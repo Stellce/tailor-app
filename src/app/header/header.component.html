@@ -1,0 +1,34 @@
+<div class="header" [ngClass]="menuSwitcher ? 'header-opened' : ''" [ngStyle]="menuSwitcher ? {height: 'auto'} : {}">
+  <div class="links">
+    <div
+      class="link"
+      *ngFor="let link of links"
+      [routerLink]="link.src"
+      routerLinkActive="highlighted-link"
+    ><span>{{link.name}}</span></div>
+
+    <div class="menu">
+      <mat-icon (click)="menuSwitcher = !menuSwitcher">menu</mat-icon>
+      <div class="menu-content" *ngIf="menuSwitcher">
+        <div
+          class="menu-link"
+          *ngFor="let link of links"
+          [routerLink]="link.src"
+          routerLinkActive="menu-link-active"
+        ><span>{{link.name}}</span></div>
+      </div>
+      </div>
+    <div
+      class="registration"
+      [routerLink]="'registration'"
+      routerLinkActive="menu-link-active"
+    >
+      <span
+        *ngIf="menuSwitcher || window.innerWidth > 600"
+
+      >Зареєструватися</span>
+      <mat-icon
+      >person</mat-icon>
+    </div>
+  </div>
+</div>
