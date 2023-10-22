@@ -1,0 +1,21 @@
+main {
+  min-height: 90dvh;
+}
+footer {
+  height: 100px;
+  padding-top: 35px;
+  color: white;
+  background: #474747;
+}
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 750px;
+  margin: auto;
+  text-align: center;
+}
+.cont {
+  display: block;
+  cursor: pointer;
+}

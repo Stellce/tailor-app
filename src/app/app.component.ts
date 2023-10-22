@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'tailor-app';
+  footerContent: {name: string, src: string}[] = [
+    {name: 'Контакти', src: 'contacts'},
+    {name: 'Адреса', src: 'address'}
+  ]
 }

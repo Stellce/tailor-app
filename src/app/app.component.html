@@ -1,2 +1,9 @@
 <app-header></app-header>
-<router-outlet></router-outlet>
+<main>
+  <router-outlet></router-outlet>
+</main>
+<footer>
+  <div class="footer-content">
+    <span class="cont" *ngFor="let cont of footerContent" [routerLink]="cont.src">{{cont.name}}</span>
+  </div>
+</footer>
