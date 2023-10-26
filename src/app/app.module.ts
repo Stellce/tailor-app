@@ -11,9 +11,18 @@ import {HttpClientModule} from "@angular/common/http";
 import { AboutComponent } from './about/about.component';
 import { ServicesComponent } from './services/services.component';
 import { PricesComponent } from './prices/prices.component';
-import { RegistrationComponent } from './registration/registration.component';
+import { RegistrationComponent } from './auth/registration/registration.component';
 import { ContactsComponent } from './footer/contacts/contacts.component';
 import { AddressComponent } from './footer/address/address.component';
+import { LoginComponent } from './auth/login/login.component';
+import {MatCardModule} from "@angular/material/card";
+import {FormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import { SamePasswordsDirective } from './auth/registration/same-passwords.directive';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { ErrorDialogComponent } from './auth/error-dialog/error-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -24,17 +33,26 @@ import { AddressComponent } from './footer/address/address.component';
     PricesComponent,
     RegistrationComponent,
     ContactsComponent,
-    AddressComponent
+    AddressComponent,
+    LoginComponent,
+    SamePasswordsDirective,
+    ErrorDialogComponent
   ],
-    imports: [
-      BrowserModule,
-      AppRoutingModule,
-      BrowserAnimationsModule,
-      HttpClientModule,
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
 
-      MatIconModule,
-      MatButtonModule
-    ],
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatDialogModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

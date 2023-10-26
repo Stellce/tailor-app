@@ -1,0 +1,15 @@
+mat-card {
+  max-width: 500px;
+  margin: 10dvh auto;
+}
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  margin: 10px auto;
+}
+.loginButton {
+  width: 100% !important;
+}
+mat-spinner {
+  margin: 300px auto;
+}
