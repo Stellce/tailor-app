@@ -9,7 +9,7 @@ export class HeaderComponent {
   menuSwitcher: boolean = false;
   links: {name: string, src: string}[] = [
     {name: 'Про нас', src: 'about'},
-    {name: 'Послуги', src: 'services'},
+    {name: 'Послуги', src: 'categories'},
     {name: 'Цiни', src: 'prices'}
   ];
 

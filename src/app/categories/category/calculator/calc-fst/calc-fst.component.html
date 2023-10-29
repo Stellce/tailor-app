@@ -1,0 +1,20 @@
+<div class="calculator">
+  <form #f="ngForm" (ngSubmit)="fstCalc(f)">
+    <div class="input-fields" *ngFor="let inputField of inputFields">
+      <div class="input-field">
+        <div class="span-wrapper">
+          <span>{{inputField.text}}</span>
+        </div>
+        <mat-form-field>
+          <mat-label>{{inputField.text}}</mat-label>
+          <input matInput [name]="inputField.name" type="number" ngModel >
+          <mat-error>Поле обов'язкове</mat-error>
+        </mat-form-field>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+    <div class="submit-button-wrapper">
+      <button mat-raised-button color="primary" type="submit">Далi</button>
+    </div>
+  </form>
+  </div>

@@ -9,7 +9,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {HttpClientModule} from "@angular/common/http";
 import { AboutComponent } from './about/about.component';
-import { ServicesComponent } from './services/services.component';
+import { CategoriesComponent } from './categories/categories.component';
 import { PricesComponent } from './prices/prices.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
 import { ContactsComponent } from './footer/contacts/contacts.component';
@@ -23,20 +23,27 @@ import { SamePasswordsDirective } from './auth/registration/same-passwords.direc
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { ErrorDialogComponent } from './auth/error-dialog/error-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { CategoryComponent } from './categories/category/category.component';
+import { CalcFstComponent } from './categories/category/calculator/calc-fst/calc-fst.component';
+import { CalcScndComponent } from './categories/category/calculator/calc-scnd/calc-scnd.component';
+import {MatDividerModule} from "@angular/material/divider";
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     AboutComponent,
-    ServicesComponent,
+    CategoriesComponent,
     PricesComponent,
     RegistrationComponent,
     ContactsComponent,
     AddressComponent,
     LoginComponent,
     SamePasswordsDirective,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    CategoryComponent,
+    CalcFstComponent,
+    CalcScndComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +58,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

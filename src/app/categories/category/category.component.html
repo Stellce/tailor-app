@@ -1,0 +1,9 @@
+<div *ngIf="selectedCategoryImages.length !== 0">
+  <div class="category-images">
+    <div class="images-grid">
+      <img [src]="'data:image/png;base64, ' + image" *ngFor="let image of selectedCategoryImages" alt="">
+    </div>
+  </div>
+  <app-calc-fst (firstFormFilled)="onFirstFormFilled(calcScnd)"></app-calc-fst>
+  <app-calc-scnd #calcScnd [firstFormFilled]="firstFormFilled"></app-calc-scnd>
+</div>
