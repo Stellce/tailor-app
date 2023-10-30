@@ -27,6 +27,7 @@ import { CategoryComponent } from './categories/category/category.component';
 import { CalcFstComponent } from './categories/category/calculator/calc-fst/calc-fst.component';
 import { CalcScndComponent } from './categories/category/calculator/calc-scnd/calc-scnd.component';
 import {MatDividerModule} from "@angular/material/divider";
+import { ActivationComponent } from './auth/activation/activation.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import {MatDividerModule} from "@angular/material/divider";
     ErrorDialogComponent,
     CategoryComponent,
     CalcFstComponent,
-    CalcScndComponent
+    CalcScndComponent,
+    ActivationComponent
   ],
   imports: [
     BrowserModule,

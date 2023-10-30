@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {User} from "./user.model";
-import {Subject} from "rxjs";
+import {catchError, retry, Subject, throwError} from "rxjs";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "./error-dialog/error-dialog.component";
@@ -12,13 +12,13 @@ import {ErrorDialogComponent} from "./error-dialog/error-dialog.component";
 })
 export class AuthService {
   backendUrl = environment.backendUrl;
-  error: string;
   authStatusListener = new Subject<boolean>();
+  error: HttpErrorResponse;
 
   constructor(private http: HttpClient, private router: Router, public dialog: MatDialog) {}
 
   sendRegistration(user: User) {
-    this.http.post(`${this.backendUrl}`, user).subscribe({
+    this.http.post(`${this.backendUrl}/clients/register`, user).subscribe({
       next: () => {
         this.router.navigate(['/']);
       },
@@ -43,5 +43,24 @@ export class AuthService {
 
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
+  }
+
+  onAccountActivate(id: string) {
+    this.http.post(`${this.backendUrl}/users/activate/${id}`, {}).subscribe({
+    next: () => {
+      this.authStatusListener.next(true);
+    },
+    error: () => {
+      this.authStatusListener.next(false)
+    }
+    })
+  }
+  private handleActivationError(error: HttpErrorResponse) {
+    console.log(this.authStatusListener)
+    this.authStatusListener.next(false);
+    return throwError(() => {
+      this.error = error;
+      console.log(error);
+    })
   }
 }

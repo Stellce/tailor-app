@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
@@ -10,7 +10,6 @@ export class CategoryComponent {
   @Input() images: string[] | undefined;
   @Input() selectedCategoryImages: string[];
   firstFormFilled: boolean = false;
-  constructor(private activatedRoute: ActivatedRoute) {}
 
   onFirstFormFilled(calcScnd: any) {
     this.firstFormFilled = true;

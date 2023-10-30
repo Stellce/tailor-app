@@ -1,0 +1,24 @@
+<mat-card *ngIf="isActivated">
+  <div class="activation-image">
+    <img [src]="activationDonePath" alt="Аккаунт активовано">
+  </div>
+  <span>
+    Аккаунт активовано
+  </span>
+</mat-card>
+<mat-card *ngIf="isActivated === undefined">
+  <div class="activation-image">
+    <mat-spinner></mat-spinner>
+  </div>
+  <span>
+    Перевiрка...
+  </span>
+</mat-card>
+<mat-card *ngIf="!isActivated && isActivated !== undefined">
+  <div class="activation-image">
+    <img [src]="activationFailedPath" alt="Аккаунт активовано">
+  </div>
+  <span>
+    Виникла помилка
+  </span>
+</mat-card>
