@@ -1,5 +1,6 @@
 export interface Category {
   path: string;
-  name: string;
+  dbPath: string;
+  text: string;
   images: string[];
 }

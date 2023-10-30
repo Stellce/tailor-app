@@ -7,7 +7,7 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent {
-  @Input() images: string[] | undefined;
+  @Input() images: string[];
   @Input() selectedCategoryImages: string[];
   firstFormFilled: boolean = false;
 

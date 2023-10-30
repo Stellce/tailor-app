@@ -2,9 +2,9 @@
   <div class="categories-grid">
     <a class="category" *ngFor="let category of categories" [routerLink]="['/', 'categories', category.path]" (click)="scrollToCategory(category.path)">
       <div class="category-image">
-        <img [src]="'data:image/png;base64, ' + category.images[0]" [alt]="category.name">
+        <img [src]="'data:image/png;base64, ' + category.images[categoryImageIndex]" [alt]="category.text">
       </div>
-      <span>{{category.name}}</span>
+      <span>{{category.text}}</span>
     </a>
     </div>
 </div>

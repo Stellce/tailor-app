@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 import {AppService} from "../app.service";
-import {Category} from "../categories.model";
+import {Category} from "../category.model";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -11,13 +11,17 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class CategoriesComponent implements OnInit, OnDestroy{
   categoriesSub: Subscription;
-  categories: Category[];
+  categories: Category[] = <Category[]> [];
   selectedCategory: string;
   selectedCategoryImages: string[] = [];
 
+  imageInterval: any;
+
+  categoryImageIndex: number = 0;
+
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {}
   ngOnInit() {
-    this.categoriesSub = this.appService.categoriesListener.subscribe(
+    this.categoriesSub = this.appService.clothesListener.subscribe(
       categories => {
         this.categories = categories;
         console.log(categories);
@@ -29,25 +33,25 @@ export class CategoriesComponent implements OnInit, OnDestroy{
       }
     );
     this.appService.getCategories();
+    this.updateImageIndex();
     // this.appService.fakeGetCategories();
-
   }
 
   scrollToCategory(categoryPath: string) {
     this.router.navigate(['/', 'categories', categoryPath], {fragment: "categoryTarget"})
   }
 
-  ngOnDestroy() {
-    this.categoriesSub.unsubscribe();
+  updateImageIndex() {
+    this.imageInterval = setInterval(() => {
+      this.categoryImageIndex = this.categoryImageIndex >= this.categories[0].images.length-1 ? 0 : this.categoryImageIndex += 1;
+    }, 5000);
   }
 
-  getSelectedCategoryImages() {
-    if(this.categories) {
-      console.log(this.categories.length);
-      return this.categories.length > 1 ? this.categories.find(category => category.name == this.selectedCategory)?.images : [];
-    }
-    return [];
+  ngOnDestroy() {
+    this.categoriesSub.unsubscribe();
+    clearInterval(this.imageInterval);
   }
+
 
   protected readonly Object = Object;
 }
