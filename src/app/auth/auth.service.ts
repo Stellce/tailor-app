@@ -29,7 +29,7 @@ export class AuthService {
     });
   }
   sendLogin(user: User) {
-    this.http.post(`${this.backendUrl}`, user).subscribe({
+    this.http.post(`${this.backendUrl}/authenticate`, user).subscribe({
       next: () => {
         this.router.navigate(['/']);
       },
@@ -53,14 +53,6 @@ export class AuthService {
     error: () => {
       this.authStatusListener.next(false)
     }
-    })
-  }
-  private handleActivationError(error: HttpErrorResponse) {
-    console.log(this.authStatusListener)
-    this.authStatusListener.next(false);
-    return throwError(() => {
-      this.error = error;
-      console.log(error);
     })
   }
 }
