@@ -14,9 +14,7 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   categories: Category[] = <Category[]> [];
   selectedCategory: string;
   selectedCategoryImages: string[] = [];
-
   imageInterval: any;
-
   categoryImageIndex: number = 0;
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {}
@@ -24,11 +22,9 @@ export class CategoriesComponent implements OnInit, OnDestroy{
     this.categoriesSub = this.appService.clothesListener.subscribe(
       categories => {
         this.categories = categories;
-        console.log(categories);
         this.activatedRoute.params.subscribe(route => {
           this.selectedCategory = route['category'];
           this.selectedCategoryImages = this.categories.find(category => category.path == this.selectedCategory)?.images || [];
-          console.log(this.selectedCategory);
         })
       }
     );
@@ -38,7 +34,7 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   }
 
   scrollToCategory(categoryPath: string) {
-    this.router.navigate(['/', 'categories', categoryPath], {fragment: "categoryTarget"})
+    this.router.navigate(['/', 'categories', categoryPath])
   }
 
   updateImageIndex() {
@@ -52,6 +48,4 @@ export class CategoriesComponent implements OnInit, OnDestroy{
     clearInterval(this.imageInterval);
   }
 
-
-  protected readonly Object = Object;
 }

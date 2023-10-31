@@ -3,7 +3,6 @@ import {HttpClient} from "@angular/common/http";
 import {Category} from "./category.model";
 import {environment} from "../environments/environment";
 import {Subject} from "rxjs";
-import * as fakeResponse from "./fakeResponse.json"
 import {clothesResponse} from "./categoriesResponse.model";
 
 @Injectable({providedIn: 'root'})
@@ -34,20 +33,11 @@ export class AppService {
 
   getCategories() {
     this.http.get<clothesResponse[]>(`${this.backendUrl}/homepage/images`).subscribe(clothesResponse => {
+      if(this.categories.every(category => category.images.length === 4)) return this.clothesListener.next(this.categories);
       clothesResponse.forEach(clothesEl => {
         this.categories.find(category => category.dbPath === clothesEl.coatType)?.images.push(clothesEl.image);
       })
-      console.log(this.categories)
       this.clothesListener.next(this.categories);
-      console.log(this.categories);
     });
   }
-
-  // fakeGetCategories() {
-  //   let response = new Promise((resolve, reject) => {
-  //     let categories = Object.keys(fakeResponse);
-  //     this.categories = categories;
-  //     this.categoriesListener.next(categories);
-  //   })
-  // }
 }

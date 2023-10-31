@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-category',
@@ -13,8 +12,7 @@ export class CategoryComponent {
 
   onFirstFormFilled(calcScnd: any) {
     this.firstFormFilled = true;
-    console.log(calcScnd)
-    calcScnd.nativeElement.scrollIntoView({behavior: "smooth"});
+    console.log(calcScnd);
   }
 
 }

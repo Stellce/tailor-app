@@ -24,12 +24,14 @@ export class RegistrationComponent implements OnInit, OnDestroy{
   }
 
   onRegister(form: NgForm) {
+    console.log(form);
     if(form.invalid) return;
     this.isLoading = true;
     let formValues = {...form.value}
     delete formValues.passwordRepeat;
     this.user = {...formValues}
     this.authService.sendRegistration(this.user);
+    console.log(form);
   }
 
   ngOnDestroy() {
