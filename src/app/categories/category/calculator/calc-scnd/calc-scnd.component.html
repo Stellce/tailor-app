@@ -1,4 +1,4 @@
-<div class="calculator" *ngIf="firstFormFilled">
+<div class="calculator" *ngIf="firstCalcFilled">
   <form #f="ngForm" (ngSubmit)="scndCalc(f)">
     <div class="input-fields" *ngFor="let inputField of inputFields">
       <div class="input-field">
@@ -14,7 +14,7 @@
       <mat-divider></mat-divider>
     </div>
     <div class="submit-button-wrapper">
-      <button mat-raised-button color="primary" type="submit">Зберегти</button>
+      <button mat-raised-button color="primary" type="submit">Далі</button>
     </div>
   </form>
 </div>

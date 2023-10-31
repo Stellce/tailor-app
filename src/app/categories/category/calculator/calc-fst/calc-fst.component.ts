@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {InputField} from "../inputField.model";
+import {CalculatorService} from "../calculator.service";
 
 @Component({
   selector: 'app-calc-fst',
@@ -9,27 +10,36 @@ import {InputField} from "../inputField.model";
 })
 export class CalcFstComponent {
   inputFields: InputField[] = [
-    {name: 'neckSemiCircumference;', text: 'Напiвобхват шиї'},
-    {name: 'chestSemiCircumference1;', text:'Напiвобхват грудей перший'},
-    {name: 'chestSemiCircumference2;', text: 'Напiвобхват грудей другий'},
-    {name: 'chestSemiCircumference3;', text: 'Напiвобхват грудей третiй'},
-    {name: 'waistSemiCircumference;', text:'Напiвобхват талiї'},
-    {name: 'shoulderWidth;', text: 'Ширина плечового схилу'},
-    {name: 'chestHeight; (from the point of the base of the neck)', text:'Висота грудей перша (вiд точки основи шиї)'},
+    {name: 'neckSemiCircumference', text: 'Напiвобхват шиї'},
+    {name: 'chestSemiCircumference1', text:'Напiвобхват грудей перший'},
+    {name: 'chestSemiCircumference2', text: 'Напiвобхват грудей другий'},
+    {name: 'chestSemiCircumference3', text: 'Напiвобхват грудей третій'},
+    {name: 'waistSemiCircumference', text:'Напiвобхват талії'},
+    {name: 'shoulderWidth', text: 'Ширина плечового схилу'},
+    {name: 'chestHeight', text: 'Висота грудей перша (вiд точки основи шиї)'},
     {name: 'chestHeight1', text: 'Висота грудей (вiд шийної точки)'},
     {name: 'backArmholeHeight;', text: 'Висота пройми ззаду'},
-    {name: 'backLengthTillWaist;', text: 'Довжина спини до талiї'},
+    {name: 'backLengthTillWaist', text: 'Довжина спини до талії'},
     {name: 'shoulderHeightSidelong', text: 'Висота плеча коса (для контролю)'},
     {name: 'chestWidth', text: 'Ширина грудей'},
     {name: 'chestCenter', text: 'Центр грудей'},
     {name: 'backWidth', text: 'Ширина спини'},
-    {name: 'waistLengthFront', text: 'Довжина талiї переду'},
-    {name: 'neckBaseToFrontWaistLineDistance', text: 'Вiдстань вiд точки основи шиї лiнiї талiї спереду'}
+    {name: 'waistLengthFront', text: 'Довжина талії переду'},
+    {name: 'neckBaseToFrontWaistLineDistance', text: 'Відстань вiд точки основи шиї лінії талії спереду'}
   ]
-  @Output()firstFormFilled = new EventEmitter<boolean>();
+  constructor(private calcService: CalculatorService) {}
 
   fstCalc(f: NgForm) {
     if(f.invalid) return;
-    this.firstFormFilled.next(true);
+    this.calcService.firstCalcFilledListener.next(true);
+    // let values = f.form.controls.forEach
+    let values: {[s: string]: number} = {};
+    // console.log(Object.entries(f.form.controls).map((k, value) => {k: value}));
+    for(let [k, v] of Object.entries(f.form.controls)) {
+      values[k] = v.value;
+    }
+    console.log(values)
+
+    this.calcService.setFirstCalcValues(values);
   }
 }

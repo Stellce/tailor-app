@@ -4,6 +4,46 @@
       <img [src]="'data:image/png;base64, ' + image" *ngFor="let image of selectedCategoryImages" alt="">
     </div>
   </div>
-  <app-calc-fst (firstFormFilled)="onFirstFormFilled(calcScnd)"></app-calc-fst>
-  <app-calc-scnd #calcScnd [firstFormFilled]="firstFormFilled"></app-calc-scnd>
+  <div class="calculator">
+    <form #fstForm="ngForm" (ngSubmit)="calcFstForm(fstForm)">
+      <div class="first-calc">
+        <div class="input-fields" *ngFor="let inputField of inputFieldsFst">
+          <div class="input-field">
+            <div class="span-wrapper">
+              <span>{{inputField.text}}</span>
+            </div>
+            <mat-form-field>
+              <mat-label>{{inputField.text}}</mat-label>
+              <input matInput [name]="inputField.name" type="number" ngModel >
+              <mat-error>Поле обов'язкове</mat-error>
+            </mat-form-field>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+        <div class="submit-button-wrapper">
+          <button mat-raised-button color="primary" type="submit">Далі</button>
+        </div>
+      </div>
+    </form>
+    <form #scndForm="ngForm" (ngSubmit)="calcScndForm(scndForm)">
+      <div class="second-calc" *ngIf="isFstFormFilled">
+        <div class="input-fields" *ngFor="let inputField of inputFieldsScnd">
+          <div class="input-field">
+            <div class="span-wrapper">
+              <span>{{inputField.text}}</span>
+            </div>
+            <mat-form-field>
+              <mat-label>{{inputField.text}}</mat-label>
+              <input matInput [name]="inputField.name" type="number" ngModel >
+              <mat-error>Поле обов'язкове</mat-error>
+            </mat-form-field>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+        <div class="submit-button-wrapper">
+          <button mat-raised-button color="primary" type="submit">Далі</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
