@@ -10,7 +10,7 @@ export class HeaderComponent {
   links: {name: string, src: string}[] = [
     {name: 'Про нас', src: 'about'},
     {name: 'Послуги', src: 'categories'},
-    {name: 'Цiни', src: 'prices'}
+    {name: 'Ціни', src: 'prices'}
   ];
 
   protected readonly window = window;

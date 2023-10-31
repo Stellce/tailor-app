@@ -24,8 +24,6 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { ErrorDialogComponent } from './auth/error-dialog/error-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { CategoryComponent } from './categories/category/category.component';
-import { CalcFstComponent } from './categories/category/calculator/calc-fst/calc-fst.component';
-import { CalcScndComponent } from './categories/category/calculator/calc-scnd/calc-scnd.component';
 import {MatDividerModule} from "@angular/material/divider";
 import { ActivationComponent } from './auth/activation/activation.component';
 
@@ -43,8 +41,6 @@ import { ActivationComponent } from './auth/activation/activation.component';
     SamePasswordsDirective,
     ErrorDialogComponent,
     CategoryComponent,
-    CalcFstComponent,
-    CalcScndComponent,
     ActivationComponent
   ],
   imports: [

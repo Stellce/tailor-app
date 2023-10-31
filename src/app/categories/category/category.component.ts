@@ -60,6 +60,7 @@ export class CategoryComponent {
     }
     this.values = values;
     console.log(this.values);
+    this.calcService.setValues(this.values);
   }
 
 }
