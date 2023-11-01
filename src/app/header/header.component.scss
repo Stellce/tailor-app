@@ -33,7 +33,7 @@
 .highlighted-link {
   border-bottom: 4px solid #FF39F7;
 }
-.links > :not(.highlighted-link, .registration, mat-icon, .menu) {
+.links > :not(.highlighted-link, .login, mat-icon, .menu) {
   border-bottom: 4px solid #d9d9d9;
 }
 .link, .menu-link {
@@ -45,7 +45,7 @@
   margin: 0 0;
   cursor: pointer;
 }
-.registration {
+.login {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,7 +55,7 @@
   cursor: pointer;
   gap: 5px;
 }
-.registration span {
+.login span {
   display: inline-block;
 }
 
@@ -70,7 +70,7 @@
   .link {
     width: 20dvw;
   }
-  .registration, .menu {
+  .login, .menu {
     position: inherit;
     margin-bottom: -4px;
   }

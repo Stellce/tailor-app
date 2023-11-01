@@ -26,7 +26,7 @@
       </div>
     </form>
     <form #scndForm="ngForm" (ngSubmit)="calcScndForm(scndForm)">
-      <div class="second-calc" *ngIf="isFstFormFilled">
+      <div id="scndCalc" class="second-calc" *ngIf="isFstFormFilled">
         <div class="input-fields" *ngFor="let inputField of inputFieldsScnd">
           <div class="input-field">
             <div class="span-wrapper">

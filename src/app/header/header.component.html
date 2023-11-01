@@ -19,14 +19,20 @@
       </div>
       </div>
     <div
-      class="registration"
+      class="login"
       [routerLink]="'login'"
       routerLinkActive="menu-link-active"
-    >
+      *ngIf="!isAuth">
       <span
         *ngIf="menuSwitcher || window.innerWidth > 600"
       >Увійти</span>
       <mat-icon>person</mat-icon>
+    </div>
+    <div class="logout login" routerLinkActive="menu-link-active" *ngIf="isAuth" (click)="onLogout()">
+      <span
+        *ngIf="menuSwitcher || window.innerWidth > 600"
+      >Вийти</span>
+      <mat-icon>logout</mat-icon>
     </div>
   </div>
 </div>

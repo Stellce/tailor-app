@@ -30,7 +30,7 @@ export class RegistrationComponent implements OnInit, OnDestroy{
     let formValues = {...form.value}
     delete formValues.passwordRepeat;
     this.user = {...formValues}
-    this.authService.sendRegistration(this.user);
+    this.authService.register(this.user);
     console.log(form);
   }
 

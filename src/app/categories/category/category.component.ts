@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {CalculatorService} from "./calculator/calculator.service";
 import {InputField} from "./calculator/inputField.model";
 import {NgForm} from "@angular/forms";
+import {ViewportScroller} from "@angular/common";
 
 @Component({
   selector: 'app-category',
@@ -21,7 +22,7 @@ export class CategoryComponent {
     {name: 'shoulderWidth', text: 'Ширина плечового схилу'},
     {name: 'chestHeight', text: 'Висота грудей перша (вiд точки основи шиї)'},
     {name: 'chestHeight1', text: 'Висота грудей (вiд шийної точки)'},
-    {name: 'backArmholeHeight;', text: 'Висота пройми ззаду'},
+    {name: 'backArmholeHeight', text: 'Висота пройми ззаду'},
     {name: 'backLengthTillWaist', text: 'Довжина спини до талії'},
     {name: 'shoulderHeightSidelong', text: 'Висота плеча коса (для контролю)'},
     {name: 'chestWidth', text: 'Ширина грудей'},
@@ -37,10 +38,7 @@ export class CategoryComponent {
   ];
   values: {[k: string]: number};
 
-  constructor(private calcService: CalculatorService) {}
-  checkFstForm() {
-    // return f.valid || false;
-  }
+  constructor(private calcService: CalculatorService, private scroller: ViewportScroller) {}
 
   calcFstForm(f: NgForm) {
     if(f.invalid) return;
@@ -51,6 +49,7 @@ export class CategoryComponent {
     }
     this.values = values;
     console.log(this.values);
+    this.scroller.scrollToAnchor('scndCalc')
   }
   calcScndForm(f: NgForm) {
     if(f.invalid) return;
