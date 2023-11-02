@@ -18,3 +18,9 @@ mat-spinner {
   flex-direction: row;
   justify-content: space-around;
 }
+
+@media (max-width: 550px) {
+  .names {
+    flex-direction: column;
+  }
+}

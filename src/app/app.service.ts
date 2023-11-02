@@ -25,7 +25,7 @@ export class AppService {
     {
       path: 'maxiCoat',
       dbPath: 'MAXI_COAT',
-      text: 'Пальто халат',
+      text: 'Пальто максі',
       images: []
     }
   ]

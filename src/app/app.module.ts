@@ -26,6 +26,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { CategoryComponent } from './categories/category/category.component';
 import {MatDividerModule} from "@angular/material/divider";
 import { ActivationComponent } from './auth/activation/activation.component';
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -43,22 +44,23 @@ import { ActivationComponent } from './auth/activation/activation.component';
     CategoryComponent,
     ActivationComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
 
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
-    MatDividerModule
-  ],
+        MatIconModule,
+        MatButtonModule,
+        MatCardModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatDialogModule,
+        MatDividerModule,
+        MatTableModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -4,7 +4,7 @@
       <img [src]="'data:image/png;base64, ' + image" *ngFor="let image of selectedCategoryImages" alt="">
     </div>
   </div>
-  <div class="calculator">
+  <div class="container">
     <form #fstForm="ngForm" (ngSubmit)="calcFstForm(fstForm)">
       <div class="first-calc">
         <div class="input-fields" *ngFor="let inputField of inputFieldsFst">
@@ -14,7 +14,7 @@
             </div>
             <mat-form-field>
               <mat-label>{{inputField.text}}</mat-label>
-              <input matInput [name]="inputField.name" type="number" ngModel >
+              <input matInput [name]="inputField.name" type="number" ngModel required>
               <mat-error>Поле обов'язкове</mat-error>
             </mat-form-field>
           </div>
@@ -34,7 +34,7 @@
             </div>
             <mat-form-field>
               <mat-label>{{inputField.text}}</mat-label>
-              <input matInput [name]="inputField.name" type="number" ngModel >
+              <input matInput [name]="inputField.name" type="number" ngModel required>
               <mat-error>Поле обов'язкове</mat-error>
             </mat-form-field>
           </div>
@@ -45,5 +45,19 @@
         </div>
       </div>
     </form>
+    <div class="res-values" *ngIf="resFields.length > 0">
+      <mat-table [dataSource]="resFields">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>Назва</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.text}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="res">
+          <mat-header-cell *matHeaderCellDef>Розрахунок</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.res}}</mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="['name', 'res']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['name', 'res']"></mat-row>
+      </mat-table>
+    </div>
   </div>
 </div>

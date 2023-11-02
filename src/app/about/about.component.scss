@@ -1,0 +1,28 @@
+mat-card {
+  width: 75dvw;
+  margin: 15px auto;
+  font-size: 14px;
+  border-radius: 1rem;
+}
+mat-card-content {
+
+}
+.img-wrap img{
+  width: 100%;
+}
+.img-wrap {
+  float: left;
+  width: 20dvw;
+  max-width: 350px;
+  margin: 15px;
+}
+mat-card-content p{
+  text-align: justify;
+  margin: 15px;
+}
+
+@media (max-width: 600px) {
+  .img-wrap{
+    width: calc(100% - 30px);
+  }
+}

@@ -1,11 +1,11 @@
 <div class="categories-wrapper">
-  <div class="categories-grid">
-    <a class="category" *ngFor="let category of categories" [routerLink]="['/', 'categories', category.path]" (click)="scrollToCategory(category.path)">
+  <div class="categories-flex">
+    <a class="category" [ngClass]="{selected: selectedCategory === category.path}" *ngFor="let category of categories" [routerLink]="['/', 'categories', category.path]" (click)="scrollToCategory(category.path)">
       <div class="category-image">
         <img [src]="'data:image/png;base64, ' + category.images[categoryImageIndex]" [alt]="category.text">
       </div>
       <span>{{category.text}}</span>
     </a>
-    </div>
+  </div>
 </div>
 <app-category [images]="selectedCategoryImages" [selectedCategoryImages]="selectedCategoryImages"></app-category>

@@ -1,15 +1,17 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CalculatorService} from "./calculator/calculator.service";
 import {InputField} from "./calculator/inputField.model";
 import {NgForm} from "@angular/forms";
 import {ViewportScroller} from "@angular/common";
+import {ResField} from "./calculator/resField.model";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss']
 })
-export class CategoryComponent {
+export class CategoryComponent implements OnInit{
   @Input() images: string[];
   @Input() selectedCategoryImages: string[];
   isFstFormFilled: boolean = false;
@@ -37,8 +39,15 @@ export class CategoryComponent {
     {name: 'increaseToNeckBack', text: 'До ширини горловини спинки і пілочки'}
   ];
   values: {[k: string]: number};
+  resFields: ResField[] = <ResField[]> [];
+  resFieldsSub: Subscription;
 
   constructor(private calcService: CalculatorService, private scroller: ViewportScroller) {}
+  ngOnInit() {
+    this.resFieldsSub = this.calcService.resFieldsListener.subscribe(resFields => {
+      this.resFields = resFields;
+    })
+  }
 
   calcFstForm(f: NgForm) {
     if(f.invalid) return;
@@ -59,7 +68,7 @@ export class CategoryComponent {
     }
     this.values = values;
     console.log(this.values);
-    this.calcService.setValues(this.values);
+    this.calcService.calculate(this.values);
   }
 
 }

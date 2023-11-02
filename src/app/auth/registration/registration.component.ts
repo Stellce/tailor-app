@@ -24,7 +24,6 @@ export class RegistrationComponent implements OnInit, OnDestroy{
   }
 
   onRegister(form: NgForm) {
-    console.log(form);
     if(form.invalid) return;
     this.isLoading = true;
     let formValues = {...form.value}
@@ -32,6 +31,7 @@ export class RegistrationComponent implements OnInit, OnDestroy{
     this.user = {...formValues}
     this.authService.register(this.user);
     console.log(form);
+    console.log(this.user)
   }
 
   ngOnDestroy() {
