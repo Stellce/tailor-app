@@ -2,6 +2,7 @@
   width: 90dvw;
   margin: 25px auto;
   max-width: 1200px;
+  padding: 10px;
 }
 .categories-flex {
   display: flex;
@@ -19,6 +20,7 @@
   flex-direction: column;
   text-align: center;
   font-size: 16px;
+  transition: transform 0.2s;
 }
 .category-image {
   position: relative;
@@ -28,13 +30,13 @@
   pointer-events: none;
   z-index: 10;
 }
-.category:hover, .selected {
+.category:not(.selected):hover{
+  transform: scale(1.03);
+}
+.selected {
   transform: scale(1.05);
-  cursor: none;
+  cursor: default;
 }
 .selected img {
-  box-shadow: 0 0 12px 4px #f665ff;
-}
-.highlighted {
-  box-shadow: #FF39F7;
+  box-shadow: 0 0 12px 4px #1f1fdc;
 }

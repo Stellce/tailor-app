@@ -5,6 +5,8 @@ import {NgForm} from "@angular/forms";
 import {ViewportScroller} from "@angular/common";
 import {ResField} from "./calculator/resField.model";
 import {Subscription} from "rxjs";
+import {Category} from "../../category.model";
+import {Model} from "./category-model.model";
 
 @Component({
   selector: 'app-category',
@@ -12,8 +14,8 @@ import {Subscription} from "rxjs";
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit{
-  @Input() images: string[];
-  @Input() selectedCategoryImages: string[];
+  @Input() category: Category;
+  selectedModel: Model = <Model>{name: ''};
   isFstFormFilled: boolean = false;
   inputFieldsFst: InputField[] = [
     {name: 'neckSemiCircumference', text: 'Напiвобхват шиї'},

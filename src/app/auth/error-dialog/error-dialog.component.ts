@@ -8,9 +8,5 @@ import {Router} from "@angular/router";
   styleUrls: ['./error-dialog.component.scss']
 })
 export class ErrorDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: string, private router: Router) {}
-
-  onHome() {
-    this.router.navigate(['/']);
-  }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: string) {}
 }

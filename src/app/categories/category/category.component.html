@@ -1,7 +1,15 @@
-<div *ngIf="selectedCategoryImages.length !== 0">
+<div *ngIf="category">
   <div class="category-images">
-    <div class="images-grid">
-      <img [src]="'data:image/png;base64, ' + image" *ngFor="let image of selectedCategoryImages" alt="">
+    <div class="models-grid">
+      <div
+        class="model"
+        *ngFor="let model of category.models"
+        [ngClass]="{selected: selectedModel.name === model.name}"
+        (click)="selectedModel = model"
+      >
+        <img [src]="'data:image/png;base64, ' + model.image" [alt]="category.text" (click)="selectedModel = model">
+        <span>{{model.name}}</span>
+      </div>
     </div>
   </div>
   <div class="container">

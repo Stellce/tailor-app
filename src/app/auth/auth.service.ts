@@ -63,10 +63,11 @@ export class AuthService {
         this.router.navigate(['/categories']);
       },
       error: (error) => {
+        this.authStatusListener.next(false);
         this.error = error;
         console.log(error)
         this.dialog.open(ErrorDialogComponent);
-        this.router.navigate(['/']);
+        // this.router.navigate(['/']);
       }
     });
   }

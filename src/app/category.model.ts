@@ -1,6 +1,7 @@
+import {Model} from "./categories/category/category-model.model";
+
 export interface Category {
-  path: string;
-  dbPath: string;
+  coatType: string;
   text: string;
-  images: string[];
+  models: Model[];
 }

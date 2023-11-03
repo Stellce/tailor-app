@@ -12,23 +12,21 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class CategoriesComponent implements OnInit, OnDestroy{
   categoriesSub: Subscription;
   categories: Category[] = <Category[]> [];
-  selectedCategory: string;
-  selectedCategoryImages: string[] = [];
+  selectedCategory: Category = <Category> {coatType: ''};
   imageInterval: any;
-  categoryImageIndex: number = 0;
+  categoryIndex: number = 0;
 
   constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {}
   ngOnInit() {
-    this.categoriesSub = this.appService.clothesListener.subscribe(
+    this.categoriesSub = this.appService.categoriesListener.subscribe(
       categories => {
         this.categories = categories;
         this.activatedRoute.params.subscribe(route => {
-          this.selectedCategory = route['category'];
-          this.selectedCategoryImages = this.categories.find(category => category.path == this.selectedCategory)?.images || [];
+          this.selectedCategory = this.categories.find(category => category.coatType === route['category'])!;
         })
       }
     );
-    this.appService.getCategories();
+    this.appService.getModels();
     this.updateImageIndex();
     // this.appService.fakeGetCategories();
   }
@@ -39,7 +37,7 @@ export class CategoriesComponent implements OnInit, OnDestroy{
 
   updateImageIndex() {
     this.imageInterval = setInterval(() => {
-      this.categoryImageIndex = this.categoryImageIndex >= this.categories[0].images.length-1 ? 0 : this.categoryImageIndex += 1;
+      this.categoryIndex = this.categoryIndex >= this.categories.length-1 ? 0 : this.categoryIndex += 1;
     }, 5000);
   }
 

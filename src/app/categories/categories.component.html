@@ -1,11 +1,16 @@
 <div class="categories-wrapper">
   <div class="categories-flex">
-    <a class="category" [ngClass]="{selected: selectedCategory === category.path}" *ngFor="let category of categories" [routerLink]="['/', 'categories', category.path]" (click)="scrollToCategory(category.path)">
+    <a
+      class="category"
+      [ngClass]="{selected: selectedCategory && selectedCategory.coatType === category.coatType}"
+      *ngFor="let category of categories"
+      [routerLink]="['/', 'categories', category.coatType]"
+      (click)="scrollToCategory(category.coatType)">
       <div class="category-image">
-        <img [src]="'data:image/png;base64, ' + category.images[categoryImageIndex]" [alt]="category.text">
+        <img [src]="'data:image/png;base64, ' + category.models[categoryIndex].image" [alt]="category.text">
       </div>
       <span>{{category.text}}</span>
     </a>
   </div>
 </div>
-<app-category [images]="selectedCategoryImages" [selectedCategoryImages]="selectedCategoryImages"></app-category>
+<app-category [category]="selectedCategory"></app-category>
