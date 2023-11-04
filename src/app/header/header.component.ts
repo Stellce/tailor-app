@@ -13,17 +13,15 @@ export class HeaderComponent implements OnInit{
     {name: 'Послуги', src: 'categories'},
     {name: 'Ціни', src: 'prices'}
   ];
-  isAuth: boolean = false;
+  isAuth: boolean;
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.authService.authStatusListener.subscribe(isAuth => {
+    this.isAuth = this.authService.getIsAuth();
+    this.authService.getAuthStatusListener().subscribe(isAuth => {
+      console.log(isAuth)
       this.isAuth = isAuth;
     })
-  }
-
-  getIsAuth(): boolean {
-    return this.authService.getIsAuth();
   }
 
   onLogout() {

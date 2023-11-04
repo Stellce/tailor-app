@@ -6,7 +6,7 @@ import {Subject} from "rxjs";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "./error-dialog/error-dialog.component";
-import jwt_decode from 'jwt-decode';
+import {jwtDecode, JwtPayload} from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class AuthService {
   authStatusListener = new Subject<boolean>();
   error: HttpErrorResponse;
   token: string;
+  tokenTimer: any;
   isAuthenticated: boolean = false;
 
   constructor(private http: HttpClient, private router: Router, public dialog: MatDialog) {}
@@ -30,6 +31,29 @@ export class AuthService {
 
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
+  }
+
+  autoAuthUser() {
+    const authInformation = this.getAuthData();
+    if (!authInformation) {
+      return;
+    }
+    const now = new Date();
+    const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
+    if (expiresIn > 0) {
+      console.log('activated')
+      this.token = authInformation.token;
+      this.isAuthenticated = true;
+      this.setAuthTimer(expiresIn / 1000);
+      this.authStatusListener.next(true);
+    }
+  }
+
+  private setAuthTimer(duration: number) {
+    console.log("Setting timer: " + duration)
+    this.tokenTimer = setTimeout(() => {
+      this.logout();
+    }, duration * 1000);
   }
 
   register(user: User) {
@@ -51,15 +75,14 @@ export class AuthService {
     this.http.post(`${this.backendUrl}/authenticate`, userObj, {responseType: "text"}).subscribe({
       next: (token) => {
         this.token = token;
+        let decoded: JwtPayload = jwtDecode(token);
+        console.log(decoded);
+        console.log(token)
         this.isAuthenticated = true;
         this.authStatusListener.next(true);
         console.log(token);
 
-        // const tokenInfo = this.getDecodedAccessToken(token); // decode token
-        // const expireDate = tokenInfo.exp; // get token expiration dateTime
-        // console.log(tokenInfo); // show decoded token object in console
-
-        this.saveAuthData(token, new Date(new Date().getTime() + (24 * 60 * 60 * 1000)));
+        this.saveAuthData(token, new Date(decoded.exp! * 1000));
         this.router.navigate(['/categories']);
       },
       error: (error) => {
@@ -67,7 +90,6 @@ export class AuthService {
         this.error = error;
         console.log(error)
         this.dialog.open(ErrorDialogComponent);
-        // this.router.navigate(['/']);
       }
     });
   }
@@ -76,6 +98,8 @@ export class AuthService {
     this.http.post(`${this.backendUrl}/users/activate/${id}`, {}, {responseType: "text"}).subscribe({
     next: (token) => {
       this.token = token;
+      let decoded = jwtDecode(token);
+      this.saveAuthData(token, new Date(decoded.exp! * 1000))
       this.authStatusListener.next(true);
     },
     error: () => {
@@ -101,12 +125,16 @@ export class AuthService {
     localStorage.removeItem("expiration")
   }
 
-  // private getDecodedAccessToken(token: string): any {
-  //   try {
-  //     return jwt_decode(token);
-  //   } catch(Error) {
-  //     return null;
-  //   }
-  // }
+  private getAuthData() {
+    const token = localStorage.getItem("token");
+    const expirationDate = localStorage.getItem("expiration");
+    if (!token || !expirationDate) {
+      return;
+    }
+    return {
+      token: token,
+      expirationDate: new Date(expirationDate)
+    }
+  }
 
 }

@@ -7,7 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { AboutComponent } from './about/about.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { PricesComponent } from './prices/prices.component';
@@ -27,6 +27,7 @@ import { CategoryComponent } from './categories/category/category.component';
 import {MatDividerModule} from "@angular/material/divider";
 import { ActivationComponent } from './auth/activation/activation.component';
 import {MatTableModule} from "@angular/material/table";
+import {AuthInterceptor} from "./auth/auth-interceptor";
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import {MatTableModule} from "@angular/material/table";
         MatDividerModule,
         MatTableModule
     ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
