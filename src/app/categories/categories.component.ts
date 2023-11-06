@@ -3,6 +3,8 @@ import {Subscription} from "rxjs";
 import {AppService} from "../app.service";
 import {Category} from "../category.model";
 import {ActivatedRoute, Router} from "@angular/router";
+import {MatDialog} from "@angular/material/dialog";
+import {VideoDialogComponent} from "./video-dialog/video-dialog.component";
 
 @Component({
   selector: 'app-categories',
@@ -32,7 +34,7 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   }
 
   scrollToCategory(categoryPath: string) {
-    this.router.navigate(['/', 'categories', categoryPath])
+    // this.router.navigate(['/', 'categories', categoryPath])
   }
 
   updateImageIndex() {

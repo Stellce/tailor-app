@@ -1,0 +1,14 @@
+.mat-mdc-dialog-content {
+  max-height: 100dvh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+iframe {
+  padding: 0;
+  margin: 0;
+  //width: calc(2*384px);
+  //height: calc(2*727px);
+  height: 90dvh;
+  aspect-ratio: 1/calc(727/384);
+}

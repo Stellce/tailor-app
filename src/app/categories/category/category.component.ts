@@ -7,6 +7,9 @@ import {ResField} from "./calculator/resField.model";
 import {Subscription} from "rxjs";
 import {Category} from "../../category.model";
 import {Model} from "./category-model.model";
+import {AuthService} from "../../auth/auth.service";
+import {VideoDialogComponent} from "../video-dialog/video-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-category',
@@ -44,11 +47,15 @@ export class CategoryComponent implements OnInit{
   resFields: ResField[] = <ResField[]> [];
   resFieldsSub: Subscription;
 
-  constructor(private calcService: CalculatorService, private scroller: ViewportScroller) {}
+  constructor(private calcService: CalculatorService, private scroller: ViewportScroller, private authService: AuthService, public dialog: MatDialog) {}
   ngOnInit() {
     this.resFieldsSub = this.calcService.resFieldsListener.subscribe(resFields => {
       this.resFields = resFields;
     })
+  }
+
+  onModelSelect(model: Model) {
+    this.selectedModel = model
   }
 
   calcFstForm(f: NgForm) {
@@ -70,7 +77,15 @@ export class CategoryComponent implements OnInit{
     }
     this.values = values;
     console.log(this.values);
+    console.log(Object.keys(values).length);
+    if (this.authService.getIsAuth()) {
+      this.calcService.createOrder(this.values, this.selectedModel.id);
+    }
     this.calcService.calculate(this.values);
+  }
+
+  openDialog() {
+    this.dialog.open(VideoDialogComponent);
   }
 
 }

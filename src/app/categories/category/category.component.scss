@@ -11,6 +11,7 @@
   grid-template-columns: repeat(4, 1fr);
 }
 .model {
+  position: relative;
   width: 100%;
   transition: transform 0.2s;
 }
@@ -19,6 +20,7 @@
 }
 .model:not(.selected):hover{
   transform: scale(1.03);
+  cursor: pointer;
 }
 .selected {
   transform: scale(1.05);
@@ -26,6 +28,26 @@
 }
 .selected img {
   box-shadow: 0 0 12px 4px #1f1fdc;
+}
+.video-bubble {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  //height: 50px;
+  width: 18%;
+  aspect-ratio: 1/1;
+  border-radius: 50px;
+  background: white;
+  opacity: 0.5;
+}
+.video-bubble mat-icon {
+  height: 100%;
+  width: 100%;
+  font-size: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -78,9 +100,18 @@ mat-form-field {
   flex-direction: row-reverse;
 }
 
+@media (max-width: 1100px) {
+  .video-bubble mat-icon {
+    font-size: 30px;
+  }
+}
+
 @media (max-width: 900px) {
   .span-wrapper span {
     max-width: 200px;
+  }
+  .video-bubble mat-icon {
+    font-size: 20px;
   }
 }
 
@@ -98,5 +129,14 @@ mat-form-field {
   }
   .span-wrapper span {
     max-width: 100%;
+  }
+  .video-bubble {
+    width: 20px;
+    height: 20px;
+    left: 2px;
+    top: 2px;
+  }
+  .video-bubble mat-icon {
+    font-size: 15px;
   }
 }

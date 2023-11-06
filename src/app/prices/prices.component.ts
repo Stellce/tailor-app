@@ -18,6 +18,5 @@ export class PricesComponent implements OnInit{
       data.push({pos: i, name: `Товар ${i}`, price: (Math.random()*100).toFixed(2)});
     }
     this.elementData = data;
-    console.log((Math.random()*100).toFixed(2))
   }
 }

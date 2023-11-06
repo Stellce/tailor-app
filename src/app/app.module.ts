@@ -28,6 +28,7 @@ import {MatDividerModule} from "@angular/material/divider";
 import { ActivationComponent } from './auth/activation/activation.component';
 import {MatTableModule} from "@angular/material/table";
 import {AuthInterceptor} from "./auth/auth-interceptor";
+import { VideoDialogComponent } from './categories/video-dialog/video-dialog.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import {AuthInterceptor} from "./auth/auth-interceptor";
     SamePasswordsDirective,
     ErrorDialogComponent,
     CategoryComponent,
-    ActivationComponent
+    ActivationComponent,
+    VideoDialogComponent
   ],
     imports: [
         BrowserModule,
@@ -63,6 +65,10 @@ import {AuthInterceptor} from "./auth/auth-interceptor";
         MatTableModule
     ],
   providers: [
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthInterceptor
+    // }
   ],
   bootstrap: [AppComponent]
 })

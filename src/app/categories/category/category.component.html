@@ -5,14 +5,16 @@
         class="model"
         *ngFor="let model of category.models"
         [ngClass]="{selected: selectedModel.name === model.name}"
-        (click)="selectedModel = model"
+        (click)="onModelSelect(model)"
       >
-        <img [src]="'data:image/png;base64, ' + model.image" [alt]="category.text" (click)="selectedModel = model">
+        <img [src]="'data:image/png;base64, ' + model.image" [alt]="category.text">
         <span>{{model.name}}</span>
+        <div class="video-bubble" (click)="openDialog()"><mat-icon>videocam</mat-icon></div>
       </div>
     </div>
   </div>
-  <div class="container">
+
+  <div class="container" *ngIf="selectedModel.name">
     <form #fstForm="ngForm" (ngSubmit)="calcFstForm(fstForm)">
       <div class="first-calc">
         <div class="input-fields" *ngFor="let inputField of inputFieldsFst">

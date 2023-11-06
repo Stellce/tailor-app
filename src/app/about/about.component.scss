@@ -1,8 +1,29 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  background-image: url("../../assets/about.jpg");
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  background-size: cover;
+  background-position: center top;
+}
+p {
+  margin: 0;
+}
+.card-wrapper {
+  height: 100dvh;
+  margin: 0;
+}
 mat-card {
   width: 75dvw;
+  max-width: 1800px;
   margin: 15px auto;
   font-size: 14px;
   border-radius: 1rem;
+  background: rgba(217, 217, 217, 0.6);
+}
+mat-card-content p {
+  text-shadow: 1px 1px 2px pink;
 }
 mat-card-content {
 
@@ -18,7 +39,6 @@ mat-card-content {
 }
 mat-card-content p{
   text-align: justify;
-  margin: 15px;
 }
 
 @media (max-width: 600px) {

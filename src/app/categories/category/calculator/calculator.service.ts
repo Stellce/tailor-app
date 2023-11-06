@@ -7,7 +7,7 @@ import {ResField} from "./resField.model";
 
 @Injectable({providedIn: 'root'})
 export class CalculatorService {
-  values: {[k: string]: number};
+  values: {coatModelId: number, productMetrics: { [k: string]: number }};
   backendUrl: string = environment.backendUrl;
   calcValues = {};
   resFieldsListener = new Subject<ResField[]>();
@@ -38,26 +38,29 @@ export class CalculatorService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   calculate(values: {[k: string]: number}) {
-    this.values = values;
-
-
-    let headers = new HttpHeaders();
-    let save = '';
-    if(this.authService.isAuthenticated) {
-      const authToken = this.authService.getToken();
-      headers = headers.set("Authorization", "Bearer " + authToken);
-      save = '/save';
-    }
-    this.http.post<{[s: string]: string}>(`${this.backendUrl}/patterns/calculate${save}`, values, {headers: headers}).subscribe(res => {
-      console.log(res);
-      this.calcValues = res;
-      this.resFields = this.resFields.map(el => {
-        el.res = res[el.name];
-        return el;
-      });
-      console.log(this.resFields);
-      this.resFieldsListener.next(this.resFields);
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/patterns/calculate`, values).subscribe(res => {
+      this.handleCalcValues(res);
     });
+  }
+  createOrder(values: {[k: string]: number}, selectedModelId: number) {
+    this.values = {coatModelId: selectedModelId, productMetrics: {...values}};
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set("Authorization", "Bearer " + authToken);
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, this.values, {headers: headers}).subscribe(res => {
+      console.log(res)
+      // this.handleCalcValues(res);
+    });
+  }
+
+  private handleCalcValues(res: {[s: string]: string}) {
+    this.calcValues = res;
+    this.resFields = this.resFields.map(el => {
+      el.res = res[el.name];
+      return el;
+    });
+    console.log(this.resFields);
+    this.resFieldsListener.next(this.resFields);
   }
 
 }
