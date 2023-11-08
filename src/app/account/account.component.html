@@ -1,0 +1,60 @@
+<mat-card class="outer">
+  <form #f="ngForm" [formGroup]="userForm" (ngSubmit)="onSubmit(f)">
+  <mat-card>
+    <mat-card-header>Данi користувача</mat-card-header>
+    <mat-card-content>
+      <div class="field">
+        <span>Дата народження</span>
+        <mat-form-field>
+          <mat-label>Дата народження</mat-label>
+          <input
+            [matDatepicker]="picker"
+            [(ngModel)]="birthDate"
+            name="birthDate"
+            required
+            matInput
+            [value]="String(userDetails?.birthDate)"
+            disabled>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker disabled="false"></mat-datepicker>
+          <mat-error>Поле обов'язкове</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <span>Номер телефону</span>
+        <mat-form-field>
+          <mat-label>Номер телефону</mat-label>
+          <input
+            name="phoneNumber"
+            type="number"
+            [(ngModel)]="phoneNumber"
+            required
+            matInput
+            [value]="String(userDetails?.phoneNumber)">
+          <mat-error>Поле обов'язкове</mat-error>
+        </mat-form-field>
+      </div>
+        <mat-divider></mat-divider>
+      </mat-card-content>
+    <mat-card-header>Адреса</mat-card-header>
+    <mat-card-content>
+      <div class="field" *ngFor="let addressField of address; let i = index">
+        <span>{{addressField.text}}</span>
+        <mat-form-field>
+          <mat-label>{{addressField.text}}</mat-label>
+          <input
+            [name]="addressField.name"
+            [required]="addressField.name !== 'apartmentNumber'"
+            [value]="addressField.oldValue || ''"
+            ngModel
+            matInput>
+          <mat-error>Поле обов'язкове</mat-error>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Зберегти</button>
+    </mat-card-actions>
+  </mat-card>
+  </form>
+</mat-card>

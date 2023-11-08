@@ -76,11 +76,8 @@ export class AuthService {
       next: (token) => {
         this.token = token;
         let decoded: JwtPayload = jwtDecode(token);
-        console.log(decoded);
-        console.log(token)
         this.isAuthenticated = true;
         this.authStatusListener.next(true);
-        console.log(token);
 
         this.saveAuthData(token, new Date(decoded.exp! * 1000));
         this.router.navigate(['/categories']);

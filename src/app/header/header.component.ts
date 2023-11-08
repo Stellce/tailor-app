@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -11,15 +12,16 @@ export class HeaderComponent implements OnInit{
   links: {name: string, src: string}[] = [
     {name: 'Про нас', src: 'about'},
     {name: 'Послуги', src: 'categories'},
-    {name: 'Ціни', src: 'prices'}
+    {name: 'Ціни', src: 'prices'},
+    {name: 'Акаунт', src: 'account'}
   ];
   isAuth: boolean;
+  isAuthSub: Subscription;
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.isAuth = this.authService.getIsAuth();
-    this.authService.getAuthStatusListener().subscribe(isAuth => {
-      console.log(isAuth)
+    this.isAuthSub = this.authService.getAuthStatusListener().subscribe(isAuth => {
       this.isAuth = isAuth;
     })
   }
