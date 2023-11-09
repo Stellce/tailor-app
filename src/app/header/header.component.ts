@@ -12,8 +12,7 @@ export class HeaderComponent implements OnInit{
   links: {name: string, src: string}[] = [
     {name: 'Про нас', src: 'about'},
     {name: 'Послуги', src: 'categories'},
-    {name: 'Ціни', src: 'prices'},
-    {name: 'Акаунт', src: 'account'}
+    {name: 'Ціни', src: 'prices'}
   ];
   isAuth: boolean;
   isAuthSub: Subscription;
@@ -23,7 +22,19 @@ export class HeaderComponent implements OnInit{
     this.isAuth = this.authService.getIsAuth();
     this.isAuthSub = this.authService.getAuthStatusListener().subscribe(isAuth => {
       this.isAuth = isAuth;
+      this.onAuth();
     })
+    this.onAuth();
+  }
+
+  private onAuth() {
+    if(this.isAuth) {
+      this.links.push({name: 'Акаунт', src: 'account'});
+      console.log('yes')
+    } else {
+      this.links = this.links.filter(link => link.src !== 'account');
+      console.log('no')
+    }
   }
 
   onLogout() {

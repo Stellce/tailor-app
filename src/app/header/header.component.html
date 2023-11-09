@@ -28,7 +28,7 @@
       >Увійти</span>
       <mat-icon>person</mat-icon>
     </div>
-    <div class="logout login" routerLinkActive="menu-link-active" *ngIf="isAuth" (click)="onLogout()">
+    <div class="login" [routerLink]="['/']" *ngIf="isAuth" (click)="onLogout()">
       <span
         *ngIf="menuSwitcher || window.innerWidth > 600"
       >Вийти</span>

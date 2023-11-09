@@ -40,11 +40,16 @@ mat-card-actions button {
   margin: 0 10% 10px 0;
 }
 mat-form-field {
-  width: 248px !important;
+  max-width: 200px !important;
 }
-@media (max-width: 900px) {
+@media (max-width: 500px) {
   .field {
     flex-direction: column;
   }
 
+}
+@media (max-width: 320px) {
+  mat-form-field {
+    width: 100% !important;
+  }
 }

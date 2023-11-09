@@ -1,15 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountService} from "./account.service";
 import {FormControl, FormGroup, NgForm, PatternValidator, Validators} from "@angular/forms";
 import {UserDetails} from "./user-details.model";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss']
 })
-export class AccountComponent implements OnInit{
+export class AccountComponent implements OnInit, OnDestroy{
   userDetails: UserDetails;
+  userDetailsSub: Subscription;
   newAddress: {name: string, text: string, oldValue?: string}[] = [
     {name: 'city', text: 'Мiсто'},
     {name: 'street', text: 'Вулиця'},
@@ -22,8 +24,9 @@ export class AccountComponent implements OnInit{
   phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
   constructor(private accountService: AccountService) {}
   ngOnInit() {
-    this.accountService.getUserDetailsListener().subscribe(userDetails => {
+    this.userDetailsSub = this.accountService.getUserDetailsListener().subscribe(userDetails => {
       this.userDetails = userDetails;
+      if(userDetails.phoneNumber)this.userDetails.phoneNumber = String(this.userDetails?.phoneNumber).replace(/-/g, "");
       console.log(userDetails);
       let newUserDetails: any = {...userDetails};
       this.newAddress.map(el => el.oldValue = newUserDetails.address[el.name]);
@@ -63,6 +66,10 @@ export class AccountComponent implements OnInit{
     this.userDetails ?
       this.accountService.updateUserDetails(userDetails) :
       this.accountService.postUserDetails(userDetails);
+  }
+
+  ngOnDestroy() {
+    this.userDetailsSub.unsubscribe();
   }
 
   protected readonly Object = Object;

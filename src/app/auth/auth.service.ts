@@ -45,6 +45,7 @@ export class AuthService {
       this.token = authInformation.token;
       this.isAuthenticated = true;
       this.setAuthTimer(expiresIn / 1000);
+      this.isAuthenticated = true;
       this.authStatusListener.next(true);
     }
   }
@@ -83,6 +84,7 @@ export class AuthService {
         this.router.navigate(['/categories']);
       },
       error: (error) => {
+        this.isAuthenticated = false;
         this.authStatusListener.next(false);
         this.error = error;
         console.log(error)
@@ -96,10 +98,12 @@ export class AuthService {
     next: (token) => {
       this.token = token;
       let decoded = jwtDecode(token);
-      this.saveAuthData(token, new Date(decoded.exp! * 1000))
+      this.saveAuthData(token, new Date(decoded.exp! * 1000));
+      this.isAuthenticated = true;
       this.authStatusListener.next(true);
     },
     error: () => {
+      this.isAuthenticated = false;
       this.authStatusListener.next(false)
     }
     })

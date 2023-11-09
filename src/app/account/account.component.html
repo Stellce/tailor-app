@@ -13,7 +13,7 @@
             required
             matInput
             formControlName="birthDate"
-            [value]="String(userDetails?.birthDate)">
+            [value]="String(userDetails.birthDate)">
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker disabled="false"></mat-datepicker>
           <mat-error>Поле обов'язкове</mat-error>
@@ -29,7 +29,7 @@
             required
             matInput
             formControlName="phoneNumber"
-            [value]="String(userDetails?.phoneNumber)">
+            [value]="String(userDetails.phoneNumber)">
           <mat-error>Поле обов'язкове</mat-error>
         </mat-form-field>
       </div>

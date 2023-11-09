@@ -11,7 +11,6 @@ export class VideoDialogComponent implements AfterContentChecked{
   imgSrc: string = 'assets/jeans.png';
   ngAfterContentChecked() {
     if(!this.videoEl) return;
-    console.log(this.videoEl.nativeElement)
   }
 
 }
