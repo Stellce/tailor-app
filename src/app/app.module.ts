@@ -32,6 +32,7 @@ import { VideoDialogComponent } from './categories/video-dialog/video-dialog.com
 import { AccountComponent } from './account/account.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [
@@ -69,9 +70,11 @@ import {MatNativeDateModule} from "@angular/material/core";
         MatTableModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatMomentDateModule,
     ],
   providers: [
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
     // MatDatepickerModule
     // {
     //   provide: HTTP_INTERCEPTORS,

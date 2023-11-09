@@ -1,5 +1,5 @@
 <mat-card class="outer">
-  <form #f="ngForm" [formGroup]="userForm" (ngSubmit)="onSubmit(f)">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
   <mat-card>
     <mat-card-header>Данi користувача</mat-card-header>
     <mat-card-content>
@@ -9,12 +9,11 @@
           <mat-label>Дата народження</mat-label>
           <input
             [matDatepicker]="picker"
-            [(ngModel)]="birthDate"
             name="birthDate"
             required
             matInput
-            [value]="String(userDetails?.birthDate)"
-            disabled>
+            formControlName="birthDate"
+            [value]="String(userDetails?.birthDate)">
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker disabled="false"></mat-datepicker>
           <mat-error>Поле обов'язкове</mat-error>
@@ -27,9 +26,9 @@
           <input
             name="phoneNumber"
             type="number"
-            [(ngModel)]="phoneNumber"
             required
             matInput
+            formControlName="phoneNumber"
             [value]="String(userDetails?.phoneNumber)">
           <mat-error>Поле обов'язкове</mat-error>
         </mat-form-field>
@@ -37,8 +36,8 @@
         <mat-divider></mat-divider>
       </mat-card-content>
     <mat-card-header>Адреса</mat-card-header>
-    <mat-card-content>
-      <div class="field" *ngFor="let addressField of address; let i = index">
+    <mat-card-content formGroupName="address">
+      <div class="field" *ngFor="let addressField of newAddress; let i = index">
         <span>{{addressField.text}}</span>
         <mat-form-field>
           <mat-label>{{addressField.text}}</mat-label>
@@ -46,7 +45,7 @@
             [name]="addressField.name"
             [required]="addressField.name !== 'apartmentNumber'"
             [value]="addressField.oldValue || ''"
-            ngModel
+            [formControlName]="addressField.name"
             matInput>
           <mat-error>Поле обов'язкове</mat-error>
         </mat-form-field>
