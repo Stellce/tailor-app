@@ -1,59 +1,67 @@
-<mat-card class="outer">
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
-  <mat-card>
-    <mat-card-header>Данi користувача</mat-card-header>
-    <mat-card-content>
-      <div class="field">
-        <span>Дата народження</span>
-        <mat-form-field>
-          <mat-label>Дата народження</mat-label>
-          <input
-            [matDatepicker]="picker"
-            name="birthDate"
-            required
-            matInput
-            formControlName="birthDate"
-            [value]="String(userDetails.birthDate)">
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker disabled="false"></mat-datepicker>
-          <mat-error>Поле обов'язкове</mat-error>
-        </mat-form-field>
-      </div>
-      <div class="field">
-        <span>Номер телефону</span>
-        <mat-form-field>
-          <mat-label>Номер телефону</mat-label>
-          <input
-            name="phoneNumber"
-            type="number"
-            required
-            matInput
-            formControlName="phoneNumber"
-            [value]="String(userDetails.phoneNumber)">
-          <mat-error>Поле обов'язкове</mat-error>
-        </mat-form-field>
-      </div>
-        <mat-divider></mat-divider>
-      </mat-card-content>
-    <mat-card-header>Адреса</mat-card-header>
-    <mat-card-content formGroupName="address">
-      <div class="field" *ngFor="let addressField of newAddress; let i = index">
-        <span>{{addressField.text}}</span>
-        <mat-form-field>
-          <mat-label>{{addressField.text}}</mat-label>
-          <input
-            [name]="addressField.name"
-            [required]="addressField.name !== 'apartmentNumber'"
-            [value]="addressField.oldValue || ''"
-            [formControlName]="addressField.name"
-            matInput>
-          <mat-error>Поле обов'язкове</mat-error>
-        </mat-form-field>
-      </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit">Зберегти</button>
-    </mat-card-actions>
+<div class="outer">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header><b>Данi користувача</b></mat-expansion-panel-header>
+    <mat-card>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+        <mat-card-header>Персональнi данi</mat-card-header>
+        <mat-card-content>
+          <div class="field">
+            <span>Дата народження</span>
+            <mat-form-field>
+              <mat-label>Дата народження</mat-label>
+              <input
+                [matDatepicker]="picker"
+                name="birthDate"
+                required
+                matInput
+                formControlName="birthDate"
+                [value]="String(userDetails.birthDate)">
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker disabled="false"></mat-datepicker>
+              <mat-error>Поле обов'язкове</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="field">
+            <span>Номер телефону</span>
+            <mat-form-field>
+              <mat-label>Номер телефону</mat-label>
+              <input
+                name="phoneNumber"
+                type="number"
+                required
+                matInput
+                formControlName="phoneNumber"
+                [value]="String(userDetails.phoneNumber)">
+              <mat-error>Поле обов'язкове</mat-error>
+            </mat-form-field>
+          </div>
+          <mat-divider></mat-divider>
+        </mat-card-content>
+        <mat-card-header>Адреса</mat-card-header>
+        <mat-card-content formGroupName="address">
+          <div class="field" *ngFor="let addressField of newAddress; let i = index">
+            <span>{{addressField.text}}</span>
+            <mat-form-field>
+              <mat-label>{{addressField.text}}</mat-label>
+              <input
+                [name]="addressField.name"
+                [required]="addressField.name !== 'apartmentNumber'"
+                [value]="addressField.oldValue || ''"
+                [formControlName]="addressField.name"
+                matInput>
+              <mat-error>Поле обов'язкове</mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" type="submit">Зберегти</button>
+        </mat-card-actions>
+      </form>
+    </mat-card>
+  </mat-expansion-panel>
+  <mat-card class="categories-card">
+    <mat-card-header>Замовлення</mat-card-header>
+    <app-categories></app-categories>
+    <router-outlet></router-outlet>
   </mat-card>
-  </form>
-</mat-card>
+</div>

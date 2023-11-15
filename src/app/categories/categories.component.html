@@ -1,16 +1,16 @@
-<div class="categories-wrapper">
+<div class="categories-wrapper" *ngIf="categories">
   <div class="categories-flex">
     <a
       class="category"
       [ngClass]="{selected: selectedCategory && selectedCategory.coatType === category.coatType}"
       *ngFor="let category of categories"
-      [routerLink]="['/', 'categories', category.coatType]"
-      (click)="scrollToCategory(category.coatType)">
+      [routerLink]="['/', url, category.coatType.toLowerCase()]"
+      routerLinkActive="selected"
+      (click)="scrollToCategory(category)">
       <div class="category-image">
-        <img [src]="'data:image/png;base64, ' + category.models[categoryIndex].image" [alt]="category.text">
+        <img [src]="'data:image/png;base64, ' + category.models[this.categoryIndex].image" [alt]="category.text">
       </div>
       <span>{{category.text}}</span>
     </a>
   </div>
 </div>
-<app-category [category]="selectedCategory"></app-category>

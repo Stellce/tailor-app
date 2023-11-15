@@ -59,46 +59,7 @@ input::-webkit-inner-spin-button {
   max-width: 1000px;
   margin: 50px auto;
 }
-mat-divider {
-  //height: 5px;
-}
-mat-form-field {
-  width: 410px !important;
-  margin-top: 22px;
-}
-.input-field {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-}
-.mat-column-res {
-  width: 32px;
-  text-align: right;
-  justify-content: flex-end;
-}
-.res-values {
-  width: 90%;
-  margin: auto;
-}
-.span-wrapper {
-  height: 78px;
-  margin-top: 22px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.span-wrapper span {
-  font-size: 16px;
-  word-wrap: break-word;
-  max-width: 100%;
-}
-.submit-button-wrapper {
-  margin: 22px 0;
-  display: flex;
-  width: 100%;
-  flex-direction: row-reverse;
-}
+
 
 @media (max-width: 1100px) {
   .video-bubble mat-icon {

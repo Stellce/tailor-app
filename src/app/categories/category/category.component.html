@@ -15,59 +15,6 @@
   </div>
 
   <div class="container" *ngIf="selectedModel.name">
-    <form #fstForm="ngForm" (ngSubmit)="calcFstForm(fstForm)">
-      <div class="first-calc">
-        <div class="input-fields" *ngFor="let inputField of inputFieldsFst">
-          <div class="input-field">
-            <div class="span-wrapper">
-              <span>{{inputField.text}}</span>
-            </div>
-            <mat-form-field>
-              <mat-label>{{inputField.text}}</mat-label>
-              <input matInput [name]="inputField.name" type="number" ngModel required>
-              <mat-error>Поле обов'язкове</mat-error>
-            </mat-form-field>
-          </div>
-          <mat-divider></mat-divider>
-        </div>
-        <div class="submit-button-wrapper">
-          <button mat-raised-button color="primary" type="submit">Далі</button>
-        </div>
-      </div>
-    </form>
-    <form #scndForm="ngForm" (ngSubmit)="calcScndForm(scndForm)">
-      <div id="scndCalc" class="second-calc" *ngIf="isFstFormFilled">
-        <div class="input-fields" *ngFor="let inputField of inputFieldsScnd">
-          <div class="input-field">
-            <div class="span-wrapper">
-              <span>{{inputField.text}}</span>
-            </div>
-            <mat-form-field>
-              <mat-label>{{inputField.text}}</mat-label>
-              <input matInput [name]="inputField.name" type="number" ngModel required>
-              <mat-error>Поле обов'язкове</mat-error>
-            </mat-form-field>
-          </div>
-          <mat-divider></mat-divider>
-        </div>
-        <div class="submit-button-wrapper">
-          <button mat-raised-button color="primary" type="submit">Далі</button>
-        </div>
-      </div>
-    </form>
-    <div class="res-values" *ngIf="resFields.length > 0">
-      <mat-table [dataSource]="resFields">
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef>Назва</mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.text}}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="res">
-          <mat-header-cell *matHeaderCellDef>Розрахунок</mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.res}}</mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="['name', 'res']"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: ['name', 'res']"></mat-row>
-      </mat-table>
-    </div>
+    <app-calculator></app-calculator>
   </div>
 </div>

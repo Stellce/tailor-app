@@ -1,10 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {AppService} from "../app.service";
-import {Category} from "../category.model";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {VideoDialogComponent} from "./video-dialog/video-dialog.component";
+import {Category} from "./category/category.model";
+import {ActivatedRoute} from "@angular/router";
+import {AccountService} from "../account/account.service";
+import {OrdersService} from "../account/orders/orders.service";
 
 @Component({
   selector: 'app-categories',
@@ -13,28 +12,38 @@ import {VideoDialogComponent} from "./video-dialog/video-dialog.component";
 })
 export class CategoriesComponent implements OnInit, OnDestroy{
   categoriesSub: Subscription;
-  categories: Category[] = <Category[]> [];
-  selectedCategory: Category = <Category> {coatType: ''};
+  categories: Category[];
+  selectedCategory: Category;
   imageInterval: any;
   categoryIndex: number = 0;
+  url: string;
 
-  constructor(private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) {}
+  constructor(
+    private ordersService: OrdersService,
+    private accountService: AccountService,
+    private activatedRoute: ActivatedRoute
+  ) {}
   ngOnInit() {
-    this.categoriesSub = this.appService.categoriesListener.subscribe(
-      categories => {
+    this.categoriesSub = this.ordersService.getCategoriesListener().subscribe(categories => {
         this.categories = categories;
         this.activatedRoute.params.subscribe(route => {
           this.selectedCategory = this.categories.find(category => category.coatType === route['category'])!;
         })
+        this.activatedRoute.url.subscribe(url => {
+          this.url = url
+            .map(el => el.path)
+            .filter(path => !this.categories
+              .find(el => el.coatType == path))
+            .join("");
+        })
       }
     );
-    this.appService.getModels();
+    this.ordersService.getCategories();
     this.updateImageIndex();
-    // this.appService.fakeGetCategories();
   }
 
-  scrollToCategory(categoryPath: string) {
-    // this.router.navigate(['/', 'categories', categoryPath])
+  scrollToCategory(category: Category) {
+    this.selectedCategory = category;
   }
 
   updateImageIndex() {

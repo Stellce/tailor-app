@@ -30,7 +30,6 @@ export class HeaderComponent implements OnInit{
   private onAuth() {
     if(this.isAuth) {
       this.links.push({name: 'Акаунт', src: 'account'});
-      console.log('yes')
     } else {
       this.links = this.links.filter(link => link.src !== 'account');
       console.log('no')

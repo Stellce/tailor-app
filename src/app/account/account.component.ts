@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountService} from "./account.service";
-import {FormControl, FormGroup, NgForm, PatternValidator, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserDetails} from "./user-details.model";
 import {Subscription} from "rxjs";
 
@@ -21,13 +21,13 @@ export class AccountComponent implements OnInit, OnDestroy{
   ]
   userForm: FormGroup;
   isLoading: boolean = true;
-  phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
+  phoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/
   constructor(private accountService: AccountService) {}
   ngOnInit() {
     this.userDetailsSub = this.accountService.getUserDetailsListener().subscribe(userDetails => {
       this.userDetails = userDetails;
       if(userDetails.phoneNumber)this.userDetails.phoneNumber = String(this.userDetails?.phoneNumber).replace(/-/g, "");
-      console.log(userDetails);
+      // console.log(userDetails);
       let newUserDetails: any = {...userDetails};
       this.newAddress.map(el => el.oldValue = newUserDetails.address[el.name]);
 
@@ -66,6 +66,10 @@ export class AccountComponent implements OnInit, OnDestroy{
     this.userDetails ?
       this.accountService.updateUserDetails(userDetails) :
       this.accountService.postUserDetails(userDetails);
+  }
+  scrollToBottom() {
+    window.scrollTo(0, document.body.scrollHeight);
+    // nestedElement.scrollTo(0, nestedElement.scrollHeight);
   }
 
   ngOnDestroy() {

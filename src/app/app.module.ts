@@ -33,6 +33,12 @@ import { AccountComponent } from './account/account.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import {MatExpansionModule} from "@angular/material/expansion";
+import {OrdersComponent} from "./account/orders/orders.component";
+import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
+import {ServicesComponent} from "./services/services.component";
+import {OrderComponent} from "./account/orders/order/order.component";
+import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-fields/calc-res-fields.component";
 
 @NgModule({
   declarations: [
@@ -50,36 +56,46 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/m
     CategoryComponent,
     ActivationComponent,
     VideoDialogComponent,
-    AccountComponent
+    AccountComponent,
+    OrdersComponent,
+    CalculatorComponent,
+    ServicesComponent,
+    OrderComponent,
+    CalcResFieldsComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
 
-        MatIconModule,
-        MatButtonModule,
-        MatCardModule,
-        FormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatProgressSpinnerModule,
-        MatDialogModule,
-        MatDividerModule,
-        MatTableModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        ReactiveFormsModule,
-        MatMomentDateModule,
-    ],
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+    MatMomentDateModule,
+    MatExpansionModule
+  ],
   providers: [
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
     // MatDatepickerModule
     // {
     //   provide: HTTP_INTERCEPTORS,
     //   useClass: AuthInterceptor
     // }
+  ],
+  exports: [
+    CategoriesComponent,
+    CalculatorComponent
   ],
   bootstrap: [AppComponent]
 })

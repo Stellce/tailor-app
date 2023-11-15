@@ -1,0 +1,47 @@
+<form #fstForm="ngForm" (ngSubmit)="calcFstForm(fstForm)">
+  <div class="first-calc">
+    <div class="input-fields" *ngFor="let inputField of inputFieldsFst">
+      <div class="input-field">
+        <div class="span-wrapper">
+          <span>{{inputField.text}}</span>
+        </div>
+        <mat-form-field>
+          <mat-label>{{inputField.text}}</mat-label>
+          <input
+            matInput
+            [name]="inputField.name"
+            [value]="inputField.value || ''"
+            type="number"
+            ngModel
+            required>
+          <mat-error>Поле обов'язкове</mat-error>
+        </mat-form-field>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+    <div class="submit-button-wrapper">
+      <button mat-raised-button color="primary" type="submit">Далі</button>
+    </div>
+  </div>
+</form>
+<form #scndForm="ngForm" (ngSubmit)="calcScndForm(scndForm)">
+  <div id="scndCalc" class="second-calc" *ngIf="isFstFormFilled">
+    <div class="input-fields" *ngFor="let inputField of inputFieldsScnd">
+      <div class="input-field">
+        <div class="span-wrapper">
+          <span>{{inputField.text}}</span>
+        </div>
+        <mat-form-field>
+          <mat-label>{{inputField.text}}</mat-label>
+          <input matInput [value]="inputField.value || ''"  [name]="inputField.name" type="number" ngModel required>
+          <mat-error>Поле обов'язкове</mat-error>
+        </mat-form-field>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+    <div class="submit-button-wrapper">
+      <button mat-raised-button color="primary" type="submit">Далі</button>
+    </div>
+  </div>
+</form>
+<app-calc-res-fields></app-calc-res-fields>

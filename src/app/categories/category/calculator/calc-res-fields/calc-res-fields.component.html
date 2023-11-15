@@ -1,0 +1,14 @@
+<div class="res-values" *ngIf="resFields.length > 0">
+  <mat-table [dataSource]="resFields">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Назва</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.text}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="res">
+      <mat-header-cell *matHeaderCellDef>Розрахунок</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.res}}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="['name', 'res']"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['name', 'res']"></mat-row>
+  </mat-table>
+</div>

@@ -1,0 +1,27 @@
+.orders {
+  max-width: 900px;
+  width: 90%;
+  margin: auto;
+}
+.mat-column-price, .mat-column-pos {
+  width: 32px;
+  text-align: right;
+  justify-content: flex-end;
+}
+.mat-column-pos {
+  flex: 0 0 32px !important;
+  white-space: unset !important;
+}
+.mat-column-price {
+  flex: 0 0 100px !important;
+  white-space: unset !important;
+}
+.selected {
+  transform: scale(1.05);
+  cursor: default;
+  font-weight: 600;
+  background: #d9d9d9;
+}
+.selected img {
+  box-shadow: 0 0 12px 4px #1f1fdc;
+}

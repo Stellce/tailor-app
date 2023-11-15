@@ -9,5 +9,8 @@
   src: url("/assets/Inter-Light.ttf");
 }
 
-html, body { height: 100%; }
+html, body {
+  height: 100%;
+  background: #e8e8e8;
+}
 body, span { margin: 0; font-family: "Inter-Light", sans-serif; }
