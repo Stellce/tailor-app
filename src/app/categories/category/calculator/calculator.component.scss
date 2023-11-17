@@ -26,7 +26,19 @@ mat-form-field {
   width: 100%;
   flex-direction: row-reverse;
 }
-
+.flex-center {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.pattern-img img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 @media (max-width: 900px) {
   .span-wrapper span {
     max-width: 200px;

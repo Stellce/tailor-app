@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, NgForm} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {InputField} from "./inputField.model";
 import {ViewportScroller} from "@angular/common";
 import {AuthService} from "../../../auth/auth.service";
 import {CalculatorService} from "./calculator.service";
 import {OrdersService} from "../../../account/orders/orders.service";
-import {Order} from "../../../account/orders/order.model";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
@@ -18,13 +17,11 @@ export class CalculatorComponent implements OnInit{
   scndForm: FormGroup;
   inputFieldsFst: InputField[];
   inputFieldsScnd: InputField[];
-  order: Order;
   values: {[k: string]: number};
   orderId: number;
   formCreated: boolean = false;
-
   isFstFormFilled: boolean = false;
-  i = 0
+  patternImgPath: string = '../../../../assets/pattern-image.jpg'
 
   constructor(
     private scroller: ViewportScroller,
