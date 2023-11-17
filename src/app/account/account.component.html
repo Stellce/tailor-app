@@ -14,8 +14,7 @@
                 name="birthDate"
                 required
                 matInput
-                formControlName="birthDate"
-                [value]="String(userDetails.birthDate)">
+                formControlName="birthDate">
               <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker disabled="false"></mat-datepicker>
               <mat-error>Поле обов'язкове</mat-error>
@@ -30,8 +29,7 @@
                 type="number"
                 required
                 matInput
-                formControlName="phoneNumber"
-                [value]="String(userDetails.phoneNumber)">
+                formControlName="phoneNumber">
               <mat-error>Поле обов'язкове</mat-error>
             </mat-form-field>
           </div>
@@ -46,7 +44,6 @@
               <input
                 [name]="addressField.name"
                 [required]="addressField.name !== 'apartmentNumber'"
-                [value]="addressField.oldValue || ''"
                 [formControlName]="addressField.name"
                 matInput>
               <mat-error>Поле обов'язкове</mat-error>

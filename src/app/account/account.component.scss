@@ -34,6 +34,7 @@ mat-card-content {
 .categories-card {
   max-width: 1200px;
   margin: 20px auto;
+  padding: 15px;
 }
 .field {
   display: flex;
@@ -66,5 +67,10 @@ mat-form-field {
 @media (max-width: 320px) {
   mat-form-field {
     width: 100% !important;
+  }
+  .categories-card {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 5px;
   }
 }

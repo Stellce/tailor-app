@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {AuthService} from "../auth/auth.service";
 import {UserDetails} from "./user-details.model";
-import {Subject} from "rxjs";
+import {catchError, retry, Subject, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -21,14 +21,23 @@ export class AccountService {
     let token = this.authService.getToken();
     let headers = new HttpHeaders();
     headers = headers.set("Authorization", "Bearer " + token);
-    this.http.get<UserDetails>(this.backendUrl + '/clients/details', {headers: headers}).subscribe({
+    this.http.get<UserDetails>(this.backendUrl + '/clients/details', {headers: headers})
+      .pipe(
+        catchError(this.handleError)
+      ).subscribe({
       next: (userDetails) => {
         this.userDetailsListener.next(userDetails);
       },
       error: (error) => {
+        console.log(error)
         console.log(error['status']);
+        throw new Error('dsasd')
+        // this.userDetailsListener.next({});
       }
     })
+  }
+  private handleError(error: HttpErrorResponse) {
+    return throwError(() => new Error('Щось пiшло не так'))
   }
   postUserDetails(details: UserDetails) {
     let token = this.authService.getToken();
@@ -39,7 +48,9 @@ export class AccountService {
         console.log(res)
       },
       error: (error) => {
+        console.log(error)
         console.log(error['status']);
+        throw new Error(error)
       }
     })
   }

@@ -10,6 +10,7 @@ import {CategoryComponent} from "./categories/category/category.component";
 import {OrdersComponent} from "./account/orders/orders.component";
 import {ServicesComponent} from "./services/services.component";
 import {OrderComponent} from "./account/orders/order/order.component";
+import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'about', pathMatch: 'full'},
@@ -23,7 +24,8 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'account', component: AccountComponent, children: [
       {path: ':category', component: OrdersComponent, children: [
-          {path: ':modelId', component: OrderComponent}
+          {path: ':orderId', component: OrderComponent, pathMatch: 'full'},
+          {path: ':orderId/edit', component: CalculatorComponent, pathMatch: "full"}
         ]}
     ]},
   {path: '**', redirectTo: 'about'}

@@ -1,4 +1,4 @@
-<form #fstForm="ngForm" (ngSubmit)="calcFstForm(fstForm)">
+<form [formGroup]="fstForm" (ngSubmit)="calcFstForm()" *ngIf="formCreated">
   <div class="first-calc">
     <div class="input-fields" *ngFor="let inputField of inputFieldsFst">
       <div class="input-field">
@@ -9,10 +9,8 @@
           <mat-label>{{inputField.text}}</mat-label>
           <input
             matInput
-            [name]="inputField.name"
-            [value]="inputField.value || ''"
+            [formControlName]="inputField.name"
             type="number"
-            ngModel
             required>
           <mat-error>Поле обов'язкове</mat-error>
         </mat-form-field>
@@ -24,7 +22,7 @@
     </div>
   </div>
 </form>
-<form #scndForm="ngForm" (ngSubmit)="calcScndForm(scndForm)">
+<form [formGroup]="scndForm" (ngSubmit)="calcScndForm()">
   <div id="scndCalc" class="second-calc" *ngIf="isFstFormFilled">
     <div class="input-fields" *ngFor="let inputField of inputFieldsScnd">
       <div class="input-field">
@@ -33,7 +31,7 @@
         </div>
         <mat-form-field>
           <mat-label>{{inputField.text}}</mat-label>
-          <input matInput [value]="inputField.value || ''"  [name]="inputField.name" type="number" ngModel required>
+          <input matInput [formControlName]="inputField.name" type="number" required>
           <mat-error>Поле обов'язкове</mat-error>
         </mat-form-field>
       </div>

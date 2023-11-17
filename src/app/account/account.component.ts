@@ -20,29 +20,49 @@ export class AccountComponent implements OnInit, OnDestroy{
     {name: 'zipCode', text: 'Поштовий код'}
   ]
   userForm: FormGroup;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
   phoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/
   constructor(private accountService: AccountService) {}
   ngOnInit() {
-    this.userDetailsSub = this.accountService.getUserDetailsListener().subscribe(userDetails => {
-      this.userDetails = userDetails;
-      if(userDetails.phoneNumber)this.userDetails.phoneNumber = String(this.userDetails?.phoneNumber).replace(/-/g, "");
-      // console.log(userDetails);
-      let newUserDetails: any = {...userDetails};
-      this.newAddress.map(el => el.oldValue = newUserDetails.address[el.name]);
-
-      this.userForm = new FormGroup({
-        birthDate: new FormControl(this.userDetails.birthDate || '', Validators.required),
-        phoneNumber: new FormControl(this.userDetails.phoneNumber || '', Validators.required),
-        address: new FormGroup({
-          city: new FormControl(this.userDetails.address.city || '', Validators.required),
-          street: new FormControl(this.userDetails.address.street || '', Validators.required),
-          buildingNumber: new FormControl(this.userDetails.address.buildingNumber || '', Validators.required),
-          apartmentNumber: new FormControl(this.userDetails.address.apartmentNumber || ''),
-          zipCode: new FormControl(this.userDetails.address.zipCode || '', Validators.required)
-        })
+    this.userForm = new FormGroup({
+      birthDate: new FormControl('', Validators.required),
+      phoneNumber: new FormControl('', Validators.required),
+      address: new FormGroup({
+        city: new FormControl('', Validators.required),
+        street: new FormControl('', Validators.required),
+        buildingNumber: new FormControl('', Validators.required),
+        apartmentNumber: new FormControl(''),
+        zipCode: new FormControl('', Validators.required)
       })
-      this.isLoading = false
+    })
+    this.userDetailsSub = this.accountService.getUserDetailsListener().subscribe({
+      next: userDetails => {
+        this.userDetails = userDetails;
+        if(userDetails.phoneNumber)this.userDetails.phoneNumber = String(this.userDetails?.phoneNumber).replace(/-/g, "");
+        // console.log(userDetails);
+        let newUserDetails: any = {...userDetails};
+        this.newAddress.map(el => el.oldValue = newUserDetails.address[el.name]);
+        this.userForm.setValue({
+          birthDate: this.userDetails.birthDate,
+          phoneNumber: this.userDetails.phoneNumber,
+          address: {
+            city: this.userDetails.address.city,
+            street: this.userDetails.address.street,
+            buildingNumber: this.userDetails.address.buildingNumber,
+            apartmentNumber: this.userDetails.address.apartmentNumber,
+            zipCode: this.userDetails.address.zipCode
+          }
+        })
+        this.isLoading = false
+      },
+      error: err => {
+        this.isLoading = false;
+        console.log(err);
+        console.log('Achtung!')
+      },
+      complete: () => {
+
+      }
     })
     this.accountService.getUserDetails();
   }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Model} from "../../categories/category/category-model.model";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../auth/auth.service";
@@ -80,6 +80,9 @@ export class OrdersService {
     headers = headers.set("Authorization", "Bearer " + token);
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: headers}).subscribe({
       next: (orders) => {
+        console.log('orders')
+        console.log(orders)
+
         orders = orders.map((order) => {
           order.createdAt = new Date(order.createdAt).toLocaleString('en-GB', {
             hour12: false
@@ -113,4 +116,5 @@ export class OrdersService {
       this.orderListener.next(order);
     })
   }
+
 }

@@ -29,7 +29,7 @@ export class CalcResFieldsComponent implements OnInit, OnDestroy{
       this.calcService.handleCalcValues(order.patternData);
     })
     this.activatedRoute.params.subscribe(params => {
-      let modelId = params['modelId'];
+      let modelId = params['orderId'];
       if(modelId) this.ordersService.getOrderById(modelId);
     })
   }
