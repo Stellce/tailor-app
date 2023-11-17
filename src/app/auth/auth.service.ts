@@ -7,6 +7,8 @@ import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "./error-dialog/error-dialog.component";
 import {jwtDecode, JwtPayload} from 'jwt-decode';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {SnackBarComponent} from "../snack-bar/snack-bar.component";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,7 @@ export class AuthService {
   tokenTimer: any;
   isAuthenticated: boolean = false;
 
-  constructor(private http: HttpClient, private router: Router, public dialog: MatDialog) {}
+  constructor(private http: HttpClient, private router: Router, public dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
   getToken() {
     return this.token;
@@ -60,6 +62,7 @@ export class AuthService {
     this.http.post(`${this.backendUrl}/clients/register`, user).subscribe({
       next: () => {
         this.router.navigate(['/']);
+        this._snackBar.openFromComponent(SnackBarComponent, {duration: 5000, data: "Перевiрте пошту"});
       },
       error: (error) => {
         this.error = error;

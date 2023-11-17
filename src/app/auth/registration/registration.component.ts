@@ -31,7 +31,7 @@ export class RegistrationComponent implements OnInit, OnDestroy{
     this.user = {...formValues}
     this.authService.register(this.user);
     console.log(form);
-    console.log(this.user)
+    console.log(this.user);
   }
 
   ngOnDestroy() {
