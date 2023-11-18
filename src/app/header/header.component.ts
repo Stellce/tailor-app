@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit{
   links: {name: string, src: string}[] = [
     {name: 'Про нас', src: 'about'},
     {name: 'Послуги', src: 'categories'},
-    {name: 'Ціни', src: 'prices'}
+    // {name: 'Ціни', src: 'prices'}
   ];
   isAuth: boolean;
   isAuthSub: Subscription;
@@ -28,8 +28,8 @@ export class HeaderComponent implements OnInit{
   }
 
   private onAuth() {
-    if(this.isAuth) {
-      this.links.push({name: 'Акаунт', src: 'account'});
+    if(this.isAuth && !this.links.find(link => link.src === 'account')) {
+      this.links.push({name: 'Акаунт', src: 'account/midi_coat'});
     } else {
       this.links = this.links.filter(link => link.src !== 'account');
       console.log('no')

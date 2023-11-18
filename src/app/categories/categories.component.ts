@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from "rxjs";
 import {Category} from "./category/category.model";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLinkActive} from "@angular/router";
 import {AccountService} from "../account/account.service";
 import {OrdersService} from "../account/orders/orders.service";
 
@@ -17,6 +17,7 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   imageInterval: any;
   categoryIndex: number = 0;
   url: string;
+  isFstClick: boolean = true;
 
   constructor(
     private ordersService: OrdersService,
@@ -25,17 +26,15 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   ) {}
   ngOnInit() {
     this.categoriesSub = this.ordersService.getCategoriesListener().subscribe(categories => {
-        this.categories = categories;
-        this.activatedRoute.params.subscribe(route => {
-          this.selectedCategory = this.categories.find(category => category.coatType === route['category'])!;
-        })
-        this.activatedRoute.url.subscribe(url => {
-          this.url = url
-            .map(el => el.path)
-            .filter(path => !this.categories
-              .find(el => el.coatType == path))
-            .join("");
-        })
+      this.categories = categories;
+      this.activatedRoute.params.subscribe(route => {
+        this.selectedCategory = this.categories.find(category => category.coatType === route['category'])!;
+      })
+      this.url = this.activatedRoute.snapshot.url
+        .map(el => el.path)
+        .filter(path =>
+          !this.categories.find(el => el.coatType == path)
+        ).join("");
       }
     );
     this.ordersService.getCategories();
@@ -50,6 +49,10 @@ export class CategoriesComponent implements OnInit, OnDestroy{
     this.imageInterval = setInterval(() => {
       this.categoryIndex = this.categoryIndex >= this.categories.length-1 ? 0 : this.categoryIndex += 1;
     }, 5000);
+  }
+
+  getCategoryImage(category: Category) {
+    return category.models[this.categoryIndex]?.image || '';
   }
 
   ngOnDestroy() {

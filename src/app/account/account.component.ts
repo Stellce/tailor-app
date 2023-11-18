@@ -59,19 +59,13 @@ export class AccountComponent implements OnInit, OnDestroy{
         this.isLoading = false;
         console.log(err);
         console.log('Achtung!')
-      },
-      complete: () => {
-
       }
     })
     this.accountService.getUserDetails();
   }
 
   onSubmit() {
-    console.log(this.userForm);
     if(this.userForm.invalid) return;
-    console.log('valid')
-
     let userDetails: UserDetails = {
       birthDate: this.userForm.controls['birthDate'].value,
       phoneNumber: this.userForm.controls['phoneNumber'].value,

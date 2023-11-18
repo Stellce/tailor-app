@@ -1,3 +1,6 @@
+<div class="spinner-wrapper">
+  <mat-spinner *ngIf="!categories"></mat-spinner>
+</div>
 <div class="categories-wrapper" *ngIf="categories">
   <div class="categories-flex">
     <a
@@ -5,10 +8,11 @@
       [ngClass]="{selected: selectedCategory && selectedCategory.coatType === category.coatType}"
       *ngFor="let category of categories"
       [routerLink]="['/', url, category.coatType.toLowerCase()]"
-      routerLinkActive="selected"
-      (click)="scrollToCategory(category)">
+      [routerLinkActive]="['selected']"
+      (click)="scrollToCategory(category)"
+      >
       <div class="category-image">
-        <img [src]="'data:image/png;base64, ' + category.models[this.categoryIndex].image" [alt]="category.text">
+        <img [src]="'data:image/png;base64, ' + getCategoryImage(category)" [alt]="category.text">
       </div>
       <span>{{category.text}}</span>
     </a>

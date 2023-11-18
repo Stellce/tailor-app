@@ -54,7 +54,6 @@ export class OrdersService {
       modelsResponse.forEach(model =>
         this.categories.find(category =>
           category.coatType === model.coatType && !category.models.some(m => m === model ))?.models?.push(model));
-      console.log(this.categories)
       this.categoriesListener.next(this.categories);
     });
   }
@@ -70,7 +69,6 @@ export class OrdersService {
     headers = headers.set("Authorization", "Bearer " + authToken);
     this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, this.values, {headers: headers}).subscribe(res => {
       console.log(res)
-      // this.calcService.handleCalcValues(res);
     });
   }
 
@@ -80,9 +78,6 @@ export class OrdersService {
     headers = headers.set("Authorization", "Bearer " + token);
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: headers}).subscribe({
       next: (orders) => {
-        console.log('orders')
-        console.log(orders)
-
         orders = orders.map((order) => {
           order.createdAt = new Date(order.createdAt).toLocaleString('en-GB', {
             hour12: false

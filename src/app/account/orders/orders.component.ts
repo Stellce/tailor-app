@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {Order} from "./order.model";
-import {ActivatedRoute, RouterLinkActive} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {OrdersService} from "./orders.service";
 import {Category} from "../../categories/category/category.model";
 
@@ -11,7 +11,6 @@ import {Category} from "../../categories/category/category.model";
   styleUrl: './orders.component.scss'
 })
 export class OrdersComponent implements OnInit, OnDestroy{
-  @ViewChild('routerLinkActive') routerLinkActive: RouterLinkActive;
   categories: Category[];
   categoriesSub: Subscription;
   tableData: Order[] = <Order[]>[];
