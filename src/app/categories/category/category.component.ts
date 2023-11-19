@@ -24,7 +24,6 @@ export class CategoryComponent implements OnInit, OnDestroy{
   ) {}
   ngOnInit() {
     this.categorySub = this.ordersService.getCategoriesListener().subscribe(categories => {
-      console.log(categories)
       this.activatedRoute.params.subscribe(params => {
         this.category = categories.find(category => category.coatType.toUpperCase() === params['category'].toUpperCase())!
       })

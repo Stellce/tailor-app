@@ -1,4 +1,5 @@
 import {Model} from "../../categories/category/category-model.model";
+import {ProductMetrics} from "../../categories/category/calculator/product-metrics.model";
 
 export interface Order {
   num?: number;
@@ -6,4 +7,5 @@ export interface Order {
   createdAt: string | Date;
   coatModel: Model;
   patternData: {[s: string]: string};
+  productMetrics: ProductMetrics;
 }

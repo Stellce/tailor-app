@@ -6,14 +6,15 @@ import {environment} from "../../../environments/environment";
 import {Order} from "./order.model";
 import {Subject} from "rxjs";
 import {Category} from "../../categories/category/category.model";
+import {ProductMetrics} from "../../categories/category/calculator/product-metrics.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdersService {
   backendUrl: string = environment.backendUrl;
-  model: Model;
-  values: {coatModelId: number, productMetrics: { [k: string]: number }};
+  modelId: number;
+  productMetrics: ProductMetrics;
   orderListener = new Subject<Order>();
   categories: Category[] = [
     {
@@ -59,16 +60,24 @@ export class OrdersService {
   }
 
   selectModel(model: Model) {
-    this.model = model;
+    this.modelId = model.id;
   }
 
-  createOrder(values: {[k: string]: number}) {
-    this.values = {coatModelId: this.model.id, productMetrics: {...values}};
+  createOrder(productMetrics:  ProductMetrics) {
+    this.productMetrics = {...productMetrics};
     const authToken = this.authService.getToken();
     let headers = new HttpHeaders();
+    let order = {
+      coatModelId: this.modelId,
+      productMetrics: {
+        clientMetrics: {...productMetrics.clientMetrics},
+        ...productMetrics.increases
+      }
+    }
+    console.log(order)
     headers = headers.set("Authorization", "Bearer " + authToken);
-    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, this.values, {headers: headers}).subscribe(res => {
-      console.log(res)
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: headers}).subscribe(res => {
+      console.log(res);
     });
   }
 
@@ -84,7 +93,6 @@ export class OrdersService {
           });
           return order;
         })
-        // this.models = orders.map(order => order.coatModel);
         this.categories.forEach(category => category.orders = []);
         orders.forEach(order =>
           this.categories.find(category =>
@@ -97,7 +105,6 @@ export class OrdersService {
           return category
         })
         this.categoriesListener.next(this.categories);
-        // this.ordersListener.next(orders)
       },
       error: (error) => console.log(error)
     })
@@ -111,5 +118,4 @@ export class OrdersService {
       this.orderListener.next(order);
     })
   }
-
 }

@@ -39,6 +39,7 @@ import {CalculatorComponent} from "./categories/category/calculator/calculator.c
 import {ServicesComponent} from "./services/services.component";
 import {OrderComponent} from "./account/orders/order/order.component";
 import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-fields/calc-res-fields.component";
+import {DialogDataComponent} from "./auth/dialog-data/dialog-data.component";
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-
     CalculatorComponent,
     ServicesComponent,
     OrderComponent,
-    CalcResFieldsComponent
+    CalcResFieldsComponent,
+    DialogDataComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +89,6 @@ import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-
   ],
   providers: [
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
-    // MatDatepickerModule
     // {
     //   provide: HTTP_INTERCEPTORS,
     //   useClass: AuthInterceptor

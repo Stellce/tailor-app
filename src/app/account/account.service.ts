@@ -3,7 +3,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {AuthService} from "../auth/auth.service";
 import {UserDetails} from "./user-details.model";
-import {catchError, retry, Subject, throwError} from "rxjs";
+import {catchError, Observable, retry, Subject, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -30,14 +30,11 @@ export class AccountService {
       },
       error: (error) => {
         console.log(error)
-        console.log(error['status']);
-        throw new Error('dsasd')
-        // this.userDetailsListener.next({});
       }
     })
   }
   private handleError(error: HttpErrorResponse) {
-    return throwError(() => new Error('Щось пiшло не так'))
+    return new Observable<any>();
   }
   postUserDetails(details: UserDetails) {
     let token = this.authService.getToken();

@@ -1,6 +1,6 @@
-<form [formGroup]="fstForm" (ngSubmit)="calcFstForm()" *ngIf="formCreated">
+<form [formGroup]="metricsForm" (ngSubmit)="calcFstForm()" *ngIf="formCreated">
   <div class="first-calc">
-    <div class="input-fields" *ngFor="let inputField of inputFieldsFst">
+    <div class="input-fields" *ngFor="let inputField of inputMetrics">
       <div class="input-field">
         <div class="span-wrapper">
           <span>{{inputField.text}}</span>
@@ -18,13 +18,14 @@
       <mat-divider></mat-divider>
     </div>
     <div class="submit-button-wrapper">
-      <button mat-raised-button color="primary" type="submit">Далі</button>
+      <button mat-raised-button color="primary" type="submit" *ngIf="!isMetricsFormFilled">Далі</button>
     </div>
   </div>
 </form>
-<form [formGroup]="scndForm" (ngSubmit)="calcScndForm()">
-  <div id="scndCalc" class="second-calc" *ngIf="isFstFormFilled">
-    <div class="input-fields" *ngFor="let inputField of inputFieldsScnd">
+<mat-divider></mat-divider>
+<form [formGroup]="increasesForm" (ngSubmit)="calcScndForm()">
+  <div id="scndCalc" class="second-calc" *ngIf="isMetricsFormFilled">
+    <div class="input-fields" *ngFor="let inputField of inputIncreases">
       <div class="input-field">
         <div class="span-wrapper">
           <span>{{inputField.text}}</span>

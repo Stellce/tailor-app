@@ -20,6 +20,5 @@ export class ActivationComponent implements OnInit{
     this.authService.authStatusListener.subscribe(status => {
       this.isActivated = status;
     })
-    //
   }
 }

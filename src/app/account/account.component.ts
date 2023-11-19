@@ -39,7 +39,6 @@ export class AccountComponent implements OnInit, OnDestroy{
       next: userDetails => {
         this.userDetails = userDetails;
         if(userDetails.phoneNumber)this.userDetails.phoneNumber = String(this.userDetails?.phoneNumber).replace(/-/g, "");
-        // console.log(userDetails);
         let newUserDetails: any = {...userDetails};
         this.newAddress.map(el => el.oldValue = newUserDetails.address[el.name]);
         this.userForm.setValue({
@@ -83,7 +82,6 @@ export class AccountComponent implements OnInit, OnDestroy{
   }
   scrollToBottom() {
     window.scrollTo(0, document.body.scrollHeight);
-    // nestedElement.scrollTo(0, nestedElement.scrollHeight);
   }
 
   ngOnDestroy() {

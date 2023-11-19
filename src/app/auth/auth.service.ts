@@ -9,6 +9,7 @@ import {ErrorDialogComponent} from "./error-dialog/error-dialog.component";
 import {jwtDecode, JwtPayload} from 'jwt-decode';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {SnackBarComponent} from "../snack-bar/snack-bar.component";
+import {TailorJwtPayload} from "./JwtPayload";
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +21,15 @@ export class AuthService {
   token: string;
   tokenTimer: any;
   isAuthenticated: boolean = false;
+  roles: string[];
 
   constructor(private http: HttpClient, private router: Router, public dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
   getToken() {
     return this.token;
+  }
+  getRoles() {
+    return this.roles;
   }
 
   getIsAuth() {
@@ -44,7 +49,8 @@ export class AuthService {
     const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
     if (expiresIn > 0) {
       this.token = authInformation.token;
-      this.isAuthenticated = true;
+      let decoded: TailorJwtPayload = jwtDecode(this.token);
+      this.roles = decoded.roles.replace(/[\[\]']+/g, '').split(',');
       this.setAuthTimer(expiresIn / 1000);
       this.isAuthenticated = true;
       this.authStatusListener.next(true);
@@ -78,7 +84,9 @@ export class AuthService {
     this.http.post(`${this.backendUrl}/authenticate`, userObj, {responseType: "text"}).subscribe({
       next: (token) => {
         this.token = token;
-        let decoded: JwtPayload = jwtDecode(token);
+        let decoded: TailorJwtPayload = jwtDecode(token);
+        this.roles = decoded.roles.replace(/[\[\]']+/g, '').split(',');
+        // console.log(this.roles);
         this.isAuthenticated = true;
         this.authStatusListener.next(true);
 
@@ -99,7 +107,8 @@ export class AuthService {
     this.http.post(`${this.backendUrl}/users/activate/${id}`, {}, {responseType: "text"}).subscribe({
     next: (token) => {
       this.token = token;
-      let decoded = jwtDecode(token);
+      let decoded: TailorJwtPayload = jwtDecode(token);
+      this.roles = decoded.roles.replace(/[\[\]']+/g, '').split(',');
       this.saveAuthData(token, new Date(decoded.exp! * 1000));
       this.isAuthenticated = true;
       this.authStatusListener.next(true);

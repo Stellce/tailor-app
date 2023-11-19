@@ -10,6 +10,7 @@
         <img [src]="'data:image/png;base64, ' + model.image" [alt]="category.text">
         <span>{{model.name}}</span>
         <div class="video-bubble" (click)="openDialog()"><mat-icon>videocam</mat-icon></div>
+        <div class="price-bubble">Цiна: {{model.price}}</div>
       </div>
     </div>
   </div>

@@ -4,13 +4,15 @@ import {environment} from "../../../../environments/environment";
 import {Subject} from "rxjs";
 import {ResField} from "./resField.model";
 import {InputField} from "./inputField.model";
+import {ProductMetrics} from "./product-metrics.model";
 
 @Injectable({providedIn: 'root'})
 export class CalculatorService {
   backendUrl: string = environment.backendUrl;
   calcValues = {};
+  isUserDataProvidedListener = new Subject<boolean>();
 
-  inputFieldsFst: InputField[] = [
+  clientMetrics: InputField[] = [
     {name: 'neckSemiCircumference', text: 'Напiвобхват шиї'},
     {name: 'chestSemiCircumference1', text:'Напiвобхват грудей перший'},
     {name: 'chestSemiCircumference2', text: 'Напiвобхват грудей другий'},
@@ -29,7 +31,7 @@ export class CalculatorService {
     {name: 'neckBaseToFrontWaistLineDistance', text: 'Відстань вiд точки основи шиї лінії талії спереду'}
   ];
 
-  inputFieldsScnd: InputField[] = [
+  clientIncrease: InputField[] = [
     {name: 'increaseToWidthByChestLine', text: 'До ширини виробу по лінії грудей'},
     {name: 'increaseToArmholeDepth', text: 'До глибини пройми'},
     {name: 'increaseToNeckBack', text: 'До ширини горловини спинки і пілочки'}
@@ -62,13 +64,23 @@ export class CalculatorService {
   constructor(private http: HttpClient) {}
 
   getInputFieldsFst() {
-    return this.inputFieldsFst;
+    return this.clientMetrics;
   }
   getInputFieldsScnd() {
-    return this.inputFieldsScnd;
+    return this.clientIncrease;
   }
-  calculate(values: {[k: string]: number}) {
-    this.http.post<{[s: string]: string}>(`${this.backendUrl}/patterns/calculate`, values).subscribe(res => {
+  getisUserDataProvidedListener() {
+    return this.isUserDataProvidedListener.asObservable();
+  }
+  setUserData(userData: any) {
+    this.isUserDataProvidedListener.next(true);
+  }
+  calculate(productMetrics: ProductMetrics) {
+    let calcObj = {
+      clientMetrics: {...productMetrics.clientMetrics},
+      ...productMetrics.increases
+    }
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/patterns/calculate`, calcObj).subscribe(res => {
       this.handleCalcValues(res);
     });
   }
