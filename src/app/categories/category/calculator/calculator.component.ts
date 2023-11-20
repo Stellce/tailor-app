@@ -103,7 +103,7 @@ export class CalculatorComponent implements OnInit{
       productMetrics.increases[k] = v.value;
     }
     this.productMetrics = productMetrics;
-    if (this.authService.getIsAuth()) {
+    if (this.authService.getUser()) {
       this.ordersService.createOrder(this.productMetrics);
     }
     this.calcService.calculate(this.productMetrics);

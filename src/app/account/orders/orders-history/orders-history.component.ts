@@ -1,16 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {Order} from "./order.model";
+import {Order} from "../order.model";
 import {ActivatedRoute} from "@angular/router";
-import {OrdersService} from "./orders.service";
-import {Category} from "../../categories/category/category.model";
+import {OrdersService} from "../orders.service";
+import {Category} from "../../../categories/category/category.model";
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  styleUrl: './orders.component.scss'
+  selector: 'app-orders-history',
+  templateUrl: './orders-history.component.html',
+  styleUrl: './orders-history.component.scss'
 })
-export class OrdersComponent implements OnInit, OnDestroy{
+export class OrdersHistoryComponent implements OnInit, OnDestroy{
   categories: Category[];
   categoriesSub: Subscription;
   tableData: Order[] = <Order[]>[];

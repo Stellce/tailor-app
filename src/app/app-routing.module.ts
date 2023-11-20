@@ -7,10 +7,10 @@ import {LoginComponent} from "./auth/login/login.component";
 import {ActivationComponent} from "./auth/activation/activation.component";
 import {AccountComponent} from "./account/account.component";
 import {CategoryComponent} from "./categories/category/category.component";
-import {OrdersComponent} from "./account/orders/orders.component";
+import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {ServicesComponent} from "./services/services.component";
-import {OrderComponent} from "./account/orders/order/order.component";
 import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
+import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-fields/calc-res-fields.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'about', pathMatch: 'full'},
@@ -23,8 +23,8 @@ const routes: Routes = [
   {path: 'activate/:id', component: ActivationComponent},
   {path: 'login', component: LoginComponent},
   {path: 'account', component: AccountComponent, children: [
-      {path: ':category', component: OrdersComponent, children: [
-          {path: ':orderId', component: OrderComponent, pathMatch: 'full'},
+      {path: ':category', component: OrdersHistoryComponent, children: [
+          {path: ':orderId', component: CalcResFieldsComponent, pathMatch: 'full'},
           {path: ':orderId/edit', component: CalculatorComponent, pathMatch: "full"}
         ]}
     ]},

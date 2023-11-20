@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {User} from "../user.model";
+import {Customer} from "../customer.model";
 import {AuthService} from "../auth.service";
 import {Subscription} from "rxjs";
 
@@ -11,7 +11,7 @@ import {Subscription} from "rxjs";
 })
 export class RegistrationComponent implements OnInit, OnDestroy{
   hide: boolean = true;
-  user: User;
+  user: Customer;
   authStatusSub: Subscription;
   isLoading: boolean = false;
   constructor(private authService: AuthService) {}

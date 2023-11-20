@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {AuthService} from "../auth.service";
-import {User} from "../user.model";
+import {Customer} from "../customer.model";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   onLogin(form: NgForm) {
     if(form.invalid) return;
     this.isLoading = true;
-    let user: User = form.value;
+    let user: Customer = form.value;
     this.authService.login(user);
   }
 

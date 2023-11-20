@@ -17,7 +17,7 @@ export class ActivationComponent implements OnInit{
     this.activatedRoute.params.subscribe(params => {
       this.authService.activateAccount(params['id']);
     })
-    this.authService.authStatusListener.subscribe(status => {
+    this.authService.isAuthListener.subscribe(status => {
       this.isActivated = status;
     })
   }

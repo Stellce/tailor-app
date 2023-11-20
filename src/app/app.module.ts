@@ -34,12 +34,13 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import {MatExpansionModule} from "@angular/material/expansion";
-import {OrdersComponent} from "./account/orders/orders.component";
+import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
 import {ServicesComponent} from "./services/services.component";
 import {OrderComponent} from "./account/orders/order/order.component";
 import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-fields/calc-res-fields.component";
 import {DialogDataComponent} from "./auth/dialog-data/dialog-data.component";
+import {OrdersComponent} from "./account/employee/orders/orders.component";
 
 @NgModule({
   declarations: [
@@ -58,12 +59,13 @@ import {DialogDataComponent} from "./auth/dialog-data/dialog-data.component";
     ActivationComponent,
     VideoDialogComponent,
     AccountComponent,
-    OrdersComponent,
+    OrdersHistoryComponent,
     CalculatorComponent,
     ServicesComponent,
     OrderComponent,
     CalcResFieldsComponent,
-    DialogDataComponent
+    DialogDataComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule,
@@ -94,10 +96,7 @@ import {DialogDataComponent} from "./auth/dialog-data/dialog-data.component";
     //   useClass: AuthInterceptor
     // }
   ],
-  exports: [
-    CategoriesComponent,
-    CalculatorComponent
-  ],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

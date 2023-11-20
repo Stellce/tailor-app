@@ -4,8 +4,10 @@
       class="link"
       *ngFor="let link of links"
       [routerLink]="link.src"
-      routerLinkActive="highlighted-link"
+      [ngClass]="{'highlighted-link': isActive(link.src.split('/')[0])}"
     ><span>{{link.name}}</span></div>
+
+<!--    routerLinkActive="highlighted-link"-->
 
     <div class="menu">
       <mat-icon (click)="menuSwitcher = !menuSwitcher">menu</mat-icon>
@@ -17,7 +19,7 @@
           routerLinkActive="menu-link-active"
         ><span>{{link.name}}</span></div>
       </div>
-      </div>
+    </div>
     <div
       class="login"
       [routerLink]="'login'"

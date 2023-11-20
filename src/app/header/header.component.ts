@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
-import {Subscription} from "rxjs";
+import {Subject, Subscription} from "rxjs";
+import {ActivatedRoute, Router, UrlSegment} from "@angular/router";
+import {Customer} from "../auth/customer.model";
+import {User} from "../account/user.model";
 
 @Component({
   selector: 'app-header',
@@ -15,10 +18,10 @@ export class HeaderComponent implements OnInit{
   ];
   isAuth: boolean;
   isAuthSub: Subscription;
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
-    this.isAuth = this.authService.getIsAuth();
+    this.isAuth = this.authService.getUser();
     this.isAuthSub = this.authService.getAuthStatusListener().subscribe(isAuth => {
       this.isAuth = isAuth;
       this.onAuth();
@@ -32,6 +35,10 @@ export class HeaderComponent implements OnInit{
     } else {
       this.links = this.links.filter(link => link.src !== 'account/midi_coat');
     }
+  }
+
+  isActive(url: any) {
+    return this.router.url.includes(url);
   }
 
   onLogout() {

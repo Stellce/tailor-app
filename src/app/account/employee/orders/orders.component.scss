@@ -1,13 +1,12 @@
 $short-column: 32px;
 $medium-column: 64px;
-$long-column: 128px;
 
 .orders {
   max-width: 900px;
   width: 90%;
   margin: auto;
 }
-.mat-column-price, .mat-column-pos, .mat-column-edit {
+.mat-column-price, .mat-column-pos, .mat-column-assign {
   width: 64px;
   text-align: right;
   justify-content: flex-end;
@@ -20,7 +19,7 @@ $long-column: 128px;
   flex: 0 0 100px !important;
   white-space: unset !important;
 }
-.mat-column-edit {
+.mat-column-assign {
   flex: 0 0 $medium-column !important;
   white-space: unset;
   justify-content: flex-start;
@@ -42,14 +41,4 @@ $long-column: 128px;
   font-weight: normal;
   height: 100px;
   width: 100px;
-}
-.selected img {
-  box-shadow: 0 0 12px 4px #1f1fdc;
-}
-.no-orders {
-  font-size: 16px;
-  margin: 20px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

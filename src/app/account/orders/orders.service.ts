@@ -16,6 +16,7 @@ export class OrdersService {
   modelId: number;
   productMetrics: ProductMetrics;
   orderListener = new Subject<Order>();
+  ordersListener = new Subject<Order[]>();
   categories: Category[] = [
     {
       coatType: 'JACKET_COAT',
@@ -42,6 +43,9 @@ export class OrdersService {
   getOrderListener() {
     return this.orderListener.asObservable();
   }
+  getOrdersListener() {
+    return this.ordersListener.asObservable();
+  }
   getCategoriesListener() {
     return this.categoriesListener.asObservable();
   }
@@ -65,8 +69,6 @@ export class OrdersService {
 
   createOrder(productMetrics:  ProductMetrics) {
     this.productMetrics = {...productMetrics};
-    const authToken = this.authService.getToken();
-    let headers = new HttpHeaders();
     let order = {
       coatModelId: this.modelId,
       productMetrics: {
@@ -75,17 +77,13 @@ export class OrdersService {
       }
     }
     console.log(order)
-    headers = headers.set("Authorization", "Bearer " + authToken);
-    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: headers}).subscribe(res => {
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.getHeader()}).subscribe(res => {
       console.log(res);
     });
   }
 
   getOrders() {
-    let token = this.authService.getToken();
-    let headers = new HttpHeaders();
-    headers = headers.set("Authorization", "Bearer " + token);
-    this.http.get<Order[]>(this.backendUrl + '/orders', {headers: headers}).subscribe({
+    this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.getHeader()}).subscribe({
       next: (orders) => {
         orders = orders.map((order) => {
           order.createdAt = new Date(order.createdAt).toLocaleString('en-GB', {
@@ -111,11 +109,28 @@ export class OrdersService {
   }
 
   getOrderById(id: number) {
-    const authToken = this.authService.getToken();
-    let headers = new HttpHeaders();
-    headers = headers.set("Authorization", "Bearer " + authToken);
-    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: headers}).subscribe(order => {
+    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.getHeader()}).subscribe(order => {
       this.orderListener.next(order);
     })
+  }
+
+  getAllUnassignedOrders() {
+    this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.getHeader()}).subscribe(orders => {
+      console.log(orders);
+      this.ordersListener.next(orders);
+    })
+  }
+
+  assignOrder(orderId: number) {
+    this.http.patch(`${this.backendUrl}/orders/assign/${orderId}`, {}, {headers: this.getHeader()}).subscribe({
+      next: () => {},
+      error: (err) => console.log(err)
+    })
+  }
+
+  private getHeader() {
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    return headers.set("Authorization", "Bearer " + authToken);
   }
 }

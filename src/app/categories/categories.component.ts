@@ -33,7 +33,10 @@ export class CategoriesComponent implements OnInit, OnDestroy{
       this.url = this.activatedRoute.snapshot.url
         .map(el => el.path)
         .filter(path =>
-          !this.categories.find(el => el.coatType == path)
+          !this.categories.some(el => {
+            console.log(path, el.coatType.toLowerCase())
+            return el.coatType.toLowerCase() == path
+          })
         ).join("");
       }
     );
@@ -42,6 +45,8 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   }
 
   scrollToCategory(category: Category) {
+    console.log(['/', this.url, category.coatType.toLowerCase()].join("/"));
+    console.log(this.url)
     this.selectedCategory = category;
   }
 

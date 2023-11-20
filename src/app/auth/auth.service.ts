@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {User} from "./user.model";
+import {Customer} from "./customer.model";
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
@@ -10,17 +10,18 @@ import {jwtDecode, JwtPayload} from 'jwt-decode';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {SnackBarComponent} from "../snack-bar/snack-bar.component";
 import {TailorJwtPayload} from "./JwtPayload";
+import {User} from "../account/user.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   backendUrl = environment.backendUrl;
-  authStatusListener = new Subject<boolean>();
+  isAuthListener = new Subject<boolean>();
   error: HttpErrorResponse;
   token: string;
   tokenTimer: any;
-  isAuthenticated: boolean = false;
+  isAuth: boolean;
   roles: string[];
 
   constructor(private http: HttpClient, private router: Router, public dialog: MatDialog, private _snackBar: MatSnackBar) {}
@@ -32,12 +33,12 @@ export class AuthService {
     return this.roles;
   }
 
-  getIsAuth() {
-    return this.isAuthenticated;
+  getUser() {
+    return this.isAuth;
   }
 
   getAuthStatusListener() {
-    return this.authStatusListener.asObservable();
+    return this.isAuthListener.asObservable();
   }
 
   autoAuthUser() {
@@ -52,8 +53,8 @@ export class AuthService {
       let decoded: TailorJwtPayload = jwtDecode(this.token);
       this.roles = decoded.roles.replace(/[\[\]']+/g, '').split(',');
       this.setAuthTimer(expiresIn / 1000);
-      this.isAuthenticated = true;
-      this.authStatusListener.next(true);
+      this.isAuth = true;
+      this.isAuthListener.next(true);
     }
   }
 
@@ -64,7 +65,7 @@ export class AuthService {
     }, duration * 1000);
   }
 
-  register(user: User) {
+  register(user: Customer) {
     this.http.post(`${this.backendUrl}/clients/register`, user).subscribe({
       next: () => {
         this.router.navigate(['/']);
@@ -76,7 +77,7 @@ export class AuthService {
       }
     });
   }
-  login(user: User) {
+  login(user: Customer) {
     let userObj = {
       username: user.email,
       password: user.password
@@ -87,15 +88,15 @@ export class AuthService {
         let decoded: TailorJwtPayload = jwtDecode(token);
         this.roles = decoded.roles.replace(/[\[\]']+/g, '').split(',');
         // console.log(this.roles);
-        this.isAuthenticated = true;
-        this.authStatusListener.next(true);
+        this.isAuth = true;
+        this.isAuthListener.next(true);
 
         this.saveAuthData(token, new Date(decoded.exp! * 1000));
         this.router.navigate(['/categories']);
       },
       error: (error) => {
-        this.isAuthenticated = false;
-        this.authStatusListener.next(false);
+        this.isAuth = false;
+        this.isAuthListener.next(false);
         this.error = error;
         console.log(error)
         this.dialog.open(ErrorDialogComponent);
@@ -110,20 +111,20 @@ export class AuthService {
       let decoded: TailorJwtPayload = jwtDecode(token);
       this.roles = decoded.roles.replace(/[\[\]']+/g, '').split(',');
       this.saveAuthData(token, new Date(decoded.exp! * 1000));
-      this.isAuthenticated = true;
-      this.authStatusListener.next(true);
+      this.isAuth = true;
+      this.isAuthListener.next(true);
     },
     error: () => {
-      this.isAuthenticated = false;
-      this.authStatusListener.next(false)
+      this.isAuth = false;
+      this.isAuthListener.next(false)
     }
     })
   }
 
   logout() {
     this.token = '';
-    this.isAuthenticated = false;
-    this.authStatusListener.next(false);
+    this.isAuth = false;
+    this.isAuthListener.next(false);
     this.clearAuthData();
   }
 

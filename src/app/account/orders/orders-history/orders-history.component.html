@@ -1,0 +1,36 @@
+<div class="orders-history" *ngIf="tableData">
+  <mat-table [dataSource]="tableData">
+    <ng-container matColumnDef="pos">
+      <mat-header-cell *matHeaderCellDef>№</mat-header-cell>
+      <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.num}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>id</mat-header-cell>
+      <mat-cell *matCellDef="let order">{{order.num}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Назва</mat-header-cell>
+      <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.name}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="date">
+      <mat-header-cell *matHeaderCellDef>Дата</mat-header-cell>
+      <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.createdAt}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef>Ціна</mat-header-cell>
+      <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.price}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let order" [routerLink]="[order.id, 'edit']" routerLinkActive="selected">
+        <mat-icon class="edit">table_view</mat-icon>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row [ngStyle]="{cursor: 'pointer'}" *matRowDef="let order; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>
+<div class="no-orders">
+  <span *ngIf="tableData.length === 0">Ще немає замовлень</span>
+</div>
+<router-outlet></router-outlet>
