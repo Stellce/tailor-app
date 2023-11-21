@@ -1,6 +1,12 @@
-$short-column: 32px;
-$medium-column: 64px;
-
+mat-form-field {
+  margin-top: 22px;
+}
+.orders-table {
+  overflow: auto;
+}
+mat-table {
+  min-width: 400px;
+}
 .orders {
   max-width: 900px;
   width: 90%;
@@ -10,25 +16,19 @@ $medium-column: 64px;
   width: 64px;
   text-align: right;
   justify-content: flex-end;
+  white-space: unset !important;
 }
+$short-column: 32px;
+$medium-column: 64px;
 .mat-column-pos {
   flex: 0 0 $short-column !important;
-  white-space: unset !important;
 }
 .mat-column-price {
   flex: 0 0 100px !important;
-  white-space: unset !important;
 }
 .mat-column-assign {
   flex: 0 0 $medium-column !important;
-  white-space: unset;
   justify-content: flex-start;
-}
-.edit-button {
-  width: $medium-column !important;
-}
-.edit-button button mat-icon {
-  font-size: 64px;
 }
 .selected {
   transform: scale(1.05);

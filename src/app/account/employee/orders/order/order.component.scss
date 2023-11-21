@@ -1,0 +1,36 @@
+.order-description {
+  display: flex;
+  flex-direction: row;
+}
+.order-image {
+  width: 50%;
+  aspect-ratio: 1/1.5;
+}
+.order-image img{
+  width: 100%;
+  aspect-ratio: 1/1.5;
+}
+.status-changer {
+  display: flex;
+  justify-content: center;
+  margin: 15px auto;
+}
+.status-changer button {
+  margin: 15px auto;
+  width: 100% !important;
+}
+@media (max-width: 600px) {
+  button {
+    font-size: 12px;
+    height: 50px !important;
+    margin: 0 !important;
+  }
+}
+@media (max-width: 400px) {
+  .order-description {
+    flex-direction: column;
+  }
+  .status-changer {
+    margin: 0 auto;
+  }
+}

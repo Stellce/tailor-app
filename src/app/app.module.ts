@@ -37,10 +37,11 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
 import {ServicesComponent} from "./services/services.component";
-import {OrderComponent} from "./account/orders/order/order.component";
+import {OrderComponent} from "./account/employee/orders/order/order.component";
 import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-fields/calc-res-fields.component";
 import {DialogDataComponent} from "./auth/dialog-data/dialog-data.component";
 import {OrdersComponent} from "./account/employee/orders/orders.component";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import {OrdersComponent} from "./account/employee/orders/orders.component";
     MatNativeDateModule,
     ReactiveFormsModule,
     MatMomentDateModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSelectModule
   ],
   providers: [
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}

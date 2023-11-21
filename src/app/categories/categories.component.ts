@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {Category} from "./category/category.model";
-import {ActivatedRoute, RouterLinkActive} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {AccountService} from "../account/account.service";
 import {OrdersService} from "../account/orders/orders.service";
 
@@ -33,10 +33,7 @@ export class CategoriesComponent implements OnInit, OnDestroy{
       this.url = this.activatedRoute.snapshot.url
         .map(el => el.path)
         .filter(path =>
-          !this.categories.some(el => {
-            console.log(path, el.coatType.toLowerCase())
-            return el.coatType.toLowerCase() == path
-          })
+          !this.categories.some(el => el.coatType.toLowerCase() == path)
         ).join("");
       }
     );
@@ -45,8 +42,6 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   }
 
   scrollToCategory(category: Category) {
-    console.log(['/', this.url, category.coatType.toLowerCase()].join("/"));
-    console.log(this.url)
     this.selectedCategory = category;
   }
 

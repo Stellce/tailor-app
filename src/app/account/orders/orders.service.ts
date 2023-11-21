@@ -121,9 +121,11 @@ export class OrdersService {
     })
   }
 
-  assignOrder(orderId: number) {
+  assignOrder(orderId: string) {
     this.http.patch(`${this.backendUrl}/orders/assign/${orderId}`, {}, {headers: this.getHeader()}).subscribe({
-      next: () => {},
+      next: () => {
+
+      },
       error: (err) => console.log(err)
     })
   }

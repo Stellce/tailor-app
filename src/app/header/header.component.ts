@@ -1,8 +1,7 @@
-import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
-import {Subject, Subscription} from "rxjs";
-import {ActivatedRoute, Router, UrlSegment} from "@angular/router";
-import {Customer} from "../auth/customer.model";
+import {Subscription} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../account/user.model";
 
 @Component({
@@ -16,24 +15,26 @@ export class HeaderComponent implements OnInit{
     {name: 'Про нас', src: 'about'},
     {name: 'Послуги', src: 'categories'}
   ];
-  isAuth: boolean;
-  isAuthSub: Subscription;
+  user: User;
+  userSub: Subscription;
   constructor(private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
-    this.isAuth = this.authService.getUser();
-    this.isAuthSub = this.authService.getAuthStatusListener().subscribe(isAuth => {
-      this.isAuth = isAuth;
+    this.user = this.authService.getUser();
+    this.userSub = this.authService.getUserListener().subscribe(user => {
+      this.user = user;
       this.onAuth();
     })
     this.onAuth();
   }
 
   private onAuth() {
-    if(this.isAuth && !this.links.find(link => link.src === 'account/midi_coat')) {
+    if(this.user.roles?.includes('CLIENT') && !this.links.some(link => link.src === 'account/midi_coat')) {
       this.links.push({name: 'Акаунт', src: 'account/midi_coat'});
+      this.links.push({name: 'Замовлення', src: 'orders/pending'})
     } else {
       this.links = this.links.filter(link => link.src !== 'account/midi_coat');
+      this.links = this.links.filter(link => link.src !== 'orders/pending')
     }
   }
 

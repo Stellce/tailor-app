@@ -24,13 +24,13 @@
       class="login"
       [routerLink]="'login'"
       routerLinkActive="menu-link-active"
-      *ngIf="!isAuth">
+      *ngIf="!user.roles?.includes('CLIENT')">
       <span
         *ngIf="menuSwitcher || window.innerWidth > 600"
       >Увійти</span>
       <mat-icon>person</mat-icon>
     </div>
-    <div class="login" [routerLink]="['/']" *ngIf="isAuth" (click)="onLogout()">
+    <div class="login" [routerLink]="['/']" *ngIf="user.roles?.includes('CLIENT')" (click)="onLogout()">
       <span
         *ngIf="menuSwitcher || window.innerWidth > 600"
       >Вийти</span>

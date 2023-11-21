@@ -5,6 +5,7 @@ export interface Order {
   num?: number;
   id: string;
   createdAt: string | Date;
+  status: string;
   coatModel: Model;
   patternData: {[s: string]: string};
   productMetrics: ProductMetrics;

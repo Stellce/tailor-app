@@ -1,32 +1,38 @@
-<div class="orders" *ngIf="orders">
-  <mat-table [dataSource]="orders">
-    <ng-container matColumnDef="pos">
-      <mat-header-cell *matHeaderCellDef>№</mat-header-cell>
-      <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.num}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef>id</mat-header-cell>
-      <mat-cell *matCellDef="let order">{{order.num}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Назва</mat-header-cell>
-      <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.name}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef>Дата</mat-header-cell>
-      <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.createdAt}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="price">
-      <mat-header-cell *matHeaderCellDef>Ціна</mat-header-cell>
-      <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.price}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="assign">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell *matCellDef="let order" (click)="onAssignOrder(order.id)">
-        <mat-icon>check</mat-icon>
-      </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row [ngStyle]="{cursor: 'pointer'}" *matRowDef="let order; columns: displayedColumns"></mat-row>
-  </mat-table>
+<div class="orders">
+  <mat-form-field>
+    <mat-label>Стан замовлення</mat-label>
+    <mat-select [(value)]=selectedState (selectionChange)="onCheckStates()">
+      @for (state of states; track state) {
+      <mat-option [value]='state.name' >{{state.text}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div class="orders-table">
+    <mat-table [dataSource]="displayedOrders" *ngIf="displayedOrders">
+      <ng-container matColumnDef="pos">
+        <mat-header-cell *matHeaderCellDef>№</mat-header-cell>
+        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.num}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>id</mat-header-cell>
+        <mat-cell *matCellDef="let order">{{order.num}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Назва</mat-header-cell>
+        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.name}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef>Дата</mat-header-cell>
+        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.createdAt}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <mat-header-cell *matHeaderCellDef>Ціна</mat-header-cell>
+        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.price}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row [ngStyle]="{cursor: 'pointer'}" *matRowDef="let order; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </div>
+  <mat-divider></mat-divider>
+  <router-outlet></router-outlet>
 </div>

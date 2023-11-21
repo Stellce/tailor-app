@@ -10,7 +10,8 @@ import {CategoryComponent} from "./categories/category/category.component";
 import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {ServicesComponent} from "./services/services.component";
 import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
-import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-fields/calc-res-fields.component";
+import {OrdersComponent} from "./account/employee/orders/orders.component";
+import {OrderComponent} from "./account/employee/orders/order/order.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'about', pathMatch: 'full'},
@@ -23,12 +24,15 @@ const routes: Routes = [
   {path: 'activate/:id', component: ActivationComponent},
   {path: 'login', component: LoginComponent},
   {path: 'account', component: AccountComponent, children: [
-      {path: ':category', component: OrdersHistoryComponent, children: [
-          {path: ':orderId', component: CalcResFieldsComponent, pathMatch: 'full'},
-          {path: ':orderId/edit', component: CalculatorComponent, pathMatch: "full"}
-        ]}
-    ]},
-  {path: '**', redirectTo: 'about'}
+    {path: ':category', component: OrdersHistoryComponent, children: [
+      {path: ':orderId', component: OrderComponent, pathMatch: 'full'},
+      {path: ':orderId/edit', component: CalculatorComponent, pathMatch: "full"}
+    ]}
+  ]},
+  {path: 'orders/:status', component: OrdersComponent, children: [
+    {path: ':orderId', component: OrderComponent}
+  ]},
+  // {path: '**', redirectTo: 'about'}
 ];
 
 @NgModule({
