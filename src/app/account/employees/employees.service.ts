@@ -13,14 +13,9 @@ export class EmployeesService {
   backendUrl = environment.backendUrl;
   employees: Employee[];
   employeesListener = new Subject<Employee[]>();
-  updateEmployeesComponentListener = new Subject<void>();
 
   constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) {}
 
-
-  getUpdateEmployeesComponentListener() {
-    return this.updateEmployeesComponentListener.asObservable();
-  }
   getEmployees() {
     return this.employees;
   }
@@ -32,13 +27,18 @@ export class EmployeesService {
       next: (employees) => {
         this.employees = employees;
         this.employeesListener.next(employees);
-
+      },
+      error: (err) => {
+        console.log(err);
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Невдала спроба отримання даних працiвника'}});
       }
     })
   }
   registerEmployee(employee: Employee) {
     this.http.post(`${this.backendUrl}/employees/register`, {...employee}, {headers: this.getHeader()}).subscribe({
-      next: () => {},
+      next: () => {
+        this.getAllEmployees();
+      },
       error: (err) => {
         console.log(err)
         let errorText = '';
@@ -49,17 +49,15 @@ export class EmployeesService {
   }
   deleteEmployee(employeeId: string) {
     this.http.delete(`${this.backendUrl}/employees/${employeeId}`, {headers: this.getHeader()}).subscribe({
-      next: () => {},
+      next: () => {
+        this.getAllEmployees();
+      },
       error: (err) => {
         let errorText = '';
         if (err['status'] === 409) errorText = 'Працiвник має незавершенi замовлення';
         this.dialog.open(ErrorDialogComponent, {data: {message: errorText, isSuccessful: false}})
       }
     })
-  }
-
-  updateEmployeesComponent() {
-    this.updateEmployeesComponentListener.next();
   }
 
   private getHeader() {

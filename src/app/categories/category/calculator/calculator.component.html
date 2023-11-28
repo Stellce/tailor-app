@@ -22,7 +22,7 @@
     </div>
   </div>
 </form>
-<mat-divider></mat-divider>
+<mat-divider *ngIf="isMetricsFormFilled"></mat-divider>
 <form [formGroup]="increasesForm" (ngSubmit)="calcScndForm()">
   <div id="scndCalc" class="second-calc" *ngIf="isMetricsFormFilled">
     <div class="input-fields" *ngFor="let inputField of inputIncreases">

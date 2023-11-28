@@ -20,6 +20,7 @@ export class EmployeeComponent implements OnInit, OnDestroy{
   employeesSub: Subscription;
   employeeFields: Field[];
   employeeId: string;
+  isLoading: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -33,13 +34,12 @@ export class EmployeeComponent implements OnInit, OnDestroy{
       this.user = user;
     });
     this.activatedRoute.params.subscribe(params => {
-      console.log(params)
       this.employeeId = params['employeeId'];
+      this.employeesService.getAllEmployees();
+      this.isLoading = true;
     })
-
     this.employeesSub = this.employeesService.getEmployeesListener().subscribe(employees => {
-      console.log(employees)
-      console.log(employees.find(e => (e.id as string) == this.employeeId));
+      this.isLoading = false;
       this.employee = employees.find(employee => (employee.id as string) == this.employeeId)!;
       this.castEmployeeToFields();
     })
@@ -62,7 +62,6 @@ export class EmployeeComponent implements OnInit, OnDestroy{
   onDeleteEmployee() {
     this.employeesService.deleteEmployee(this.employee.id!);
     this.router.navigate(['./'], {relativeTo: this.activatedRoute.parent});
-    this.employeesService.getAllEmployees();
   }
 
   ngOnDestroy() {

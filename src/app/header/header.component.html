@@ -5,6 +5,7 @@
       *ngFor="let link of links"
       [routerLink]="link.src"
       [ngClass]="{'highlighted-link': isActive(link.src.split('/')[0])}"
+      (click)="closeMenu()"
     ><span>{{link.name}}</span></div>
 
     <div class="menu">
@@ -15,6 +16,7 @@
           *ngFor="let link of links"
           [routerLink]="link.src"
           routerLinkActive="menu-link-active"
+          (click)="closeMenu()"
         ><span>{{link.name}}</span></div>
       </div>
     </div>
@@ -22,7 +24,9 @@
       class="login"
       [routerLink]="'login'"
       routerLinkActive="menu-link-active"
-      *ngIf="!user.isAuth">
+      *ngIf="!user.isAuth"
+      (click)="closeMenu()"
+      >
       <span
         *ngIf="menuSwitcher || window.innerWidth > 600"
       >Увійти</span>

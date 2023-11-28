@@ -20,6 +20,5 @@ export class EmployeeRegistrationComponent {
       password: f.controls['password'].value
     }
     this.employeesService.registerEmployee(newEmployee);
-    this.employeesService.getAllEmployees();
   }
 }

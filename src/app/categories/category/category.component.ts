@@ -26,6 +26,7 @@ export class CategoryComponent implements OnInit, OnDestroy{
     this.categorySub = this.ordersService.getCategoriesListener().subscribe(categories => {
       this.activatedRoute.params.subscribe(params => {
         this.category = categories.find(category => category.coatType.toUpperCase() === params['category'].toUpperCase())!
+        console.log(this.category)
       })
     })
     this.ordersService.getCategories();
@@ -36,8 +37,8 @@ export class CategoryComponent implements OnInit, OnDestroy{
     this.ordersService.selectModel(model);
   }
 
-  openDialog() {
-    this.dialog.open(VideoDialogComponent);
+  openDialog(videoUrl: string) {
+    this.dialog.open(VideoDialogComponent, {data: {videoUrl: videoUrl}});
   }
 
   ngOnDestroy() {

@@ -48,8 +48,6 @@ export class CalculatorService {
     {name: 'backNeckHeight', text: 'Висота горловини спинки', res: ''},
     {name: 'shoulderCutSlope', text: 'Схил плечового зрізу', res: ''},
     {name: 'shoulderCutEnd', text: 'Кінець плечового зрізу', res: ''},
-    {name: 'sideSlopeTop', text: 'Вершина бічного зрізу', res: ''},
-    {name: 'backArmholeSlope', text: 'Зріз пройми спинки', res: ''},
     {name: 'productBalance', text: 'Баланс виробу', res: ''},
     {name: 'fileNeckWidth', text: 'Ширина горловини пілочки', res: ''},
     {name: 'fileNeckDepth', text: 'Глибина горловини пілочки', res: ''},

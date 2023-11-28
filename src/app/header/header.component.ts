@@ -20,7 +20,6 @@ export class HeaderComponent implements OnInit{
     {name: 'Замовлення', src: 'orders/pending', role: 'EMPLOYEE'},
     {name: 'Працiвники', src: 'employees', role: 'ADMIN'}
   ]
-  //сделать ссылки зависящие от роли
   user: User;
   userSub: Subscription;
   allRoles: string[];
@@ -36,12 +35,8 @@ export class HeaderComponent implements OnInit{
     })
     this.onAuth();
   }
-
-  private onAuth() {
-    this.user.roles!.forEach(role => {
-      let link = this.accessLinks.find(accessLink => accessLink.role === role);
-      if (link) this.links.push(link);
-    })
+  closeMenu() {
+    this.menuSwitcher = false;
   }
 
   isActive(url: any) {
@@ -49,8 +44,16 @@ export class HeaderComponent implements OnInit{
   }
 
   onLogout() {
+    this.closeMenu();
     this.links = this.links.filter(link => link.role === 'USER');
     this.authService.logout();
+  }
+
+  private onAuth() {
+    this.user.roles!.forEach(role => {
+      let link = this.accessLinks.find(accessLink => accessLink.role === role);
+      if (link) this.links.push(link);
+    })
   }
 
   protected readonly window = window;

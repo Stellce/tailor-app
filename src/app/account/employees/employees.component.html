@@ -1,14 +1,6 @@
 <div class="users" >
   <div class="users-table">
     <mat-table [dataSource]="employees" *ngIf="displayedColumns">
-<!--      <ng-container matColumnDef="pos">-->
-<!--        <mat-header-cell *matHeaderCellDef>№</mat-header-cell>-->
-<!--        <mat-cell *matCellDef="let employee">{{employee.num}}</mat-cell>-->
-<!--      </ng-container>-->
-<!--      <ng-container matColumnDef="id">-->
-<!--        <mat-header-cell *matHeaderCellDef>id</mat-header-cell>-->
-<!--        <mat-cell *matCellDef="let order">{{order.id}}</mat-cell>-->
-<!--      </ng-container>-->
       <ng-container matColumnDef="firstName">
         <mat-header-cell *matHeaderCellDef>Iм'я</mat-header-cell>
         <mat-cell *matCellDef="let employee">{{employee.firstName}}</mat-cell>

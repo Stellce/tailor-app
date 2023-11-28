@@ -26,6 +26,7 @@
 }
 .menu-content {
   display: none;
+  margin-bottom: 10px;
 }
 .menu-link-active {
   color: #FF39F7;
@@ -59,7 +60,7 @@
   display: inline-block;
 }
 
-@media (max-width: 660px) {
+@media (max-width: 700px) {
   .links {
     width: 100%;
     justify-content: space-between;
@@ -72,7 +73,7 @@
     margin-bottom: -4px;
   }
 }
-@media (max-width: 320px) {
+@media (max-width: 500px) {
   .header {
     height: 24px;
   }
@@ -109,5 +110,8 @@
   }
   .header-opened > * {
     display: block;
+  }
+  .login {
+    //padding: 15px;
   }
 }
