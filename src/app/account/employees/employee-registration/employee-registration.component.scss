@@ -1,26 +1,27 @@
-mat-card {
+.register-card{
   max-width: 500px;
-  margin: 10dvh auto;
+  margin: 25px auto;
 }
-mat-card-content {
+mat-card-header {
+  font-size: 16px;
+}
+.register-card mat-card-content {
   display: flex;
   flex-direction: column;
   margin: 10px auto;
-}
-.registerButton {
-  width: 100% !important;
-}
-mat-spinner {
-  margin: 300px auto;
 }
 .names {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  gap: 10px;
 }
-
 .names mat-form-field {
   width: 230px !important;
+}
+mat-card-actions {
+  display: flex;
+  flex-direction: row-reverse;
 }
 
 @media (max-width: 550px) {

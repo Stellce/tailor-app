@@ -1,0 +1,32 @@
+<div class="order-description">
+  <div class="order-image">
+    <img [src]="'data:image/png;base64, ' + order.coatModel.image" [alt]="order.coatModel" *ngIf="order">
+  </div>
+  <div class="status-changer">
+    <button
+      mat-raised-button
+      *ngIf="order?.status === 'PENDING' && (user?.roles![0] === 'EMPLOYEE' || user?.roles![0] === 'ADMIN')"
+      color="primary"
+      (click)="onAssignOrder(order.id)"
+    >
+      <mat-icon>check</mat-icon>| <span>Прийняти замовлення</span>
+    </button>
+    <button
+      mat-raised-button
+      *ngIf="order?.status === 'IN_PROGRESS' && user?.roles![0] === 'CLIENT'"
+      [ngStyle]="{background: 'green', color: 'white'}"
+      (click)="onFinishOrder(order.id)"
+    >
+      <mat-icon>done_all</mat-icon>|<span>Завершити замовлення</span>
+    </button>
+    <button
+      mat-raised-button
+      *ngIf="user?.roles!.includes('CLIENT')"
+      color="warn"
+      (click)="onCancelOrder(order.id)"
+    >
+      <mat-icon>close</mat-icon>| <span>Скасувати замовлення</span>
+    </button>
+  </div>
+</div>
+<app-calculator></app-calculator>

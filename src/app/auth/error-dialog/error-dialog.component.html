@@ -1,4 +1,12 @@
 <h1 mat-dialog-title>Щось пiшло не так</h1>
-<div mat-dialog-actions>
+<div class="dialog-data">
+  <div class="activation-image">
+    <img *ngIf="data.isSuccessful" [src]="activationDonePath" alt="Успiх">
+    <mat-spinner *ngIf="data.isSuccessful === undefined"></mat-spinner>
+    <img *ngIf="!data.isSuccessful && data.isSuccessful !== undefined" [src]="activationFailedPath" alt="Помилка">
+  </div>
+  <p>{{data.message}}</p>
+</div>
+<div mat-dialog-actions class="dialog-actions">
   <button mat-button mat-dialog-close>Ok</button>
 </div>

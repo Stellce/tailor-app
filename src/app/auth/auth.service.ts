@@ -8,7 +8,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "./error-dialog/error-dialog.component";
 import {jwtDecode} from 'jwt-decode';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {SnackBarComponent} from "../snack-bar/snack-bar.component";
+import {SnackBarComponent} from "./registration/snack-bar/snack-bar.component";
 import {TailorJwtPayload} from "./JwtPayload";
 import {User} from "../account/user.model";
 
@@ -25,21 +25,21 @@ export class AuthService {
     isAuth: false,
     roles: []
   };
-  roles: string[];
+  allRoles: string[] = [
+    'CLIENT', 'EMPLOYEE', 'ADMIN'
+  ];
 
   constructor(private http: HttpClient, private router: Router, public dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
   getToken() {
     return this.token;
   }
-  getRoles() {
-    return this.roles;
+  getAllRoles() {
+    return this.allRoles;
   }
-
   getUser() {
     return this.user;
   }
-
   getUserListener() {
     return this.userListener.asObservable();
   }
@@ -72,7 +72,7 @@ export class AuthService {
       },
       error: (error) => {
         this.error = error;
-        this.dialog.open(ErrorDialogComponent)
+        this.openErrorDialog();
       }
     });
   }
@@ -94,8 +94,8 @@ export class AuthService {
         this.user.isAuth = false;
         this.userListener.next(this.user);
         this.error = error;
-        console.log(error)
-        this.dialog.open(ErrorDialogComponent);
+        console.log(error);
+        this.openErrorDialog();
       }
     });
   }
@@ -117,6 +117,7 @@ export class AuthService {
   logout() {
     this.token = '';
     this.user.isAuth = false;
+    this.user.roles = [];
     this.userListener.next(this.user);
     this.clearAuthData();
   }
@@ -124,7 +125,7 @@ export class AuthService {
   private authenticate(token: string) {
     this.token = token;
     let decoded: TailorJwtPayload = jwtDecode(this.token);
-    this.user.roles = decoded.roles.replace(/[\[\]']+/g, '').split(',');
+    this.user.roles = decoded.roles.replace(/[\[\]'\s]+/g, '').split(',');
     this.user.isAuth = true;
     this.userListener.next(this.user);
   }
@@ -149,6 +150,12 @@ export class AuthService {
       token: token,
       expirationDate: new Date(expirationDate)
     }
+  }
+
+  private openErrorDialog() {
+
+    this.dialog.open(ErrorDialogComponent);
+    console.log(this.dialog.openDialogs);
   }
 
 }

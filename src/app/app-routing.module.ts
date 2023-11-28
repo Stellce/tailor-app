@@ -10,8 +10,10 @@ import {CategoryComponent} from "./categories/category/category.component";
 import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {ServicesComponent} from "./services/services.component";
 import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
-import {OrdersComponent} from "./account/employee/orders/orders.component";
-import {OrderComponent} from "./account/employee/orders/order/order.component";
+import {OrdersComponent} from "./account/orders/orders.component";
+import {OrderComponent} from "./account/orders/order/order.component";
+import {EmployeeComponent} from "./account/employees/employee/employee.component";
+import {EmployeesComponent} from "./account/employees/employees.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'about', pathMatch: 'full'},
@@ -26,12 +28,15 @@ const routes: Routes = [
   {path: 'account', component: AccountComponent, children: [
     {path: ':category', component: OrdersHistoryComponent, children: [
       {path: ':orderId', component: OrderComponent, pathMatch: 'full'},
-      {path: ':orderId/edit', component: CalculatorComponent, pathMatch: "full"}
+      {path: ':orderId/edit', component: CalculatorComponent, pathMatch: 'full'},
     ]}
   ]},
   {path: 'orders/:status', component: OrdersComponent, children: [
     {path: ':orderId', component: OrderComponent}
   ]},
+  {path: 'employees', component: EmployeesComponent, children: [
+      {path: ':employeeId', component: EmployeeComponent}
+    ]}
   // {path: '**', redirectTo: 'about'}
 ];
 
