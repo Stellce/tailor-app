@@ -1,6 +1,5 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-error-dialog',
@@ -8,5 +7,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./error-dialog.component.scss']
 })
 export class ErrorDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: string) {}
+  activationDonePath: string = './assets/activation-done.svg';
+  activationFailedPath: string = './assets/activation-failed.svg';
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {message: string, isSuccessful: boolean}) {}
 }

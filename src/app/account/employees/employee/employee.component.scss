@@ -1,0 +1,25 @@
+mat-card {
+  max-width: 750px;
+  margin: 25px auto;
+}
+.employee-field {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  word-wrap: break-word;
+}
+mat-divider {
+  display: none;
+}
+mat-card-actions {
+  display: flex;
+  flex-direction: row-reverse;
+}
+@media (max-width: 450px) {
+  .employee-field {
+    flex-direction: column;
+  }
+  mat-divider {
+    display: flex;
+  }
+}

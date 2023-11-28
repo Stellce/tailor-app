@@ -1,0 +1,53 @@
+mat-card {
+  max-width: 900px;
+  width: 90dvw;
+  margin: auto;
+  padding: 20px;
+}
+mat-card-header {
+  font-size: 18px;
+  text-align: center;
+}
+mat-card-content {
+  font-size: 16px;
+  margin: 16px auto;
+  width: 80%;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.field {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.field span {
+  margin-bottom: 22px;
+}
+mat-card-actions {
+  display: flex;
+  flex-direction: row-reverse;
+}
+mat-card-actions button {
+  margin: 0 10% 10px 0;
+}
+mat-form-field {
+  max-width: 200px !important;
+}
+@media (max-width: 500px) {
+  .field {
+    flex-direction: column;
+  }
+  mat-card {
+    max-width: 90%;
+  }
+
+}
+@media (max-width: 320px) {
+  mat-form-field {
+    width: 100% !important;
+  }
+}

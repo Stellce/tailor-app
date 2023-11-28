@@ -3,10 +3,12 @@ import {Model} from "../../categories/category/category-model.model";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../auth/auth.service";
 import {environment} from "../../../environments/environment";
-import {Order} from "./order.model";
+import {Order} from "./order/order.model";
 import {Subject} from "rxjs";
 import {Category} from "../../categories/category/category.model";
 import {ProductMetrics} from "../../categories/category/calculator/product-metrics.model";
+import {MatDialog} from "@angular/material/dialog";
+import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +40,7 @@ export class OrdersService {
     }
   ];
   categoriesListener = new Subject<Category[]>();
-  constructor(private authService: AuthService, private http: HttpClient) { }
+  constructor(private authService: AuthService, private http: HttpClient, private dialog: MatDialog) { }
 
   getOrderListener() {
     return this.orderListener.asObservable();
@@ -53,13 +55,19 @@ export class OrdersService {
   getCategories() {
     let areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
     if (areCached) return this.categoriesListener.next(this.categories);
-    this.http.get<Model[]>(`${this.backendUrl}/coat-models`).subscribe(modelsResponse => {
-      let areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
-      if (areCached) return this.categoriesListener.next(this.categories);
-      modelsResponse.forEach(model =>
-        this.categories.find(category =>
-          category.coatType === model.coatType && !category.models.some(m => m === model ))?.models?.push(model));
-      this.categoriesListener.next(this.categories);
+    this.http.get<Model[]>(`${this.backendUrl}/coat-models`).subscribe({
+      next: modelsResponse => {
+        let areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
+        if (areCached) return this.categoriesListener.next(this.categories);
+        modelsResponse.forEach(model =>
+          this.categories.find(category =>
+            category.coatType === model.coatType && !category.models.some(m => m === model ))?.models?.push(model));
+        this.categoriesListener.next(this.categories);
+      },
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}});
+      }
     });
   }
 
@@ -76,7 +84,6 @@ export class OrdersService {
         ...productMetrics.increases
       }
     }
-    console.log(order)
     this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.getHeader()}).subscribe(res => {
       console.log(res);
     });
@@ -103,30 +110,69 @@ export class OrdersService {
           return category
         })
         this.categoriesListener.next(this.categories);
+        console.log(this.categories)
+        this.ordersListener.next(orders);
       },
-      error: (error) => console.log(error)
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent);
+      }
     })
   }
 
   getOrderById(id: number) {
-    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.getHeader()}).subscribe(order => {
-      this.orderListener.next(order);
+    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.getHeader()}).subscribe({
+      next: (order) => {
+        this.orderListener.next(order);
+      },
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent);
+      }
     })
   }
 
   getAllUnassignedOrders() {
-    this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.getHeader()}).subscribe(orders => {
-      console.log(orders);
-      this.ordersListener.next(orders);
+    this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.getHeader()}).subscribe( {
+      next: (orders) => {
+        this.ordersListener.next(orders);
+      },
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent);
+      }
     })
   }
 
   assignOrder(orderId: string) {
     this.http.patch(`${this.backendUrl}/orders/assign/${orderId}`, {}, {headers: this.getHeader()}).subscribe({
       next: () => {
-
       },
-      error: (err) => console.log(err)
+      error: (err) => {
+        this.dialog.open(ErrorDialogComponent);
+        console.log(err);
+      }
+    })
+  }
+
+  finishOrder(orderId: string) {
+    this.http.patch(`${this.backendUrl}/orders/${orderId}/completed`, {}, {headers: this.getHeader()}).subscribe({
+      next: () => {
+      },
+      error: (err) => {
+        this.dialog.open(ErrorDialogComponent);
+        console.log(err)
+      }
+    })
+  }
+  cancelOrder(orderId: string) {
+    this.http.patch(`${this.backendUrl}/orders/${orderId}/cancel`, {}, {headers: this.getHeader()}).subscribe({
+      next: () => {
+      },
+      error: (err) => {
+        this.dialog.open(ErrorDialogComponent);
+        console.log(err)
+      }
     })
   }
 

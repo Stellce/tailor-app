@@ -7,7 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
 import { AboutComponent } from './about/about.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { PricesComponent } from './prices/prices.component';
@@ -27,7 +27,6 @@ import { CategoryComponent } from './categories/category/category.component';
 import {MatDividerModule} from "@angular/material/divider";
 import { ActivationComponent } from './auth/activation/activation.component';
 import {MatTableModule} from "@angular/material/table";
-import {AuthInterceptor} from "./auth/auth-interceptor";
 import { VideoDialogComponent } from './categories/video-dialog/video-dialog.component';
 import { AccountComponent } from './account/account.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -37,11 +36,15 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
 import {ServicesComponent} from "./services/services.component";
-import {OrderComponent} from "./account/employee/orders/order/order.component";
+import {OrderComponent} from "./account/orders/order/order.component";
 import {CalcResFieldsComponent} from "./categories/category/calculator/calc-res-fields/calc-res-fields.component";
 import {DialogDataComponent} from "./auth/dialog-data/dialog-data.component";
-import {OrdersComponent} from "./account/employee/orders/orders.component";
+import {OrdersComponent} from "./account/orders/orders.component";
 import {MatSelectModule} from "@angular/material/select";
+import {EmployeesComponent} from "./account/employees/employees.component";
+import {UserDetailsComponent} from "./account/user-details/user-details.component";
+import {EmployeeComponent} from "./account/employees/employee/employee.component";
+import {EmployeeRegistrationComponent} from "./account/employees/employee-registration/employee-registration.component";
 
 @NgModule({
   declarations: [
@@ -64,9 +67,13 @@ import {MatSelectModule} from "@angular/material/select";
     CalculatorComponent,
     ServicesComponent,
     OrderComponent,
+    OrdersComponent,
     CalcResFieldsComponent,
     DialogDataComponent,
-    OrdersComponent
+    EmployeesComponent,
+    EmployeeComponent,
+    EmployeeRegistrationComponent,
+    UserDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,10 +96,10 @@ import {MatSelectModule} from "@angular/material/select";
     ReactiveFormsModule,
     MatMomentDateModule,
     MatExpansionModule,
-    MatSelectModule
+    MatSelectModule,
   ],
   providers: [
-    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true, hasBackdrop: false}}
     // {
     //   provide: HTTP_INTERCEPTORS,
     //   useClass: AuthInterceptor

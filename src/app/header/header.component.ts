@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
 import {Subscription} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {User} from "../account/user.model";
 
 @Component({
@@ -11,31 +11,37 @@ import {User} from "../account/user.model";
 })
 export class HeaderComponent implements OnInit{
   menuSwitcher: boolean = false;
-  links: {name: string, src: string}[] = [
-    {name: 'Про нас', src: 'about'},
-    {name: 'Послуги', src: 'categories'}
+  links: {name: string, src: string, role: string}[] = [
+    {name: 'Про нас', src: 'about', role: 'USER'},
+    {name: 'Послуги', src: 'categories', role: 'USER'}
   ];
+  accessLinks: {name: string, src: string, role: string}[] = [
+    {name: 'Акаунт', src: 'account/midi_coat', role: 'CLIENT'},
+    {name: 'Замовлення', src: 'orders/pending', role: 'EMPLOYEE'},
+    {name: 'Працiвники', src: 'employees', role: 'ADMIN'}
+  ]
+  //сделать ссылки зависящие от роли
   user: User;
   userSub: Subscription;
-  constructor(private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) {}
+  allRoles: string[];
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
+    this.allRoles = this.authService.getAllRoles();
     this.user = this.authService.getUser();
     this.userSub = this.authService.getUserListener().subscribe(user => {
       this.user = user;
-      this.onAuth();
+      if(user.isAuth) return this.onAuth();
+      this.onLogout();
     })
     this.onAuth();
   }
 
   private onAuth() {
-    if(this.user.roles?.includes('CLIENT') && !this.links.some(link => link.src === 'account/midi_coat')) {
-      this.links.push({name: 'Акаунт', src: 'account/midi_coat'});
-      this.links.push({name: 'Замовлення', src: 'orders/pending'})
-    } else {
-      this.links = this.links.filter(link => link.src !== 'account/midi_coat');
-      this.links = this.links.filter(link => link.src !== 'orders/pending')
-    }
+    this.user.roles!.forEach(role => {
+      let link = this.accessLinks.find(accessLink => accessLink.role === role);
+      if (link) this.links.push(link);
+    })
   }
 
   isActive(url: any) {
@@ -43,6 +49,7 @@ export class HeaderComponent implements OnInit{
   }
 
   onLogout() {
+    this.links = this.links.filter(link => link.role === 'USER');
     this.authService.logout();
   }
 

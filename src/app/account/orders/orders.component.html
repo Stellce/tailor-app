@@ -2,13 +2,11 @@
   <mat-form-field>
     <mat-label>Стан замовлення</mat-label>
     <mat-select [(value)]=selectedState (selectionChange)="onCheckStates()">
-      @for (state of states; track state) {
-      <mat-option [value]='state.name' >{{state.text}}</mat-option>
-      }
+      <mat-option *ngFor="let state of states" [value]='state.name'>{{state.text}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <div class="orders-table">
-    <mat-table [dataSource]="displayedOrders" *ngIf="displayedOrders">
+  <div class="orders-table" *ngIf="displayedOrders">
+    <mat-table [dataSource]="displayedOrders">
       <ng-container matColumnDef="pos">
         <mat-header-cell *matHeaderCellDef>№</mat-header-cell>
         <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.num}}</mat-cell>
@@ -32,6 +30,9 @@
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row [ngStyle]="{cursor: 'pointer'}" *matRowDef="let order; columns: displayedColumns"></mat-row>
     </mat-table>
+  </div>
+  <div class="no-orders">
+    <span *ngIf="displayedOrders?.length === 0">Ще немає замовлень</span>
   </div>
   <mat-divider></mat-divider>
   <router-outlet></router-outlet>

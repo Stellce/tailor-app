@@ -7,8 +7,6 @@
       [ngClass]="{'highlighted-link': isActive(link.src.split('/')[0])}"
     ><span>{{link.name}}</span></div>
 
-<!--    routerLinkActive="highlighted-link"-->
-
     <div class="menu">
       <mat-icon (click)="menuSwitcher = !menuSwitcher">menu</mat-icon>
       <div class="menu-content" *ngIf="menuSwitcher">
@@ -24,13 +22,13 @@
       class="login"
       [routerLink]="'login'"
       routerLinkActive="menu-link-active"
-      *ngIf="!user.roles?.includes('CLIENT')">
+      *ngIf="!user.isAuth">
       <span
         *ngIf="menuSwitcher || window.innerWidth > 600"
       >Увійти</span>
       <mat-icon>person</mat-icon>
     </div>
-    <div class="login" [routerLink]="['/']" *ngIf="user.roles?.includes('CLIENT')" (click)="onLogout()">
+    <div class="login" [routerLink]="['/']" *ngIf="user.isAuth" (click)="onLogout()">
       <span
         *ngIf="menuSwitcher || window.innerWidth > 600"
       >Вийти</span>

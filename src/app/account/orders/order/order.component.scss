@@ -12,12 +12,20 @@
 }
 .status-changer {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   margin: 15px auto;
+  width: 100%;
+  max-width: 250px;
+  padding: 15px;
+  gap:10px;
 }
 .status-changer button {
   margin: 15px auto;
   width: 100% !important;
+}
+.status-changer button span {
+  width: 50px;
 }
 @media (max-width: 600px) {
   button {
@@ -30,7 +38,11 @@
   .order-description {
     flex-direction: column;
   }
+  .order-image {
+    width: 100%;
+  }
   .status-changer {
     margin: 0 auto;
+    padding: 0;
   }
 }

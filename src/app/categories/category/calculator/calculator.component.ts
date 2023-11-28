@@ -9,7 +9,7 @@ import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogDataComponent} from "../../../auth/dialog-data/dialog-data.component";
 import {ProductMetrics} from "./product-metrics.model";
-import {Order} from "../../../account/orders/order.model";
+import {Order} from "../../../account/orders/order/order.model";
 
 @Component({
   selector: 'app-calculator',
@@ -89,9 +89,9 @@ export class CalculatorComponent implements OnInit{
   }
   calcScndForm() {
     if(this.increasesForm.invalid) return;
-    if(this.authService.getRoles()?.includes('EMPLOYEE')) {
+    if(this.authService.getUser().roles?.includes('EMPLOYEE')) {
       this.openDialog();
-      this.calcService.getisUserDataProvidedListener().subscribe(isProvided => this.calcValues());
+      this.calcService.getisUserDataProvidedListener().subscribe(() => this.calcValues());
     } else {
       this.calcValues();
     }

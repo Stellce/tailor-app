@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {Order} from "../order.model";
+import {Order} from "../order/order.model";
 import {ActivatedRoute} from "@angular/router";
 import {OrdersService} from "../orders.service";
 import {Category} from "../../../categories/category/category.model";
@@ -24,7 +24,7 @@ export class OrdersHistoryComponent implements OnInit, OnDestroy{
 
       this.activatedRoute.url.subscribe(url => {
         this.coatType = url[0].path.toUpperCase();
-        this.tableData = this.categories.find(category => category.coatType === this.coatType)?.orders || [];
+        this.tableData = this.categories.find(category => category.coatType === this.coatType)?.orders.filter(order => order.status !== 'CANCELLED') || [];
       })
     })
     this.ordersService.getOrders();
