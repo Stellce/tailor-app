@@ -70,9 +70,6 @@ export class CalculatorService {
   getisUserDataProvidedListener() {
     return this.isUserDataProvidedListener.asObservable();
   }
-  setUserData(userData: any) {
-    this.isUserDataProvidedListener.next(true);
-  }
   calculate(productMetrics: ProductMetrics) {
     let calcObj = {
       clientMetrics: {...productMetrics.clientMetrics},

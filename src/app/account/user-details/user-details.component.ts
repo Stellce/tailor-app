@@ -21,7 +21,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy{
   ]
   userForm: FormGroup;
   isLoading: boolean = false;
-  phoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/
 
   constructor(private accountService: AccountService) {}
   ngOnInit() {
