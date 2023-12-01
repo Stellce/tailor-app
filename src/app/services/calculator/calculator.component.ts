@@ -2,14 +2,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {InputField} from "./inputField.model";
 import {ViewportScroller} from "@angular/common";
-import {AuthService} from "../../../auth/auth.service";
+import {AuthService} from "../../auth/auth.service";
 import {CalculatorService} from "./calculator.service";
-import {OrdersService} from "../../../account/orders/orders.service";
+import {OrdersService} from "../../account/orders/orders.service";
 import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
-import {DialogDataComponent} from "../../../auth/dialog-data/dialog-data.component";
+import {DialogDataComponent} from "../../auth/dialog-data/dialog-data.component";
 import {ProductMetrics} from "./product-metrics.model";
-import {Order} from "../../../account/orders/order/order.model";
+import {Order} from "../../account/orders/order/order.model";
 
 @Component({
   selector: 'app-calculator',

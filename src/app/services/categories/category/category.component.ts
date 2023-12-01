@@ -4,7 +4,7 @@ import {Model} from "./category-model.model";
 import {VideoDialogComponent} from "../video-dialog/video-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute} from "@angular/router";
-import {OrdersService} from "../../account/orders/orders.service";
+import {OrdersService} from "../../../account/orders/orders.service";
 import {Subscription} from "rxjs";
 
 @Component({

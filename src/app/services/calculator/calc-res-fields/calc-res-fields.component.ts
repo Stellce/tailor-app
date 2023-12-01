@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ResField} from "../resField.model";
 import {Subscription} from "rxjs";
 import {CalculatorService} from "../calculator.service";
-import {OrdersService} from "../../../../account/orders/orders.service";
+import {OrdersService} from "../../../account/orders/orders.service";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({

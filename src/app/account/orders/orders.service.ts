@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {Model} from "../../categories/category/category-model.model";
+import {Model} from "../../services/categories/category/category-model.model";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../auth/auth.service";
 import {environment} from "../../../environments/environment";
 import {Order} from "./order/order.model";
 import {Subject} from "rxjs";
-import {Category} from "../../categories/category/category.model";
-import {ProductMetrics} from "../../categories/category/calculator/product-metrics.model";
+import {Category} from "../../services/categories/category/category.model";
+import {ProductMetrics} from "../../services/calculator/product-metrics.model";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 import {NewCustomer} from "./new-customer.model";
@@ -172,8 +172,8 @@ export class OrdersService {
     })
   }
 
-  createNewCustomer() {
-    this.http.post<NewCustomer>(`${this.backendUrl}/clients/register`, {}, {headers: this.getHeader()}).subscribe({
+  createNewCustomer(newCustomer: NewCustomer) {
+    this.http.post<NewCustomer>(`${this.backendUrl}/clients/register`, {...newCustomer}, {headers: this.getHeader()}).subscribe({
       next: (customer) => {
         this.newCustomerDataListener.next(customer);
       }

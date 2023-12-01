@@ -72,7 +72,7 @@ export class AuthService {
       },
       error: (error) => {
         this.error = error;
-        this.openErrorDialog();
+        this.dialog.open(ErrorDialogComponent);
       }
     });
   }
@@ -95,7 +95,7 @@ export class AuthService {
         this.userListener.next(this.user);
         this.error = error;
         console.log(error);
-        this.openErrorDialog();
+        this.dialog.open(ErrorDialogComponent);
       }
     });
   }
@@ -109,6 +109,7 @@ export class AuthService {
     },
     error: () => {
       this.user.isAuth = false;
+      this.dialog.open(ErrorDialogComponent);
       this.userListener.next(this.user);
     }
     })
@@ -151,11 +152,4 @@ export class AuthService {
       expirationDate: new Date(expirationDate)
     }
   }
-
-  private openErrorDialog() {
-
-    this.dialog.open(ErrorDialogComponent);
-    console.log(this.dialog.openDialogs);
-  }
-
 }

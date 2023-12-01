@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {Category} from "./category/category.model";
 import {ActivatedRoute} from "@angular/router";
-import {AccountService} from "../account/account.service";
-import {OrdersService} from "../account/orders/orders.service";
+import {AccountService} from "../../account/account.service";
+import {OrdersService} from "../../account/orders/orders.service";
 
 @Component({
   selector: 'app-categories',

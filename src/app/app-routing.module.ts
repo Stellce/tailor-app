@@ -6,10 +6,10 @@ import {RegistrationComponent} from "./auth/registration/registration.component"
 import {LoginComponent} from "./auth/login/login.component";
 import {ActivationComponent} from "./auth/activation/activation.component";
 import {AccountComponent} from "./account/account.component";
-import {CategoryComponent} from "./categories/category/category.component";
+import {CategoryComponent} from "./services/categories/category/category.component";
 import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {ServicesComponent} from "./services/services.component";
-import {CalculatorComponent} from "./categories/category/calculator/calculator.component";
+import {CalculatorComponent} from "./services/calculator/calculator.component";
 import {OrdersComponent} from "./account/orders/orders.component";
 import {OrderComponent} from "./account/orders/order/order.component";
 import {EmployeeComponent} from "./account/employees/employee/employee.component";

@@ -25,6 +25,6 @@ export class VideoDialogComponent implements OnInit, AfterContentChecked{
     let preparedUrl = url.replace('shorts', 'embed');
     let urlArray = preparedUrl.split('/');
     let id = urlArray[(urlArray.length-1)]
-    return preparedUrl += `?playlist=${id}&loop=1&controls=0&autoplay=1?rel=0`
+    return preparedUrl + `?playlist=${id}&loop=1&controls=0&autoplay=1?rel=0`
   }
 }
