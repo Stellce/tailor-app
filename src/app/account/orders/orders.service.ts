@@ -9,6 +9,7 @@ import {Category} from "../../categories/category/category.model";
 import {ProductMetrics} from "../../categories/category/calculator/product-metrics.model";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
+import {NewCustomer} from "./new-customer.model";
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +41,14 @@ export class OrdersService {
     }
   ];
   categoriesListener = new Subject<Category[]>();
+  newCustomerDataListener = new Subject<NewCustomer>();
+
   constructor(private authService: AuthService, private http: HttpClient, private dialog: MatDialog) { }
 
+
+  getNewCustomerDataListener() {
+    return this.newCustomerDataListener.asObservable();
+  }
   getOrderListener() {
     return this.orderListener.asObservable();
   }
@@ -75,9 +82,10 @@ export class OrdersService {
     this.modelId = model.id;
   }
 
-  createOrder(productMetrics:  ProductMetrics) {
+  createOrder(productMetrics:  ProductMetrics, clientId?: string) {
     this.productMetrics = {...productMetrics};
     let order = {
+      clientId: clientId || '',
       coatModelId: this.modelId,
       productMetrics: {
         clientMetrics: {...productMetrics.clientMetrics},
@@ -89,29 +97,13 @@ export class OrdersService {
     });
   }
 
-  getOrders() {
+  getAssignedOrders() {
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.getHeader()}).subscribe({
       next: (orders) => {
-        orders = orders.map((order) => {
-          order.createdAt = new Date(order.createdAt).toLocaleString('en-GB', {
-            hour12: false
-          });
-          return order;
-        })
-        this.categories.forEach(category => category.orders = []);
-        orders.forEach(order =>
-          this.categories.find(category =>
-            category.coatType === order.coatModel.coatType)?.orders.push(order));
-        this.categories = this.categories.map(category => {
-          category.orders = category.orders.map((order, index) => {
-            order.num = index + 1;
-            return order;
-          })
-          return category
-        })
-        this.categoriesListener.next(this.categories);
-        console.log(this.categories)
+        orders = this.fixOrdersDate(orders);
         this.ordersListener.next(orders);
+        this.divideOrdersByCategories(orders);
+        this.categoriesListener.next(this.categories);
       },
       error: (err) => {
         console.log(err)
@@ -135,6 +127,7 @@ export class OrdersService {
   getAllUnassignedOrders() {
     this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.getHeader()}).subscribe( {
       next: (orders) => {
+        orders = this.fixOrdersDate(orders);
         this.ordersListener.next(orders);
       },
       error: (err) => {
@@ -144,9 +137,10 @@ export class OrdersService {
     })
   }
 
-  assignOrder(orderId: string) {
-    this.http.patch(`${this.backendUrl}/orders/assign/${orderId}`, {}, {headers: this.getHeader()}).subscribe({
+  assignOrder(order: Order) {
+    this.http.patch(`${this.backendUrl}/orders/assign/${order.id}`, {}, {headers: this.getHeader()}).subscribe({
       next: () => {
+        this.getOrdersOnStatus(order.status);
       },
       error: (err) => {
         this.dialog.open(ErrorDialogComponent);
@@ -155,9 +149,10 @@ export class OrdersService {
     })
   }
 
-  finishOrder(orderId: string) {
-    this.http.patch(`${this.backendUrl}/orders/${orderId}/completed`, {}, {headers: this.getHeader()}).subscribe({
+  finishOrder(order: Order) {
+    this.http.patch(`${this.backendUrl}/orders/${order.id}/completed`, {}, {headers: this.getHeader()}).subscribe({
       next: () => {
+        this.getOrdersOnStatus(order.status);
       },
       error: (err) => {
         this.dialog.open(ErrorDialogComponent);
@@ -165,9 +160,10 @@ export class OrdersService {
       }
     })
   }
-  cancelOrder(orderId: string) {
-    this.http.patch(`${this.backendUrl}/orders/${orderId}/cancel`, {}, {headers: this.getHeader()}).subscribe({
+  cancelOrder(order: Order) {
+    this.http.patch(`${this.backendUrl}/orders/${order.id}/cancel`, {}, {headers: this.getHeader()}).subscribe({
       next: () => {
+        this.getOrdersOnStatus(order.status)
       },
       error: (err) => {
         this.dialog.open(ErrorDialogComponent);
@@ -176,9 +172,48 @@ export class OrdersService {
     })
   }
 
+  createNewCustomer() {
+    this.http.post<NewCustomer>(`${this.backendUrl}/clients/register`, {}, {headers: this.getHeader()}).subscribe({
+      next: (customer) => {
+        this.newCustomerDataListener.next(customer);
+      }
+    })
+  }
+
+  private getOrdersOnStatus(orderStatus: string) {
+    if(orderStatus === 'PENDING') {
+      this.getAllUnassignedOrders();
+    } else {
+      this.getAssignedOrders();
+    }
+  }
+
+  private fixOrdersDate(orders: Order[]) {
+    return orders.map((order) => {
+      order.createdAt = (order.createdAt as string).replace('T', ' ');
+      return order;
+    })
+  }
+
   private getHeader() {
     const authToken = this.authService.getToken();
     let headers = new HttpHeaders();
     return headers.set("Authorization", "Bearer " + authToken);
+  }
+  private divideOrdersByCategories(orders: Order[]) {
+    orders = JSON.parse(JSON.stringify(orders));
+    this.categories.forEach(category => category.orders = []);
+    orders.forEach(order =>
+      this.categories.find(category =>
+        category.coatType === order.coatModel.coatType)?.orders.push(order));
+  }
+  numberCategories() {
+    return this.categories = this.categories.map(category => {
+      category.orders = category.orders.map((order, index) => {
+        order.num = index + 1;
+        return order;
+      })
+      return category
+    })
   }
 }

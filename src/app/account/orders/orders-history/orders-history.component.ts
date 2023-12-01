@@ -27,7 +27,7 @@ export class OrdersHistoryComponent implements OnInit, OnDestroy{
         this.tableData = this.categories.find(category => category.coatType === this.coatType)?.orders.filter(order => order.status !== 'CANCELLED') || [];
       })
     })
-    this.ordersService.getOrders();
+    this.ordersService.getAssignedOrders();
   }
   ngOnDestroy() {
     this.categoriesSub.unsubscribe();

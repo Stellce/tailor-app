@@ -11,14 +11,15 @@
             matInput
             [formControlName]="inputField.name"
             type="number"
-            required>
+            required
+            [readonly]="!isEditable">
           <mat-error>Поле обов'язкове</mat-error>
         </mat-form-field>
       </div>
       <mat-divider></mat-divider>
     </div>
-    <div class="submit-button-wrapper">
-      <button mat-raised-button color="primary" type="submit" *ngIf="!isMetricsFormFilled">Далі</button>
+    <div class="submit-button-wrapper" *ngIf="!isMetricsFormFilled && !isEditable">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!isEditable">Далі</button>
     </div>
   </div>
 </form>
@@ -32,7 +33,7 @@
         </div>
         <mat-form-field>
           <mat-label>{{inputField.text}}</mat-label>
-          <input matInput [formControlName]="inputField.name" type="number" required>
+          <input matInput [formControlName]="inputField.name" type="number" required [readonly]="!isEditable">
           <mat-error>Поле обов'язкове</mat-error>
         </mat-form-field>
       </div>

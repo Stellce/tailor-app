@@ -27,29 +27,26 @@ export class OrderComponent implements OnInit, OnDestroy{
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       let orderId = params['orderId'];
-      this.orderSub = this.ordersService.getOrderListener().subscribe(order => {
-        this.order = order;
-      })
       this.ordersService.getOrderById(orderId);
+    })
+    this.orderSub = this.ordersService.getOrderListener().subscribe(order => {
+      this.order = order;
     })
     this.user = this.authService.getUser();
     this.userSub = this.authService.getUserListener().subscribe(user => this.user = user);
   }
 
-  onAssignOrder(orderId: string) {
-    this.ordersService.assignOrder(orderId);
-    this.ordersService.getOrders();
+  onAssignOrder(order: Order) {
+    this.ordersService.assignOrder(order);
     this.backToTable();
   }
-  onFinishOrder(orderId: string) {
-    this.ordersService.finishOrder(orderId);
-    this.ordersService.getOrders();
+  onFinishOrder(order: Order) {
+    this.ordersService.finishOrder(order);
     this.backToTable();
   }
 
-  onCancelOrder(orderId: string) {
-    this.ordersService.cancelOrder(orderId);
-    this.ordersService.getOrders();
+  onCancelOrder(order: Order) {
+    this.ordersService.cancelOrder(order);
     this.backToTable();
   }
 
@@ -58,7 +55,7 @@ export class OrderComponent implements OnInit, OnDestroy{
   }
 
   private backToTable() {
-    this.router.navigate(['./'], {relativeTo: this.activatedRoute.parent})
+    this.router.navigate(['./'], {relativeTo: this.activatedRoute.parent});
   }
 
 }

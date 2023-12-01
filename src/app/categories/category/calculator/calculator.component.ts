@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {InputField} from "./inputField.model";
 import {ViewportScroller} from "@angular/common";
@@ -17,6 +17,7 @@ import {Order} from "../../../account/orders/order/order.model";
   styleUrl: './calculator.component.scss'
 })
 export class CalculatorComponent implements OnInit{
+  @Input()isEditable: boolean;
   metricsForm: FormGroup;
   increasesForm: FormGroup;
   inputMetrics: InputField[];
@@ -37,6 +38,8 @@ export class CalculatorComponent implements OnInit{
     private dialog: MatDialog
   ) {}
   ngOnInit() {
+    if(this.isEditable === undefined) this.isEditable = true;
+    console.log(this.isEditable)
     this.productMetrics = {
       clientMetrics: {},
       increases: {}
@@ -89,29 +92,28 @@ export class CalculatorComponent implements OnInit{
   }
   calcScndForm() {
     if(this.increasesForm.invalid) return;
-    if(this.authService.getUser().roles?.includes('EMPLOYEE')) {
-      this.openDialog();
-      this.calcService.getisUserDataProvidedListener().subscribe(() => this.calcValues());
+    if(this.authService.getUser().roles?.includes('EMPLOYEE' || 'ADMIN')) {
+      this.dialog.open(DialogDataComponent);
+      this.ordersService.getNewCustomerDataListener().subscribe(newCustomer => {
+        this.calcValues(newCustomer.id);
+      });
     } else {
       this.calcValues();
     }
   }
 
-  private calcValues() {
+  private calcValues(clientId?: string) {
     let productMetrics: ProductMetrics = {...this.productMetrics};
     for(let [k, v] of Object.entries(this.increasesForm.controls)) {
       productMetrics.increases[k] = v.value;
     }
     this.productMetrics = productMetrics;
     if (this.authService.getUser()) {
-      this.ordersService.createOrder(this.productMetrics);
+      this.ordersService.createOrder(this.productMetrics, clientId);
     }
     this.calcService.calculate(this.productMetrics);
   }
 
-  private openDialog() {
-    this.dialog.open(DialogDataComponent);
-  }
 
   protected readonly String = String;
 }

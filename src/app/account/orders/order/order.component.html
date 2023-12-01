@@ -7,26 +7,29 @@
       mat-raised-button
       *ngIf="order?.status === 'PENDING' && (user?.roles![0] === 'EMPLOYEE' || user?.roles![0] === 'ADMIN')"
       color="primary"
-      (click)="onAssignOrder(order.id)"
+      (click)="onAssignOrder(order)"
     >
       <mat-icon>check</mat-icon>| <span>Прийняти замовлення</span>
     </button>
     <button
       mat-raised-button
-      *ngIf="order?.status === 'IN_PROGRESS' && user?.roles![0] === 'CLIENT'"
+      *ngIf="order?.status === 'IN_PROGRESS' && !user?.roles!.includes('CLIENT')"
       [ngStyle]="{background: 'green', color: 'white'}"
-      (click)="onFinishOrder(order.id)"
+      (click)="onFinishOrder(order)"
     >
-      <mat-icon>done_all</mat-icon>|<span>Завершити замовлення</span>
+      <mat-icon>done_all</mat-icon>|Завершити замовлення
     </button>
     <button
       mat-raised-button
-      *ngIf="user?.roles!.includes('CLIENT')"
+      *ngIf="(order?.status === 'PENDING' || order?.status === 'IN_PROGRESS') && user?.roles!.includes('CLIENT')"
       color="warn"
-      (click)="onCancelOrder(order.id)"
+      (click)="onCancelOrder(order)"
     >
       <mat-icon>close</mat-icon>| <span>Скасувати замовлення</span>
     </button>
+    <mat-card *ngIf="user.roles?.includes('CLIENT')" [ngStyle]="{fontFamily: 'Inter, sans-serif',padding: '15px', color: 'white', backgroundColor: order?.status === 'CANCELLED' ? '#f44336' : order?.status === 'COMPLETED' ? 'green' : '#3f51b5'}">
+      Замовлення {{order?.status === 'COMPLETED' ? 'завершено' : order?.status === 'CANCELLED' ? 'скасовано' : 'виготовляється'}}
+    </mat-card>
   </div>
 </div>
-<app-calculator></app-calculator>
+<app-calculator [isEditable]="false"></app-calculator>

@@ -35,20 +35,19 @@ export class OrdersComponent implements OnInit, OnDestroy{
 
     this.activatedRoute.params.subscribe(params => {
      this.selectedState = params['status'].toUpperCase();
-      if (this.selectedState !== 'PENDING') return this.ordersService.getOrders();
+      if (this.selectedState !== 'PENDING') return this.ordersService.getAssignedOrders();
       this.ordersService.getAllUnassignedOrders();
     })
 
     this.ordersSub = this.ordersService.getOrdersListener().subscribe(orders => {
       console.log('orders')
       console.log(orders)
-      // this.orders = orders;
       this.filterOrdersByStatuses(orders);
       console.log('ordersByStatuses')
       console.log(this.ordersByStatuses);
       this.updateTable();
     })
-    if(this.selectedState !== 'PENDING') return this.ordersService.getOrders();
+    if(this.selectedState !== 'PENDING') return this.ordersService.getAssignedOrders();
     this.ordersService.getAllUnassignedOrders();
   }
   onCheckStates() {
@@ -78,13 +77,21 @@ export class OrdersComponent implements OnInit, OnDestroy{
     orders.forEach(order =>
       this.ordersByStatuses.find(ordersByStatus =>
         ordersByStatus.status === order.status)?.orders!.push(order));
-    this.ordersByStatuses.forEach(ordersByStatus =>
-      ordersByStatus.orders.forEach((order, index) =>
-        order.num = index + 1));
+    this.ordersByStatuses = this.ordersByStatuses.map(ordersByStatus => {
+      ordersByStatus.orders = ordersByStatus.orders.map((order, index) => {
+        order.num = index + 1;
+        return order;
+      })
+      return ordersByStatus;
+    })
   }
 
   private updateTable() {
     // this.displayedOrders = this.orders?.filter(orders => orders.status === this.selectedState)!
+    console.log('selectedstate')
+    console.log(this.selectedState)
     this.displayedOrders = this.ordersByStatuses.find(ordersByStatus => ordersByStatus.status === this.selectedState)?.orders!;
+    console.log('displayedOrders');
+    console.log(this.displayedOrders);
   }
 }

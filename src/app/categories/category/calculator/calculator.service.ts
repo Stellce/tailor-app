@@ -67,9 +67,6 @@ export class CalculatorService {
   getInputFieldsScnd() {
     return this.clientIncrease;
   }
-  getisUserDataProvidedListener() {
-    return this.isUserDataProvidedListener.asObservable();
-  }
   calculate(productMetrics: ProductMetrics) {
     let calcObj = {
       clientMetrics: {...productMetrics.clientMetrics},
