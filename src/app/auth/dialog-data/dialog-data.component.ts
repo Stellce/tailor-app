@@ -13,7 +13,9 @@ export class DialogDataComponent {
   newCustomer: NewCustomer = {
     lastName: "",
     firstName: "",
-    email: ""
+    email: "",
+    phoneNumber: "",
+    password: ""
   }
   constructor(private ordersService: OrdersService, public dialogRef: MatDialogRef<DialogDataComponent>) {}
   onSendClientForm(form: NgForm) {
