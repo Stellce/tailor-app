@@ -173,10 +173,10 @@ export class OrdersService {
       }
     })
   }
-  addPhoto(order: Order, photo: string) {
-    const params = new HttpParams().set('file', photo);
-    const header = this.getHeader().set('Content-Type', 'multipart/form-data; boundary=++--------------------------093497946155792441097908')
-    this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, {}, {headers: header, params: params}).subscribe({
+  addPhoto(order: Order, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, formData, {headers: this.getHeader()}).subscribe({
       next: () => {},
       error: (err) => {
         console.log(err)

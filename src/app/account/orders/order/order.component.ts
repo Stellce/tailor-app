@@ -54,15 +54,15 @@ export class OrderComponent implements OnInit, OnDestroy{
     this.backToTable();
   }
   onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files![0];
+    this.image = (event.target as HTMLInputElement).files![0];
     const reader = new FileReader();
     reader.onload = () => {
       this.photoPreview = reader.result as string;
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(this.image);
   }
   onSavePhoto() {
-    this.ordersService.addPhoto(this.order, this.photoPreview);
+    this.ordersService.addPhoto(this.order, this.image);
   }
   ngOnDestroy() {
     this.orderSub.unsubscribe();
