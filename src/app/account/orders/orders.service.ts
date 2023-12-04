@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Model} from "../../services/categories/category/category-model.model";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {AuthService} from "../../auth/auth.service";
 import {environment} from "../../../environments/environment";
 import {Order} from "./order/order.model";
@@ -42,10 +42,12 @@ export class OrdersService {
   ];
   categoriesListener = new Subject<Category[]>();
   newCustomerDataListener = new Subject<NewCustomer>();
-
+  orderPhotosListener = new Subject<string[]>()
   constructor(private authService: AuthService, private http: HttpClient, private dialog: MatDialog) { }
 
-
+  getOrderPhotosListener() {
+    return this.orderPhotosListener.asObservable();
+  }
   getNewCustomerDataListener() {
     return this.newCustomerDataListener.asObservable();
   }
@@ -58,14 +60,14 @@ export class OrdersService {
   getCategoriesListener() {
     return this.categoriesListener.asObservable();
   }
-
+  selectModel(model: Model) {
+    this.modelId = model.id;
+  }
   getCategories() {
-    let areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
+    const areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
     if (areCached) return this.categoriesListener.next(this.categories);
     this.http.get<Model[]>(`${this.backendUrl}/coat-models`).subscribe({
       next: modelsResponse => {
-        let areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
-        if (areCached) return this.categoriesListener.next(this.categories);
         modelsResponse.forEach(model =>
           this.categories.find(category =>
             category.coatType === model.coatType && !category.models.some(m => m === model ))?.models?.push(model));
@@ -77,26 +79,6 @@ export class OrdersService {
       }
     });
   }
-
-  selectModel(model: Model) {
-    this.modelId = model.id;
-  }
-
-  createOrder(productMetrics:  ProductMetrics, clientId?: string) {
-    this.productMetrics = {...productMetrics};
-    let order = {
-      clientId: clientId || '',
-      coatModelId: this.modelId,
-      productMetrics: {
-        clientMetrics: {...productMetrics.clientMetrics},
-        ...productMetrics.increases
-      }
-    }
-    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.getHeader()}).subscribe(res => {
-      console.log(res);
-    });
-  }
-
   getAssignedOrders() {
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.getHeader()}).subscribe({
       next: (orders) => {
@@ -111,19 +93,6 @@ export class OrdersService {
       }
     })
   }
-
-  getOrderById(id: number) {
-    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.getHeader()}).subscribe({
-      next: (order) => {
-        this.orderListener.next(order);
-      },
-      error: (err) => {
-        console.log(err)
-        this.dialog.open(ErrorDialogComponent);
-      }
-    })
-  }
-
   getAllUnassignedOrders() {
     this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.getHeader()}).subscribe( {
       next: (orders) => {
@@ -136,7 +105,31 @@ export class OrdersService {
       }
     })
   }
-
+  createOrder(productMetrics:  ProductMetrics, clientId?: string) {
+    this.productMetrics = {...productMetrics};
+    const order = {
+      clientId: clientId || '',
+      coatModelId: this.modelId,
+      productMetrics: {
+        clientMetrics: {...productMetrics.clientMetrics},
+        ...productMetrics.increases
+      }
+    }
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.getHeader()}).subscribe(res => {
+      console.log(res);
+    });
+  }
+  getOrderById(id: number) {
+    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.getHeader()}).subscribe({
+      next: (order) => {
+        this.orderListener.next(order);
+      },
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent);
+      }
+    })
+  }
   assignOrder(order: Order) {
     this.http.patch(`${this.backendUrl}/orders/assign/${order.id}`, {}, {headers: this.getHeader()}).subscribe({
       next: () => {
@@ -148,7 +141,6 @@ export class OrdersService {
       }
     })
   }
-
   finishOrder(order: Order) {
     this.http.patch(`${this.backendUrl}/orders/${order.id}/completed`, {}, {headers: this.getHeader()}).subscribe({
       next: () => {
@@ -171,12 +163,33 @@ export class OrdersService {
       }
     })
   }
-
   createNewCustomer(newCustomer: NewCustomer) {
     this.http.post<NewCustomer>(`${this.backendUrl}/clients/register`, {...newCustomer}, {headers: this.getHeader()}).subscribe({
       next: (customer) => {
         this.newCustomerDataListener.next(customer);
+      },
+      error: () => {
+        this.dialog.open(ErrorDialogComponent);
       }
+    })
+  }
+  addPhoto(order: Order, photo: string) {
+    const params = new HttpParams().set('file', photo);
+    const header = this.getHeader().set('Content-Type', 'multipart/form-data; boundary=++--------------------------093497946155792441097908')
+    this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, {}, {headers: header, params: params}).subscribe({
+      next: () => {},
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent);
+      }
+    })
+  }
+  getOrderPhotos(coatModelId: number) {
+    this.http.get<string[]>(`${this.backendUrl}/coat-models/${coatModelId}/images`).subscribe({
+      next: (photos) => {
+        this.orderPhotosListener.next(photos);
+      },
+      error: (err) => this.dialog.open(ErrorDialogComponent, {data: {message: err}})
     })
   }
 
@@ -197,7 +210,7 @@ export class OrdersService {
 
   private getHeader() {
     const authToken = this.authService.getToken();
-    let headers = new HttpHeaders();
+    const headers = new HttpHeaders();
     return headers.set("Authorization", "Bearer " + authToken);
   }
   private divideOrdersByCategories(orders: Order[]) {

@@ -5,11 +5,14 @@
       <mat-option *ngFor="let state of states" [value]='state.name'>{{state.text}}</mat-option>
     </mat-select>
   </mat-form-field>
+  <div class="spinner-wrapper">
+    <mat-spinner *ngIf="!displayedOrders"></mat-spinner>
+  </div>
   <div class="orders-table" *ngIf="displayedOrders">
     <mat-table [dataSource]="displayedOrders">
       <ng-container matColumnDef="pos">
         <mat-header-cell *matHeaderCellDef>№</mat-header-cell>
-        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.num}}</mat-cell>
+        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order['num']}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef>id</mat-header-cell>
@@ -17,15 +20,15 @@
       </ng-container>
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>Назва</mat-header-cell>
-        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.name}}</mat-cell>
+        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order['coatModel'].name}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="date">
         <mat-header-cell *matHeaderCellDef>Дата</mat-header-cell>
-        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.createdAt}}</mat-cell>
+        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order['createdAt']}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="price">
         <mat-header-cell *matHeaderCellDef>Ціна</mat-header-cell>
-        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.price}}</mat-cell>
+        <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order['coatModel']['price']}}</mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row [ngStyle]="{cursor: 'pointer'}" *matRowDef="let order; columns: displayedColumns"></mat-row>

@@ -31,7 +31,6 @@ export class HeaderComponent implements OnInit{
     this.userSub = this.authService.getUserListener().subscribe(user => {
       this.user = user;
       if(user.isAuth) return this.onAuth();
-      this.onLogout();
     })
     this.onAuth();
   }

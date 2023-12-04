@@ -1,11 +1,11 @@
-<h1 mat-dialog-title>Щось пiшло не так</h1>
+<h1 mat-dialog-title *ngIf="!data || !data.isSuccessful">Щось пiшло не так</h1>
 <div class="dialog-data">
   <div class="activation-image">
-    <img *ngIf="data.isSuccessful" [src]="activationDonePath" alt="Успiх">
-    <mat-spinner *ngIf="data.isSuccessful === undefined"></mat-spinner>
-    <img *ngIf="!data.isSuccessful || data.isSuccessful !== undefined" [src]="activationFailedPath" alt="Помилка">
+    <img *ngIf="data && data.isSuccessful" [src]="activationDonePath" alt="Успiх">
+    <img *ngIf="data && !data.isSuccessful && data.isSuccessful !== undefined || !data" [src]="activationFailedPath" alt="Помилка">
   </div>
-  <p>{{data.message || 'Щось пiщло не так'}}</p>
+  <p *ngIf="data && data.message">{{data.message}}</p>
+  <p *ngIf="!data || !data.message">Щось пiшло не так</p>
 </div>
 <div mat-dialog-actions class="dialog-actions">
   <button mat-button mat-dialog-close>Ok</button>

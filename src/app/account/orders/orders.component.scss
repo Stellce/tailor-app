@@ -1,11 +1,18 @@
 mat-form-field {
   margin-top: 22px;
 }
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px;
+}
 .orders-table {
   overflow: auto;
 }
 mat-table {
   min-width: 400px;
+  max-height: 750px;
 }
 .orders {
   max-width: 900px;
@@ -48,4 +55,7 @@ $medium-column: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.photos {
+
 }

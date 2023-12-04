@@ -1,3 +1,9 @@
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px;
+}
 .order-description {
   display: flex;
   flex-direction: row;
@@ -10,22 +16,41 @@
   width: 100%;
   aspect-ratio: 1/1.5;
 }
-.status-changer {
+.scnd-column {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   margin: 15px auto;
-  width: 100%;
-  max-width: 250px;
+  max-width: 450px;
   padding: 15px;
   gap:10px;
 }
-.status-changer button {
+.status {
+  max-width: 250px;
+  margin: 10px auto;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+.scnd-column button {
   margin: 15px auto;
   width: 100% !important;
 }
-.status-changer button span {
+.scnd-column button span {
   width: 50px;
+}
+input[type=file] {
+  display: none;
+}
+.image-preview img {
+  max-width: 100%;
+}
+.images {
+  display: flex;
+  flex-direction: row;
+}
+.add-image {
+  text-align: center;
 }
 @media (max-width: 600px) {
   button {
@@ -41,8 +66,11 @@
   .order-image {
     width: 100%;
   }
-  .status-changer {
+  .scnd-column {
     margin: 0 auto;
     padding: 0;
+  }
+  .images {
+    flex-direction: column;
   }
 }

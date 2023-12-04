@@ -9,5 +9,7 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 export class ErrorDialogComponent {
   activationDonePath: string = './assets/activation-done.svg';
   activationFailedPath: string = './assets/activation-failed.svg';
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {message: string, isSuccessful: boolean}) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {message: string, isSuccessful: boolean}) {
+    console.log(data)
+  }
 }

@@ -14,16 +14,18 @@ import {AuthService} from "../../../auth/auth.service";
 export class OrderComponent implements OnInit, OnDestroy{
   order: Order;
   orderSub: Subscription;
-  changeStateTo: string;
   user: User;
   userSub: Subscription;
+  image: File;
+  photoPreview: string;
+  photos: string[];
+  orderPhotosSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
     private ordersService: OrdersService,
     private router: Router,
     private authService: AuthService
   ) {}
-
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       let orderId = params['orderId'];
@@ -31,11 +33,14 @@ export class OrderComponent implements OnInit, OnDestroy{
     })
     this.orderSub = this.ordersService.getOrderListener().subscribe(order => {
       this.order = order;
+      this.ordersService.getOrderPhotos(this.order['coatModel'].id);
     })
     this.user = this.authService.getUser();
     this.userSub = this.authService.getUserListener().subscribe(user => this.user = user);
+    this.orderPhotosSub = this.ordersService.getOrderPhotosListener().subscribe(photos => {
+      this.photos = photos;
+    })
   }
-
   onAssignOrder(order: Order) {
     this.ordersService.assignOrder(order);
     this.backToTable();
@@ -44,18 +49,25 @@ export class OrderComponent implements OnInit, OnDestroy{
     this.ordersService.finishOrder(order);
     this.backToTable();
   }
-
   onCancelOrder(order: Order) {
     this.ordersService.cancelOrder(order);
     this.backToTable();
   }
-
-  ngOnDestroy() {
-    this.orderSub.unsubscribe()
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files![0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.photoPreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   }
-
+  onSavePhoto() {
+    this.ordersService.addPhoto(this.order, this.photoPreview);
+  }
+  ngOnDestroy() {
+    this.orderSub.unsubscribe();
+  }
   private backToTable() {
     this.router.navigate(['./'], {relativeTo: this.activatedRoute.parent});
   }
-
 }

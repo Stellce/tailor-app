@@ -14,7 +14,7 @@ import {User} from "../user.model";
 export class OrdersComponent implements OnInit, OnDestroy{
   // orders: Order[];
   ordersByStatuses: {status: string, orders: Order[]}[];
-  displayedOrders: Order[];
+  displayedOrders: Order[] | null;
   ordersSub: Subscription;
   displayedColumns: string[] = ['pos', 'name', 'date', 'price'];
   selectedState: string = 'PENDING';
@@ -27,6 +27,7 @@ export class OrdersComponent implements OnInit, OnDestroy{
   user: User;
   userSub: Subscription;
   isAdmin: boolean = false;
+  isLoading: boolean;
 
   constructor(private ordersService: OrdersService, private activatedRoute: ActivatedRoute, private router: Router, private authService: AuthService) {}
 
@@ -51,6 +52,7 @@ export class OrdersComponent implements OnInit, OnDestroy{
     this.ordersService.getAllUnassignedOrders();
   }
   onCheckStates() {
+    this.displayedOrders = null;
     this.router.navigate(['/', 'orders', this.selectedState.toLowerCase()])
     this.updateTable();
   }
