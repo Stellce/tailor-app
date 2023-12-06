@@ -1,4 +1,4 @@
-<form [formGroup]="metricsForm" (ngSubmit)="calcFstForm()" *ngIf="formCreated">
+<form [formGroup]="metricsForm" (ngSubmit)="writeClientMetrics()" *ngIf="formCreated">
   <div class="first-calc">
     <div class="input-fields" *ngFor="let inputField of inputMetrics">
       <div class="input-field">
@@ -24,7 +24,7 @@
   </div>
 </form>
 <mat-divider *ngIf="isMetricsFormFilled"></mat-divider>
-<form [formGroup]="increasesForm" (ngSubmit)="calcScndForm()">
+<form [formGroup]="increasesForm" (ngSubmit)="calculate()">
   <div id="scndCalc" class="second-calc" *ngIf="isMetricsFormFilled">
     <div class="input-fields" *ngFor="let inputField of inputIncreases">
       <div class="input-field">

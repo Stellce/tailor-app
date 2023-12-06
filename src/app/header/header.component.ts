@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit{
     {name: 'Послуги', src: 'categories', role: 'USER'}
   ];
   accessLinks: {name: string, src: string, role: string}[] = [
-    {name: 'Акаунт', src: 'account/midi_coat', role: 'CLIENT'},
+    {name: 'Акаунт', src: 'account', role: 'CLIENT'},
     {name: 'Замовлення', src: 'orders/pending', role: 'EMPLOYEE'},
     {name: 'Працiвники', src: 'employees', role: 'ADMIN'}
   ]
@@ -50,7 +50,8 @@ export class HeaderComponent implements OnInit{
 
   private onAuth() {
     this.user.roles!.forEach(role => {
-      let link = this.accessLinks.find(accessLink => accessLink.role === role);
+      let link = this.accessLinks.find(accessLink =>
+        accessLink.role === role && !this.links.some(link => link.role === role));
       if (link) this.links.push(link);
     })
   }

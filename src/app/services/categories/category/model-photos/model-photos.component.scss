@@ -1,0 +1,39 @@
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px;
+}
+.photos-grid {
+  display: grid;
+  gap: 25px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 25px auto;
+  grid-template-columns: repeat(4, 1fr);
+}
+.photo {
+  position: relative;
+  width: 100%;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+.photo img {
+  width: 100%;
+}
+.photo:not(.selected):hover{
+  transform: scale(1.03);
+  cursor: pointer;
+}
+.selected {
+  transform: scale(1.05);
+  cursor: default;
+}
+.selected img {
+  box-shadow: 0 0 12px 4px #1f1fdc;
+}
+@media (max-width: 600px) {
+  .photos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

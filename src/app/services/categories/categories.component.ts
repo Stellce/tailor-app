@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {Category} from "./category/category.model";
 import {ActivatedRoute} from "@angular/router";
@@ -11,13 +11,13 @@ import {OrdersService} from "../../account/orders/orders.service";
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit, OnDestroy{
+  @Input()isCategoryHidden: boolean = false;
   categoriesSub: Subscription;
   categories: Category[];
   selectedCategory: Category;
   imageInterval: any;
   categoryIndex: number = 0;
   url: string;
-  isFstClick: boolean = true;
 
   constructor(
     private ordersService: OrdersService,

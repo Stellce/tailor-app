@@ -6,24 +6,19 @@
     <img [src]="'data:image/png;base64, ' + order['coatModel'].image" [alt]="order['coatModel']" *ngIf="order">
   </div>
   <div class="scnd-column">
-    <div class="add-image" *ngIf="order && order.status === 'COMPLETED'">
+    <div class="add-image" *ngIf="isEmployee && order && order.status === 'COMPLETED'">
       <span *ngIf="!photoPreview">Нове фото ще не обрано</span>
       <div class="image-preview" *ngIf="photoPreview && photoPreview !== ''">
         <img [src]="photoPreview" alt="Додати фото">
       </div>
       <button mat-raised-button color="primary" *ngIf="photoPreview" (click)="onSavePhoto()">Зберегти фото</button>
     </div>
-    <div class="photos" *ngIf="photos && photos.length > 0">
-       <div class="photo" *ngFor="let photo of photos">
-         <img [src]="photo" alt="Фото виробу">
-       </div>
-    </div>
   </div>
 </div>
 <div class="status">
   <button
     mat-raised-button
-    *ngIf="order && order.status === 'PENDING' && (user?.roles![0] === 'EMPLOYEE' || user?.roles![0] === 'ADMIN')"
+    *ngIf="order && order.status === 'PENDING' && isEmployee"
     color="primary"
     (click)="onAssignOrder(order)"
   >
@@ -51,7 +46,8 @@
   >
     Замовлення {{order.status === 'COMPLETED' ? 'завершено' : order.status === 'CANCELLED' ? 'скасовано' : 'виготовляється'}}
   </mat-card>
-  <button *ngIf="order && order.status === 'COMPLETED'" mat-button type="button" color='primary' (click)="filePicker.click()">Додати фото</button>
+  <button *ngIf="isEmployee && order  && order.status === 'COMPLETED'" mat-button type="button" color='primary' (click)="filePicker.click()">Додати фото</button>
   <input type="file" #filePicker (change)="onImagePicked($event)">
 </div>
+<app-model-photos *ngIf="order" [modelId]="order.coatModel.id" [isClickable]="false" [orderId]="order.id"></app-model-photos>
 <app-calculator [isEditable]="false"></app-calculator>

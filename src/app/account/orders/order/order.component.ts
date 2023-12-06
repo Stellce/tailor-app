@@ -5,6 +5,7 @@ import {OrdersService} from "../orders.service";
 import {Subscription} from "rxjs";
 import {User} from "../../user.model";
 import {AuthService} from "../../../auth/auth.service";
+import {PhotoByOrderId} from "../../../services/categories/category/model-photos/photosById.model";
 
 @Component({
   selector: 'app-order',
@@ -18,8 +19,9 @@ export class OrderComponent implements OnInit, OnDestroy{
   userSub: Subscription;
   image: File;
   photoPreview: string;
-  photos: string[];
+  photos: PhotoByOrderId[];
   orderPhotosSub: Subscription;
+  isEmployee: boolean;
   constructor(
     private activatedRoute: ActivatedRoute,
     private ordersService: OrdersService,
@@ -27,17 +29,22 @@ export class OrderComponent implements OnInit, OnDestroy{
     private authService: AuthService
   ) {}
   ngOnInit() {
+    this.isEmployee = false;
     this.activatedRoute.params.subscribe(params => {
       let orderId = params['orderId'];
-      this.ordersService.getOrderById(orderId);
+      this.ordersService.getProductMetricsByOrderId(orderId);
     })
     this.orderSub = this.ordersService.getOrderListener().subscribe(order => {
       this.order = order;
-      this.ordersService.getOrderPhotos(this.order['coatModel'].id);
+      this.ordersService.getModelPhotos(this.order['coatModel'].id);
     })
+    this.userSub = this.authService.getUserListener().subscribe(user => {
+      this.user = user
+      this.isEmployee = this.checkIsEmployee(user);
+    });
     this.user = this.authService.getUser();
-    this.userSub = this.authService.getUserListener().subscribe(user => this.user = user);
-    this.orderPhotosSub = this.ordersService.getOrderPhotosListener().subscribe(photos => {
+    this.isEmployee = this.checkIsEmployee(this.user);
+    this.orderPhotosSub = this.ordersService.getModelPhotosListener().subscribe(photos => {
       this.photos = photos;
     })
   }
@@ -69,5 +76,8 @@ export class OrderComponent implements OnInit, OnDestroy{
   }
   private backToTable() {
     this.router.navigate(['./'], {relativeTo: this.activatedRoute.parent});
+  }
+  private checkIsEmployee(user: User) {
+    return user.roles?.some(role => ['ADMIN', 'EMPLOYEE'].includes(role))|| false
   }
 }

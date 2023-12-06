@@ -1,4 +1,4 @@
 export const environment = {
+  // backendUrl: 'https://ec2-51-21-26-25.eu-north-1.compute.amazonaws.com:8080/api/v1'
   backendUrl: 'http://localhost:8080/api/v1'
-  // backendUrl: 'https://20.33.27.70:8080/api/v1'
 }

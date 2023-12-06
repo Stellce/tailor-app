@@ -27,7 +27,7 @@ import { CategoryComponent } from './services/categories/category/category.compo
 import {MatDividerModule} from "@angular/material/divider";
 import { ActivationComponent } from './auth/activation/activation.component';
 import {MatTableModule} from "@angular/material/table";
-import { VideoDialogComponent } from './services/categories/video-dialog/video-dialog.component';
+import { VideoDialogComponent } from './services/categories/category/video-dialog/video-dialog.component';
 import { AccountComponent } from './account/account.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
@@ -45,6 +45,7 @@ import {EmployeesComponent} from "./account/employees/employees.component";
 import {UserDetailsComponent} from "./account/user-details/user-details.component";
 import {EmployeeComponent} from "./account/employees/employee/employee.component";
 import {EmployeeRegistrationComponent} from "./account/employees/employee-registration/employee-registration.component";
+import {ModelPhotosComponent} from "./services/categories/category/model-photos/model-photos.component";
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import {EmployeeRegistrationComponent} from "./account/employees/employee-regist
     EmployeeComponent,
     EmployeeRegistrationComponent,
     UserDetailsComponent,
+    ModelPhotosComponent
   ],
   imports: [
     BrowserModule,
@@ -96,7 +98,7 @@ import {EmployeeRegistrationComponent} from "./account/employees/employee-regist
     ReactiveFormsModule,
     MatMomentDateModule,
     MatExpansionModule,
-    MatSelectModule,
+    MatSelectModule
   ],
   providers: [
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true, hasBackdrop: false}}

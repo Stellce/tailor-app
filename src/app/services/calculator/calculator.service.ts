@@ -10,7 +10,7 @@ import {ProductMetrics} from "./product-metrics.model";
 export class CalculatorService {
   backendUrl: string = environment.backendUrl;
   calcValues = {};
-  isUserDataProvidedListener = new Subject<boolean>();
+  isEditableListener = new Subject<boolean>();
 
   clientMetrics: InputField[] = [
     {name: 'neckSemiCircumference', text: 'Напiвобхват шиї'},
@@ -61,6 +61,12 @@ export class CalculatorService {
   resFieldsListener = new Subject<ResField[]>();
   constructor(private http: HttpClient) {}
 
+  getIsEditableListener() {
+    return this.isEditableListener.asObservable();
+  }
+  getResFieldsListener() {
+    return this.resFieldsListener.asObservable();
+  }
   getInputFieldsFst() {
     return this.clientMetrics;
   }
@@ -68,6 +74,8 @@ export class CalculatorService {
     return this.clientIncrease;
   }
   calculate(productMetrics: ProductMetrics) {
+    console.log(`productMetrics:`)
+    console.log(productMetrics)
     let calcObj = {
       clientMetrics: {...productMetrics.clientMetrics},
       ...productMetrics.increases
@@ -86,4 +94,7 @@ export class CalculatorService {
     this.resFieldsListener.next(this.resFields);
   }
 
+  isEditableEmitter(isEditable: boolean) {
+    this.isEditableListener.next(isEditable);
+  }
 }

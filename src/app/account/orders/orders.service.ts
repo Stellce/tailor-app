@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Model} from "../../services/categories/category/category-model.model";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../auth/auth.service";
 import {environment} from "../../../environments/environment";
 import {Order} from "./order/order.model";
@@ -10,13 +10,14 @@ import {ProductMetrics} from "../../services/calculator/product-metrics.model";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 import {NewCustomer} from "./new-customer.model";
+import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosById.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdersService {
   backendUrl: string = environment.backendUrl;
-  modelId: number;
+  modelId: string;
   productMetrics: ProductMetrics;
   orderListener = new Subject<Order>();
   ordersListener = new Subject<Order[]>();
@@ -40,12 +41,15 @@ export class OrdersService {
       orders: <Order[]>[]
     }
   ];
+  photosByCoatModelId: {coatModelId: string, photosByOrderId: PhotoByOrderId[]}[] = [];
+
   categoriesListener = new Subject<Category[]>();
   newCustomerDataListener = new Subject<NewCustomer>();
-  orderPhotosListener = new Subject<string[]>()
+  orderPhotosListener = new Subject<PhotoByOrderId[]>();
+  orderMetricsListener = new Subject<ProductMetrics>();
   constructor(private authService: AuthService, private http: HttpClient, private dialog: MatDialog) { }
 
-  getOrderPhotosListener() {
+  getModelPhotosListener() {
     return this.orderPhotosListener.asObservable();
   }
   getNewCustomerDataListener() {
@@ -53,6 +57,9 @@ export class OrdersService {
   }
   getOrderListener() {
     return this.orderListener.asObservable();
+  }
+  getOrderMetricsListener() {
+    return this.orderMetricsListener.asObservable();
   }
   getOrdersListener() {
     return this.ordersListener.asObservable();
@@ -68,6 +75,8 @@ export class OrdersService {
     if (areCached) return this.categoriesListener.next(this.categories);
     this.http.get<Model[]>(`${this.backendUrl}/coat-models`).subscribe({
       next: modelsResponse => {
+        const areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
+        if (areCached) return this.categoriesListener.next(this.categories);
         modelsResponse.forEach(model =>
           this.categories.find(category =>
             category.coatType === model.coatType && !category.models.some(m => m === model ))?.models?.push(model));
@@ -115,11 +124,12 @@ export class OrdersService {
         ...productMetrics.increases
       }
     }
-    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.getHeader()}).subscribe(res => {
-      console.log(res);
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.getHeader()}).subscribe({
+      next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення створено', isSuccessful: true}}),
+      error: () => this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}})
     });
   }
-  getOrderById(id: number) {
+  getOrderById(id: string) {
     this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.getHeader()}).subscribe({
       next: (order) => {
         this.orderListener.next(order);
@@ -127,6 +137,13 @@ export class OrdersService {
       error: (err) => {
         console.log(err)
         this.dialog.open(ErrorDialogComponent);
+      }
+    })
+  }
+  getProductMetricsByOrderId(orderId: string) {
+    this.http.get<ProductMetrics>(`${this.backendUrl}/orders/${orderId}/metrics`).subscribe({
+      next: (productMetrics) => {
+        this.orderMetricsListener.next(productMetrics);
       }
     })
   }
@@ -155,11 +172,12 @@ export class OrdersService {
   cancelOrder(order: Order) {
     this.http.patch(`${this.backendUrl}/orders/${order.id}/cancel`, {}, {headers: this.getHeader()}).subscribe({
       next: () => {
-        this.getOrdersOnStatus(order.status)
+        this.getAssignedOrders();
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення скасовано', isSuccessful: true}})
       },
       error: (err) => {
-        this.dialog.open(ErrorDialogComponent);
-        console.log(err)
+        this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}});
+        console.log(err);
       }
     })
   }
@@ -177,17 +195,27 @@ export class OrdersService {
     const formData = new FormData();
     formData.append('file', file);
     this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, formData, {headers: this.getHeader()}).subscribe({
-      next: () => {},
+      next: () => {
+        this.getModelPhotos(order.coatModel.id, true);
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Фото додано', isSuccessful: true}})
+      },
       error: (err) => {
         console.log(err)
         this.dialog.open(ErrorDialogComponent);
       }
     })
   }
-  getOrderPhotos(coatModelId: number) {
-    this.http.get<string[]>(`${this.backendUrl}/coat-models/${coatModelId}/images`).subscribe({
+  getModelPhotos(coatModelId: string, isChanged?: boolean) {
+    let persists = this.photosByCoatModelId.find(photosByCoatModelId => photosByCoatModelId.coatModelId === coatModelId)
+    if(persists && !isChanged) return this.orderPhotosListener.next(persists.photosByOrderId);
+    this.http.get<{ [s: string]: string }>(`${this.backendUrl}/coat-models/${coatModelId}/images`).subscribe({
       next: (photos) => {
-        this.orderPhotosListener.next(photos);
+        let photosByOrderId: PhotoByOrderId[] = [];
+        for(let [id, photo] of Object.entries(photos)) {
+          photosByOrderId.push({orderId: id, photo: photo})
+        }
+        this.photosByCoatModelId.push({ coatModelId: coatModelId, photosByOrderId:photosByOrderId});
+        this.orderPhotosListener.next(photosByOrderId);
       },
       error: (err) => this.dialog.open(ErrorDialogComponent, {data: {message: err}})
     })

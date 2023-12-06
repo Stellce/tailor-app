@@ -1,0 +1,9 @@
+<div class="spinner-wrapper" *ngIf="!photosById">
+  <mat-spinner></mat-spinner>
+</div>
+<div class="photos-grid" *ngIf="photosById" [ngStyle]="{'grid-template-columns': 'repeat('+ nearestDivision +',1fr)'}">
+  <div class="photo" *ngFor="let photo of photosById" (click)="onShowCalculations(photo.orderId)" [ngClass]="{'selected': selectedPhotoId === photo.orderId}">
+    <img [src]="'data:image/png;base64, ' + photo.photo" alt="Фото моделi">
+  </div>
+</div>
+<p *ngIf="photosById && photosById.length == 0">Ще немає фото</p>

@@ -12,7 +12,6 @@ import {User} from "../user.model";
   styleUrl: './orders.component.scss'
 })
 export class OrdersComponent implements OnInit, OnDestroy{
-  // orders: Order[];
   ordersByStatuses: {status: string, orders: Order[]}[];
   displayedOrders: Order[] | null;
   ordersSub: Subscription;
@@ -41,11 +40,7 @@ export class OrdersComponent implements OnInit, OnDestroy{
     })
 
     this.ordersSub = this.ordersService.getOrdersListener().subscribe(orders => {
-      console.log('orders')
-      console.log(orders)
       this.filterOrdersByStatuses(orders);
-      console.log('ordersByStatuses')
-      console.log(this.ordersByStatuses);
       this.updateTable();
     })
     if(this.selectedState !== 'PENDING') return this.ordersService.getAssignedOrders();
@@ -89,11 +84,6 @@ export class OrdersComponent implements OnInit, OnDestroy{
   }
 
   private updateTable() {
-    // this.displayedOrders = this.orders?.filter(orders => orders.status === this.selectedState)!
-    console.log('selectedstate')
-    console.log(this.selectedState)
     this.displayedOrders = this.ordersByStatuses.find(ordersByStatus => ordersByStatus.status === this.selectedState)?.orders!;
-    console.log('displayedOrders');
-    console.log(this.displayedOrders);
   }
 }

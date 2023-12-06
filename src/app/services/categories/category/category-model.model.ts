@@ -1,7 +1,7 @@
 export interface Model {
   coatType: string;
   creationTimeDays: number;
-  id: number;
+  id: string;
   image: string;
   text: string;
   name: string;

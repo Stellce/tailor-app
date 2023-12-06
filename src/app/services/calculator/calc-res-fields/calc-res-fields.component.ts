@@ -22,7 +22,7 @@ export class CalcResFieldsComponent implements OnInit, OnDestroy{
   ) {}
 
   ngOnInit() {
-    this.resFieldsSub = this.calcService.resFieldsListener.subscribe(resFields => {
+    this.resFieldsSub = this.calcService.getResFieldsListener().subscribe(resFields => {
       this.resFields = resFields;
     });
     this.ordersSub = this.ordersService.getOrderListener().subscribe(order => {

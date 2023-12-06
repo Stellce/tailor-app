@@ -14,7 +14,7 @@ export class OrdersHistoryComponent implements OnInit, OnDestroy{
   categories: Category[];
   categoriesSub: Subscription;
   tableData: Order[] = <Order[]>[];
-  displayedColumns = ['pos', 'name', 'date', 'price', 'edit'];
+  displayedColumns = ['pos', 'name', 'date', 'price'];
   coatType: string;
 
   constructor(private ordersService: OrdersService, private activatedRoute: ActivatedRoute) {}

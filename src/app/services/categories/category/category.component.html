@@ -1,4 +1,4 @@
-<div *ngIf="category">
+<div *ngIf="category && !hidden">
   <div class="category-images">
     <div class="models-grid">
       <div
@@ -11,11 +11,13 @@
         <span>{{model.name}}</span>
         <div class="video-bubble" (click)="openDialog(model.videoUrl!)"><mat-icon>videocam</mat-icon></div>
         <div class="price-bubble">Цiна: {{model.price}}</div>
+        <div class="photo-bubble" (click)="onShowPhotos(model.id)"><mat-icon>image</mat-icon></div>
       </div>
     </div>
   </div>
-
   <div class="container" *ngIf="selectedModel.name">
+    <app-model-photos *ngIf="arePhotosShowen" [modelId]="selectedModel.id"></app-model-photos>
     <app-calculator></app-calculator>
+    <app-calc-res-fields *ngIf="arePhotosShowen"></app-calc-res-fields>
   </div>
 </div>

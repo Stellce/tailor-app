@@ -1,86 +1,55 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {InputField} from "./inputField.model";
-import {ViewportScroller} from "@angular/common";
 import {AuthService} from "../../auth/auth.service";
 import {CalculatorService} from "./calculator.service";
 import {OrdersService} from "../../account/orders/orders.service";
-import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogDataComponent} from "../../auth/dialog-data/dialog-data.component";
 import {ProductMetrics} from "./product-metrics.model";
-import {Order} from "../../account/orders/order/order.model";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-calculator',
   templateUrl: './calculator.component.html',
   styleUrl: './calculator.component.scss'
 })
-export class CalculatorComponent implements OnInit{
+export class CalculatorComponent implements OnInit, OnDestroy{
   @Input()isEditable: boolean;
+  isEditableSub: Subscription;
   metricsForm: FormGroup;
   increasesForm: FormGroup;
   inputMetrics: InputField[];
   inputIncreases: InputField[];
-  productMetrics: ProductMetrics;
-  orderId: number;
   formCreated: boolean = false;
   isMetricsFormFilled: boolean = false;
+  orderSub: Subscription;
   patternImgPath: string = '../../../../assets/pattern-image.jpg'
-  order: Order;
+
+  productMetrics: ProductMetrics;
 
   constructor(
-    private scroller: ViewportScroller,
     private authService: AuthService,
     private calcService: CalculatorService,
     private ordersService: OrdersService,
-    private activatedRoute: ActivatedRoute,
     private dialog: MatDialog
   ) {}
   ngOnInit() {
     if(this.isEditable === undefined) this.isEditable = true;
-    console.log(this.isEditable)
-    this.productMetrics = {
-      clientMetrics: {},
-      increases: {}
-    };
-    this.metricsForm = new FormGroup({});
-    this.increasesForm = new FormGroup({});
-    this.inputMetrics = this.calcService.getInputFieldsFst();
-    this.inputIncreases = this.calcService.getInputFieldsScnd();
 
-    this.inputMetrics.forEach(field => {
-      this.metricsForm.addControl(field.name, new FormControl());
-    })
-    this.inputIncreases.forEach(field => {
-      this.increasesForm.addControl(field.name, new FormControl());
-    })
-    this.formCreated = true;
+    this.createForm();
+    this.fillForm();
 
-    this.orderId = this.activatedRoute.snapshot.params['orderId'];
-    if(this.orderId) {
-      this.ordersService.getOrderListener().subscribe(order => {
-        this.order = order;
-        this.isMetricsFormFilled = true;
-        Object.entries(order.productMetrics.clientMetrics).forEach(([k, v]) => {
-          if (this.inputMetrics.some(field => field.name ===k)) {
-            let obj: {[s: string]: number} = {}
-            obj[k] = v;
-            this.metricsForm.patchValue(obj)
-          }
-        })
-        Object.entries(order.productMetrics).forEach(([k, v]) => {
-          if(this.inputIncreases.some(field => field.name === k)) {
-            let obj: {[s: string]: number} = {};
-            obj[k] = v;
-            this.increasesForm.patchValue(obj)
-          }
-        })
-      })
-    }
+    this.isEditableSub = this.calcService.getIsEditableListener().subscribe(isEditable => {
+      this.isEditable = isEditable;
+      if (isEditable) {
+        this.metricsForm.reset();
+        this.increasesForm.reset();
+      }
+    });
   }
 
-  calcFstForm() {
+  writeClientMetrics() {
     if(this.metricsForm.invalid) return;
     this.isMetricsFormFilled = true;
     let metrics: {[k: string]: number} = {};
@@ -88,9 +57,8 @@ export class CalculatorComponent implements OnInit{
       metrics[k] = v.value;
     })
     this.productMetrics.clientMetrics = metrics;
-    this.scroller.scrollToAnchor('scndCalc');
   }
-  calcScndForm() {
+  calculate() {
     if(this.increasesForm.invalid) return;
     if(this.authService.getUser().roles?.includes('EMPLOYEE' || 'ADMIN')) {
       this.dialog.open(DialogDataComponent);
@@ -100,6 +68,11 @@ export class CalculatorComponent implements OnInit{
     } else {
       this.calcValues();
     }
+  }
+
+  ngOnDestroy() {
+    this.orderSub.unsubscribe();
+    this.isEditableSub.unsubscribe();
   }
 
   private calcValues(clientId?: string) {
@@ -114,6 +87,45 @@ export class CalculatorComponent implements OnInit{
     this.calcService.calculate(this.productMetrics);
   }
 
+  private createForm() {
+    this.productMetrics = {
+      clientMetrics: {},
+      increases: {}
+    };
+    this.metricsForm = new FormGroup({});
+    this.increasesForm = new FormGroup({});
 
-  protected readonly String = String;
+    this.inputMetrics = this.calcService.getInputFieldsFst();
+    this.inputIncreases = this.calcService.getInputFieldsScnd();
+
+    this.inputMetrics.forEach(field => {
+      this.metricsForm.addControl(field.name, new FormControl());
+    })
+    this.inputIncreases.forEach(field => {
+      this.increasesForm.addControl(field.name, new FormControl());
+    });
+    this.formCreated = true;
+  }
+
+  private fillForm() {
+    this.orderSub = this.ordersService.getOrderMetricsListener().subscribe(productMetrics => {
+      this.isMetricsFormFilled = true;
+
+      Object.entries(productMetrics.clientMetrics).forEach(([k, v]) => {
+        if (this.inputMetrics.some(field => field.name ===k)) {
+          let obj: {[s: string]: number} = {}
+          obj[k] = v;
+          this.metricsForm.patchValue(obj)
+        }
+      })
+      Object.entries(productMetrics).forEach(([k, v]) => {
+        if(this.inputIncreases.some(field => field.name === k)) {
+          let obj: {[s: string]: number} = {};
+          obj[k] = v;
+          this.increasesForm.patchValue(obj)
+        }
+      })
+    })
+  }
+
 }

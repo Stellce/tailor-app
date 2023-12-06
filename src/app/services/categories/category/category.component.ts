@@ -1,11 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Category} from "./category.model";
 import {Model} from "./category-model.model";
-import {VideoDialogComponent} from "../video-dialog/video-dialog.component";
+import {VideoDialogComponent} from "./video-dialog/video-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Params} from "@angular/router";
 import {OrdersService} from "../../../account/orders/orders.service";
 import {Subscription} from "rxjs";
+import {CalculatorService} from "../../calculator/calculator.service";
 
 @Component({
   selector: 'app-category',
@@ -13,36 +14,56 @@ import {Subscription} from "rxjs";
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit, OnDestroy{
+  @Input()category: Category;
+  @Input()hidden: boolean;
   selectedModel: Model = <Model>{name: ''};
-  category: Category;
   categorySub: Subscription;
+  categories: Category[];
+  arePhotosShowen: boolean = false;
+  params: Params;
 
   constructor(
     private ordersService: OrdersService,
     public dialog: MatDialog,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private calcService: CalculatorService
   ) {}
   ngOnInit() {
+    if(this.hidden === undefined) this.hidden = true;
+
     this.categorySub = this.ordersService.getCategoriesListener().subscribe(categories => {
-      this.activatedRoute.params.subscribe(params => {
-        this.category = categories.find(category => category.coatType.toUpperCase() === params['category'].toUpperCase())!
-        console.log(this.category)
-      })
+      this.categories = categories;
+      this.findCategory();
     })
-    this.ordersService.getCategories();
+    this.activatedRoute.params.subscribe(params => {
+      this.params = params;
+      if(!this.categories) return;
+      this.findCategory();
+      console.log(this.category);
+    })
   }
 
   onModelSelect(model: Model) {
     this.selectedModel = model;
     this.ordersService.selectModel(model);
+    this.calcService.isEditableEmitter(true);
+    this.ordersService.getModelPhotos(this.selectedModel.id);
   }
 
   openDialog(videoUrl: string) {
     this.dialog.open(VideoDialogComponent, {data: {videoUrl: videoUrl}});
   }
+  onShowPhotos(modelId: string) {
+    this.arePhotosShowen = !this.arePhotosShowen;
+    if(this.arePhotosShowen) this.ordersService.getModelPhotos(modelId);
+  }
 
   ngOnDestroy() {
     this.categorySub.unsubscribe();
+  }
+
+  private findCategory() {
+    this.category = this.categories.find(category => category.coatType?.toUpperCase() === this.params['category']?.toUpperCase())!
   }
 
 }
