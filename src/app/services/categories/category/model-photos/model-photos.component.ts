@@ -21,7 +21,7 @@ export class ModelPhotosComponent implements OnInit, OnDestroy{
   constructor(private ordersService: OrdersService, private calcService: CalculatorService) {}
 
   ngOnInit() {
-    if(this.isClickable === undefined) this.isClickable = false;
+    if(this.isClickable === undefined) this.isClickable = true;
     this.photosSub = this.ordersService.getModelPhotosListener().subscribe(photosById => {
       console.log(photosById)
       console.log(this.orderId)
