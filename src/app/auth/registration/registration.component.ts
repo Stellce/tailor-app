@@ -10,7 +10,8 @@ import {Subscription} from "rxjs";
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit, OnDestroy{
-  hide: boolean = true;
+  hide1: boolean = true;
+  hide2: boolean = true;
   user: Customer;
   authStatusSub: Subscription;
   isLoading: boolean = false;

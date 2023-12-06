@@ -33,7 +33,7 @@
           ngModel
           required
         #password="ngModel">
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Сховати пароль'">
+        <button mat-icon-button matSuffix type="button" (click)="hide = !hide" [attr.aria-label]="'Сховати пароль'">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
         <mat-error *ngIf="password.hasError('required')">

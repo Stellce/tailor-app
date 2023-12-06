@@ -55,13 +55,13 @@
       <mat-label>Пароль</mat-label>
       <input
         matInput
-        [type]="hide ? 'password' : 'text'"
+        [type]="hide1 ? 'password' : 'text'"
         name="password"
         ngModel
         required
         #password = "ngModel">
-      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Сховати пароль'">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <button mat-icon-button matSuffix type="button" (click)="hide1 = !hide1" [attr.aria-label]="'Сховати пароль'">
+        <mat-icon>{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
       <mat-error *ngIf="password.hasError('required')">
         Введіть пароль
@@ -71,14 +71,14 @@
       <mat-label>Підтвердити пароль</mat-label>
       <input
         matInput
-        [type]="hide ? 'password' : 'text'"
+        [type]="hide2 ? 'password' : 'text'"
         name="passwordRepeat"
         ngModel
         required
         [appSamePasswords]="password"
         #passwordRepeat = "ngModel">
-      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Сховати пароль'">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <button mat-icon-button matSuffix type="button" (click)="hide2 = !hide2" [attr.aria-label]="'Сховати пароль'">
+        <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
       <mat-error *ngIf="passwordRepeat.hasError('required')">
         Введiть пароль
