@@ -1,4 +1,4 @@
-<form [formGroup]="metricsForm" (ngSubmit)="writeClientMetrics()" *ngIf="formCreated">
+<form [formGroup]="metricsForm" (ngSubmit)="toNextForm()" *ngIf="formCreated">
   <div class="first-calc">
     <div class="input-fields" *ngFor="let inputField of inputMetrics">
       <div class="input-field">

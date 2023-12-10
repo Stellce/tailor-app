@@ -23,7 +23,7 @@ export class EmployeesService {
     return this.employeesListener.asObservable();
   }
   getAllEmployees() {
-    this.http.get<Employee[]>(`${this.backendUrl}/employees`, {headers: this.getHeader()}).subscribe({
+    this.http.get<Employee[]>(`${this.backendUrl}/employees`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: (employees) => {
         this.employees = employees;
         this.employeesListener.next(employees);
@@ -35,7 +35,7 @@ export class EmployeesService {
     })
   }
   registerEmployee(employee: Employee) {
-    this.http.post(`${this.backendUrl}/employees/register`, {...employee}, {headers: this.getHeader()}).subscribe({
+    this.http.post(`${this.backendUrl}/employees/register`, {...employee}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getAllEmployees();
       },
@@ -48,7 +48,7 @@ export class EmployeesService {
     })
   }
   deleteEmployee(employeeId: string) {
-    this.http.delete(`${this.backendUrl}/employees/${employeeId}`, {headers: this.getHeader()}).subscribe({
+    this.http.delete(`${this.backendUrl}/employees/${employeeId}`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getAllEmployees();
       },
@@ -58,12 +58,6 @@ export class EmployeesService {
         this.dialog.open(ErrorDialogComponent, {data: {message: errorText, isSuccessful: false}})
       }
     })
-  }
-
-  private getHeader() {
-    const authToken = this.authService.getToken();
-    let headers = new HttpHeaders();
-    return headers.set("Authorization", "Bearer " + authToken);
   }
 
 }

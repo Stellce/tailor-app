@@ -23,16 +23,11 @@ export class ModelPhotosComponent implements OnInit, OnDestroy{
   ngOnInit() {
     if(this.isClickable === undefined) this.isClickable = true;
     this.photosSub = this.ordersService.getModelPhotosListener().subscribe(photosById => {
-      console.log(photosById)
-      console.log(this.orderId)
       if(this.orderId) {
         this.photosById = photosById.filter(photoById => photoById.orderId == this.orderId);
       } else {
         this.photosById = photosById;
       }
-
-      console.log(photosById.filter(photoById => photoById.orderId == this.orderId))
-      console.log(this.photosById)
       this.nearestDivision = this.findDivision();
       this.selectedPhotoId = '';
     })

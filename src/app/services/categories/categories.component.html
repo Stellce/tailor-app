@@ -9,7 +9,7 @@
       *ngFor="let category of categories"
       [routerLink]="['/', url, category.coatType.toLowerCase()]"
       [routerLinkActive]="['selected']"
-      (click)="scrollToCategory(category)"
+      (click)="selectCategory(category)"
       >
       <div class="category-image">
         <img [src]="'data:image/png;base64, ' + getCategoryImage(category)" [alt]="category.text">

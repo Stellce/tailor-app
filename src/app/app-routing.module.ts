@@ -16,7 +16,7 @@ import {CategoriesComponent} from "./services/categories/categories.component";
 const routes: Routes = [
   {path: '', redirectTo: 'about', pathMatch: 'full'},
   {path: 'about', component: AboutComponent},
-  {path: 'categories', component: CategoriesComponent},
+  {path: 'categories/:category', component: CategoriesComponent},
   {path: 'prices', component: PricesComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'activate/:id', component: ActivationComponent},

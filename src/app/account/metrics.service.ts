@@ -2,40 +2,45 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Subject} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
+import {ErrorDialogComponent} from "../auth/error-dialog/error-dialog.component";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MetricsService {
   backendUrl = environment.backendUrl;
-  metricsListener = new Subject<{[s: string]: string}>();
+  metricsListener = new Subject<{[s: string]: number}>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private dialog: MatDialog, private authService: AuthService) {}
+  getMetricsListener() {
+    return this.metricsListener.asObservable();
+  }
 
   getMetrics() {
-    this.http.get<{[s: string]: string}>(`${this.backendUrl}/clients/metrics`).subscribe({
+    this.http.get<{[s: string]: number}>(`${this.backendUrl}/clients/metrics`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: metrics => {
         this.metricsListener.next(metrics);
-      },
+      }
+    })
+  }
+
+  postMetrics(metrics: {[s: string]: number}) {
+    this.http.post(`${this.backendUrl}/clients/metrics`, {...metrics}, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: () => {},
       error: err => {
+        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Метрики за замовчуванням не встановлено'}}) : false;
         console.log(err)
       }
     })
   }
 
-  postMetrics(metrics: {[s: string]: string}) {
-    this.http.post(`${this.backendUrl}/clients/metrics`, {...metrics}).subscribe({
+  putMetrics(metrics: {[s: string]: number}) {
+    this.http.put(`${this.backendUrl}/clients/metrics`, {...metrics}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {},
       error: err => {
-        console.log(err)
-      }
-    })
-  }
-
-  putMetrics(metrics: {[s: string]: string}) {
-    this.http.put(`${this.backendUrl}/clients/metrics`, {...metrics}).subscribe({
-      next: () => {},
-      error: err => {
+        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Метрики за замовчуванням не оновлено'}}) : false;
         console.log(err)
       }
     })

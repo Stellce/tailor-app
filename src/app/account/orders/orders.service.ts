@@ -89,7 +89,7 @@ export class OrdersService {
     });
   }
   getAssignedOrders() {
-    this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.getHeader()}).subscribe({
+    this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.authService.getTokenHeader()}).subscribe({
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
         this.ordersListener.next(orders);
@@ -103,7 +103,7 @@ export class OrdersService {
     })
   }
   getAllUnassignedOrders() {
-    this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.getHeader()}).subscribe( {
+    this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.authService.getTokenHeader()}).subscribe( {
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
         this.ordersListener.next(orders);
@@ -115,22 +115,19 @@ export class OrdersService {
     })
   }
   createOrder(productMetrics:  ProductMetrics, clientId?: string) {
-    this.productMetrics = {...productMetrics};
+    this.productMetrics = productMetrics;
     const order = {
       clientId: clientId || '',
       coatModelId: this.modelId,
-      productMetrics: {
-        clientMetrics: {...productMetrics.clientMetrics},
-        ...productMetrics.increases
-      }
+      productMetrics: productMetrics
     }
-    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.getHeader()}).subscribe({
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення створено', isSuccessful: true}}),
-      error: () => this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}})
+      error: () => this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}}) : false
     });
   }
   getOrderById(id: string) {
-    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.getHeader()}).subscribe({
+    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: (order) => {
         this.orderListener.next(order);
       },
@@ -148,7 +145,7 @@ export class OrdersService {
     })
   }
   assignOrder(order: Order) {
-    this.http.patch(`${this.backendUrl}/orders/assign/${order.id}`, {}, {headers: this.getHeader()}).subscribe({
+    this.http.patch(`${this.backendUrl}/orders/assign/${order.id}`, {}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getOrdersOnStatus(order.status);
       },
@@ -159,7 +156,7 @@ export class OrdersService {
     })
   }
   finishOrder(order: Order) {
-    this.http.patch(`${this.backendUrl}/orders/${order.id}/completed`, {}, {headers: this.getHeader()}).subscribe({
+    this.http.patch(`${this.backendUrl}/orders/${order.id}/completed`, {}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getOrdersOnStatus(order.status);
       },
@@ -170,7 +167,7 @@ export class OrdersService {
     })
   }
   cancelOrder(order: Order) {
-    this.http.patch(`${this.backendUrl}/orders/${order.id}/cancel`, {}, {headers: this.getHeader()}).subscribe({
+    this.http.patch(`${this.backendUrl}/orders/${order.id}/cancel`, {}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getAssignedOrders();
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення скасовано', isSuccessful: true}})
@@ -182,7 +179,7 @@ export class OrdersService {
     })
   }
   createNewCustomer(newCustomer: NewCustomer) {
-    this.http.post<NewCustomer>(`${this.backendUrl}/clients/register`, {...newCustomer}, {headers: this.getHeader()}).subscribe({
+    this.http.post<NewCustomer>(`${this.backendUrl}/clients/register`, {...newCustomer}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: (customer) => {
         this.newCustomerDataListener.next(customer);
       },
@@ -194,14 +191,14 @@ export class OrdersService {
   addPhoto(order: Order, file: File) {
     const formData = new FormData();
     formData.append('file', file);
-    this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, formData, {headers: this.getHeader()}).subscribe({
+    this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getModelPhotos(order.coatModel.id, true);
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Фото додано', isSuccessful: true}})
       },
       error: (err) => {
-        console.log(err)
-        this.dialog.open(ErrorDialogComponent);
+        console.log(err);
+        this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}});
       }
     })
   }
@@ -217,7 +214,7 @@ export class OrdersService {
         this.photosByCoatModelId.push({ coatModelId: coatModelId, photosByOrderId:photosByOrderId});
         this.orderPhotosListener.next(photosByOrderId);
       },
-      error: (err) => this.dialog.open(ErrorDialogComponent, {data: {message: err}})
+      error: () => {}
     })
   }
 
@@ -236,11 +233,6 @@ export class OrdersService {
     })
   }
 
-  private getHeader() {
-    const authToken = this.authService.getToken();
-    const headers = new HttpHeaders();
-    return headers.set("Authorization", "Bearer " + authToken);
-  }
   private divideOrdersByCategories(orders: Order[]) {
     orders = JSON.parse(JSON.stringify(orders));
     this.categories.forEach(category => category.orders = []);

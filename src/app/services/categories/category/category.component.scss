@@ -29,31 +29,42 @@
 .selected img {
   box-shadow: 0 0 12px 4px #1f1fdc;
 }
+.bubble {
+  background: #c9c9c9;
+  cursor: pointer;
+  border-radius: 50px;
+  width: 18%;
+  aspect-ratio: 1/1;
+}
+.bubble mat-icon {
+  height: 100%;
+  width: 100%;
+  color: #797979;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bubble :hover {
+  background: #4f4f4f;
+  color: #d9d9d9;
+  border-radius: 50px;
+  transition: background-color, .3s;
+}
 .video-bubble {
   position: absolute;
   left: 10px;
   top: 10px;
-  width: 18%;
-  aspect-ratio: 1/1;
-  border-radius: 50px;
-  background: white;
-  opacity: 0.5;
-  cursor: pointer;
 }
 .video-bubble mat-icon {
-  height: 100%;
-  width: 100%;
   font-size: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .price-bubble {
   position: absolute;
   right: 10px;
   bottom: 35px;
-  //width: 18%;
-  //aspect-ratio: 1/1;
+  width: auto;
+  aspect-ratio: auto;
   border-radius: 10px;
   background: rgba(128, 128, 128, 0.7);
   color: white;
@@ -64,20 +75,15 @@
   position: absolute;
   right: 10px;
   top: 10px;
-  width: 18%;
-  aspect-ratio: 1/1;
-  border-radius: 50px;
-  background: white;
-  opacity: 0.5;
-  cursor: pointer;
 }
 .photo-bubble mat-icon {
-  height: 100%;
-  width: 100%;
   font-size: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+.selected-bubble {
+  background: #4f4f4f;
+}
+.selected-bubble mat-icon {
+  color: #d9d9d9;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

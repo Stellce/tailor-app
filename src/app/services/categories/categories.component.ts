@@ -21,7 +21,6 @@ export class CategoriesComponent implements OnInit, OnDestroy{
 
   constructor(
     private ordersService: OrdersService,
-    private accountService: AccountService,
     private activatedRoute: ActivatedRoute
   ) {}
   ngOnInit() {
@@ -41,14 +40,9 @@ export class CategoriesComponent implements OnInit, OnDestroy{
     this.updateImageIndex();
   }
 
-  scrollToCategory(category: Category) {
+  selectCategory(category: Category) {
+    console.log('category selected')
     this.selectedCategory = category;
-  }
-
-  updateImageIndex() {
-    this.imageInterval = setInterval(() => {
-      this.categoryIndex = this.categoryIndex >= this.categories.length-1 ? 0 : this.categoryIndex += 1;
-    }, 5000);
   }
 
   getCategoryImage(category: Category) {
@@ -58,6 +52,12 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   ngOnDestroy() {
     this.categoriesSub.unsubscribe();
     clearInterval(this.imageInterval);
+  }
+
+  private updateImageIndex() {
+    this.imageInterval = setInterval(() => {
+      this.categoryIndex = this.categoryIndex >= this.categories.length-1 ? 0 : this.categoryIndex += 1;
+    }, 5000);
   }
 
 }

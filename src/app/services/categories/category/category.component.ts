@@ -37,9 +37,9 @@ export class CategoryComponent implements OnInit, OnDestroy{
     })
     this.activatedRoute.params.subscribe(params => {
       this.params = params;
+      console.log(params['category'])
       if(!this.categories) return;
       this.findCategory();
-      console.log(this.category);
     })
   }
 
@@ -50,10 +50,11 @@ export class CategoryComponent implements OnInit, OnDestroy{
     this.ordersService.getModelPhotos(this.selectedModel.id);
   }
 
-  openDialog(videoUrl: string) {
+  openVideo(videoUrl: string) {
     this.dialog.open(VideoDialogComponent, {data: {videoUrl: videoUrl}});
   }
   onShowPhotos(modelId: string) {
+    if(this.selectedModel.id !== modelId) return;
     this.arePhotosShowen = !this.arePhotosShowen;
     if(this.arePhotosShowen) this.ordersService.getModelPhotos(modelId);
   }

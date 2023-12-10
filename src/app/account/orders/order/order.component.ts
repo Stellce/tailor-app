@@ -33,6 +33,7 @@ export class OrderComponent implements OnInit, OnDestroy{
     this.activatedRoute.params.subscribe(params => {
       let orderId = params['orderId'];
       this.ordersService.getProductMetricsByOrderId(orderId);
+      this.ordersService.getModelPhotos(orderId);
     })
     this.orderSub = this.ordersService.getOrderListener().subscribe(order => {
       this.order = order;

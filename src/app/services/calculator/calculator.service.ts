@@ -74,13 +74,10 @@ export class CalculatorService {
     return this.clientIncrease;
   }
   calculate(productMetrics: ProductMetrics) {
-    console.log(`productMetrics:`)
-    console.log(productMetrics)
-    let calcObj = {
-      clientMetrics: {...productMetrics.clientMetrics},
-      ...productMetrics.increases
-    }
+    let calcObj = JSON.parse(JSON.stringify(productMetrics))
+    console.log(calcObj)
     this.http.post<{[s: string]: string}>(`${this.backendUrl}/patterns/calculate`, calcObj).subscribe(res => {
+      console.log(res)
       this.handleCalcValues(res);
     });
   }

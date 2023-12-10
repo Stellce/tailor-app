@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Customer} from "./customer.model";
 import {Subject} from "rxjs";
@@ -31,6 +31,9 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router, public dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
+  getTokenHeader() {
+    return (new HttpHeaders()).set("Authorization", "Bearer "+ this.getToken())
+  }
   getToken() {
     return this.token;
   }
@@ -70,9 +73,9 @@ export class AuthService {
         this.router.navigate(['/']);
         this._snackBar.openFromComponent(SnackBarComponent, {duration: 5000, data: "Перевiрте пошту"});
       },
-      error: (error) => {
-        this.error = error;
-        this.dialog.open(ErrorDialogComponent);
+      error: () => {
+        this.dialog.open(ErrorDialogComponent, {data: {message: '', isSuccessful: false}});
+        this.router.navigate(['/']);
       }
     });
   }
@@ -88,14 +91,12 @@ export class AuthService {
         this.authenticate(token);
 
         this.saveAuthData(token, new Date(decoded.exp! * 1000));
-        this.router.navigate(['/categories']);
+        this.router.navigate(['/categories/midi_coat']);
       },
-      error: (error) => {
+      error: () => {
         this.user.isAuth = false;
         this.userListener.next(this.user);
-        this.error = error;
-        console.log(error);
-        this.dialog.open(ErrorDialogComponent);
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Неправильний логiн, або пароль', isSuccessful: false}});
       }
     });
   }
@@ -109,7 +110,7 @@ export class AuthService {
     },
     error: () => {
       this.user.isAuth = false;
-      this.dialog.open(ErrorDialogComponent);
+      this.dialog.open(ErrorDialogComponent, {data: {message: '', isSuccessful: false}});
       this.userListener.next(this.user);
     }
     })

@@ -12,8 +12,6 @@ import { AboutComponent } from './about/about.component';
 import { CategoriesComponent } from './services/categories/categories.component';
 import { PricesComponent } from './prices/prices.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
-import { ContactsComponent } from './footer/contacts/contacts.component';
-import { AddressComponent } from './footer/address/address.component';
 import { LoginComponent } from './auth/login/login.component';
 import {MatCardModule} from "@angular/material/card";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -55,8 +53,6 @@ import {ModelPhotosComponent} from "./services/categories/category/model-photos/
     CategoriesComponent,
     PricesComponent,
     RegistrationComponent,
-    ContactsComponent,
-    AddressComponent,
     LoginComponent,
     SamePasswordsDirective,
     ErrorDialogComponent,
@@ -102,10 +98,6 @@ import {ModelPhotosComponent} from "./services/categories/category/model-photos/
   ],
   providers: [
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true, hasBackdrop: false}}
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: AuthInterceptor
-    // }
   ],
   exports: [],
   bootstrap: [AppComponent]
