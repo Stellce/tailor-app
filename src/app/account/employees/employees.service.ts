@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Employee} from "./employee/employee.model";
 import {Subject} from "rxjs";
 import {environment} from "../../../environments/environment";

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Model} from "../../services/categories/category/category-model.model";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../auth/auth.service";
 import {environment} from "../../../environments/environment";
 import {Order} from "./order/order.model";
@@ -42,12 +42,20 @@ export class OrdersService {
     }
   ];
   photosByCoatModelId: {coatModelId: string, photosByOrderId: PhotoByOrderId[]}[] = [];
+  selectedCategory: Category;
 
   categoriesListener = new Subject<Category[]>();
   newCustomerDataListener = new Subject<NewCustomer>();
   orderPhotosListener = new Subject<PhotoByOrderId[]>();
   orderMetricsListener = new Subject<ProductMetrics>();
   constructor(private authService: AuthService, private http: HttpClient, private dialog: MatDialog) { }
+
+  setSelectedCategory(category: Category) {
+    this.selectedCategory = category;
+  }
+  getSelectedCategory() {
+    return this.selectedCategory;
+  }
 
   getModelPhotosListener() {
     return this.orderPhotosListener.asObservable();

@@ -29,15 +29,14 @@ export class CategoryComponent implements OnInit, OnDestroy{
     private calcService: CalculatorService
   ) {}
   ngOnInit() {
-    if(this.hidden === undefined) this.hidden = true;
-
     this.categorySub = this.ordersService.getCategoriesListener().subscribe(categories => {
       this.categories = categories;
       this.findCategory();
     })
     this.activatedRoute.params.subscribe(params => {
+      if(params) this.hidden = false
+      this.category = this.ordersService.getSelectedCategory();
       this.params = params;
-      console.log(params['category'])
       if(!this.categories) return;
       this.findCategory();
     })

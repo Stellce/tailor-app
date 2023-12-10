@@ -2,7 +2,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {Category} from "./category/category.model";
 import {ActivatedRoute} from "@angular/router";
-import {AccountService} from "../../account/account.service";
 import {OrdersService} from "../../account/orders/orders.service";
 
 @Component({
@@ -25,24 +24,26 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   ) {}
   ngOnInit() {
     this.categoriesSub = this.ordersService.getCategoriesListener().subscribe(categories => {
+      console.log(categories)
       this.categories = categories;
-      this.activatedRoute.params.subscribe(route => {
-        this.selectedCategory = this.categories.find(category => category.coatType === route['category'])!;
-      })
       this.url = this.activatedRoute.snapshot.url
         .map(el => el.path)
         .filter(path =>
           !this.categories.some(el => el.coatType.toLowerCase() == path)
         ).join("");
-      }
+      if(!this.selectedCategory) this.selectedCategory = this.categories?.find(category => category.coatType === 'midi_coat')!;
+    }
     );
+    this.activatedRoute.params.subscribe(params => {
+      this.selectedCategory = this.categories?.find(category => category.coatType === params['category'])!;
+    })
     this.ordersService.getCategories();
     this.updateImageIndex();
   }
 
   selectCategory(category: Category) {
-    console.log('category selected')
     this.selectedCategory = category;
+    this.ordersService.setSelectedCategory(category);
   }
 
   getCategoryImage(category: Category) {
