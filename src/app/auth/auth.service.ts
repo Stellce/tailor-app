@@ -145,9 +145,7 @@ export class AuthService {
   private getAuthData() {
     const token = localStorage.getItem("token");
     const expirationDate = localStorage.getItem("expiration");
-    if (!token || !expirationDate) {
-      return;
-    }
+    if (!token || !expirationDate) return;
     return {
       token: token,
       expirationDate: new Date(expirationDate)

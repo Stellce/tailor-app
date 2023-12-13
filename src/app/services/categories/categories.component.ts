@@ -37,7 +37,7 @@ export class CategoriesComponent implements OnInit, OnDestroy{
     this.activatedRoute.params.subscribe(params => {
       this.selectedCategory = this.categories?.find(category => category.coatType === params['category'])!;
     })
-    this.ordersService.getCategories();
+    this.ordersService.requestCategories();
     this.updateImageIndex();
   }
 

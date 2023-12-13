@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {InputField} from "./inputField.model";
 import {AuthService} from "../../auth/auth.service";
 import {CalculatorService} from "./calculator.service";
@@ -117,10 +117,10 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     this.inputIncreases = this.calcService.getInputFieldsScnd();
 
     this.inputMetrics.forEach(field => {
-      this.metricsForm.addControl(field.name, new FormControl());
+      this.metricsForm.addControl(field.name, new FormControl('', [Validators.required, Validators.min(field.min), Validators.max(field.max)]));
     })
     this.inputIncreases.forEach(field => {
-      this.increasesForm.addControl(field.name, new FormControl());
+      this.increasesForm.addControl(field.name, new FormControl('', [Validators.required, Validators.min(field.min), Validators.max(field.max)]));
     });
     this.formCreated = true;
   }

@@ -1,4 +1,13 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import {Category} from "./category.model";
 import {Model} from "./category-model.model";
 import {VideoDialogComponent} from "./video-dialog/video-dialog.component";
@@ -7,26 +16,37 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {OrdersService} from "../../../account/orders/orders.service";
 import {Subscription} from "rxjs";
 import {CalculatorService} from "../../calculator/calculator.service";
+import {AuthService} from "../../../auth/auth.service";
+import {User} from "../../../account/user.model";
+import {ModelsService} from "../../../categories/category/models.service";
 
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
-  styleUrls: ['./category.component.scss']
+  styleUrls: ['./category.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class CategoryComponent implements OnInit, OnDestroy{
+export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy{
   @Input()category: Category;
   @Input()hidden: boolean;
-  selectedModel: Model = <Model>{name: ''};
+  @ViewChild('model') model: ElementRef;
+  selectedModel: Model;
   categorySub: Subscription;
   categories: Category[];
   arePhotosShowen: boolean = false;
   params: Params;
+  isAddingModel: boolean = false;
+  user: User;
+
+  modelView: {width?: number, height?: number} = {};
 
   constructor(
     private ordersService: OrdersService,
     public dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
-    private calcService: CalculatorService
+    private authService: AuthService,
+    private calcService: CalculatorService,
+    private modelsService: ModelsService
   ) {}
   ngOnInit() {
     this.categorySub = this.ordersService.getCategoriesListener().subscribe(categories => {
@@ -40,13 +60,28 @@ export class CategoryComponent implements OnInit, OnDestroy{
       if(!this.categories) return;
       this.findCategory();
     })
+    this.user = this.authService.getUser();
+  }
+  ngAfterViewInit() {
+    this.modelView.width = this.model?.nativeElement.offsetWidth;
+    this.modelView.height= this.model?.nativeElement.offsetHeight;
+  }
+  onSwitchAddingModel() {
+    this.isAddingModel = !this.isAddingModel;
+    this.selectedModel = {} as Model;
+    this.modelsService.selectModel({} as Model);
   }
 
   onModelSelect(model: Model) {
+    console.log(model)
+    this.isAddingModel = false;
     this.selectedModel = model;
-    this.ordersService.selectModel(model);
+    this.modelsService.getAddModelInitListener().subscribe(() => {
+      this.modelsService.selectModel(model);
+    });
+    this.modelsService.selectModel(model);
     this.calcService.isEditableEmitter(true);
-    this.ordersService.getModelPhotos(this.selectedModel.id);
+    this.modelsService.requestModelPhotos(this.selectedModel.id);
   }
 
   openVideo(videoUrl: string) {
@@ -55,7 +90,11 @@ export class CategoryComponent implements OnInit, OnDestroy{
   onShowPhotos(modelId: string) {
     if(this.selectedModel.id !== modelId) return;
     this.arePhotosShowen = !this.arePhotosShowen;
-    if(this.arePhotosShowen) this.ordersService.getModelPhotos(modelId);
+    if(this.arePhotosShowen) this.modelsService.requestModelPhotos(modelId);
+  }
+
+  isAdmin() {
+    return this.authService.getUser().roles?.includes('ADMIN');
   }
 
   ngOnDestroy() {

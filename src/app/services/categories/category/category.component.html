@@ -4,19 +4,29 @@
       <div
         class="model"
         *ngFor="let model of category.models"
-        [ngClass]="{selected: selectedModel.name === model.name}"
+        [ngClass]="{selected: selectedModel?.id === model.id}"
         (click)="onModelSelect(model)"
+        #model
       >
         <img [src]="'data:image/png;base64, ' + model.image" [alt]="category.text">
         <span>{{model.name}}</span>
         <div class="video-bubble bubble" (click)="openVideo(model.videoUrl!)"><mat-icon>videocam</mat-icon></div>
         <div class="price-bubble bubble">Цiна: {{model.price}}</div>
-        <div class="photo-bubble bubble" [ngClass]="{'selected-bubble': selectedModel.id === model.id && arePhotosShowen}" (click)="onShowPhotos(model.id)"><mat-icon>image</mat-icon></div>
+        <div class="photo-bubble bubble" [ngClass]="{'selected-bubble': selectedModel?.id === model.id && arePhotosShowen}" (click)="onShowPhotos(model.id)"><mat-icon>image</mat-icon></div>
+      </div>
+      <div class="add-model model" *ngIf="isAdmin()" (click)="onSwitchAddingModel()" [ngClass]="{'selected-add-model': isAddingModel}">
+        <div class="inner-add-model">
+          <mat-icon fontIcon="add"></mat-icon>
+          <p>Додати модель</p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="container" *ngIf="selectedModel.name">
-    <app-model-photos *ngIf="arePhotosShowen" [modelId]="selectedModel.id"></app-model-photos>
+  <div class="container" [ngStyle]="{'width': '95%'}" *ngIf="user.roles.includes('ADMIN') && (selectedModel?.name || isAddingModel)">
+    <app-add-model></app-add-model>
+  </div>
+  <div class="container" *ngIf="selectedModel?.name">
+    <app-model-photos *ngIf="arePhotosShowen" [modelId]="selectedModel?.id"></app-model-photos>
     <app-calculator></app-calculator>
   </div>
 </div>

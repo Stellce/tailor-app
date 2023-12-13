@@ -35,16 +35,16 @@ export class OrdersComponent implements OnInit, OnDestroy{
 
     this.activatedRoute.params.subscribe(params => {
      this.selectedState = params['status'].toUpperCase();
-      if (this.selectedState !== 'PENDING') return this.ordersService.getAssignedOrders();
-      this.ordersService.getAllUnassignedOrders();
+      if (this.selectedState !== 'PENDING') return this.ordersService.requestAssignedOrders();
+      this.ordersService.requestAllUnassignedOrders();
     })
 
     this.ordersSub = this.ordersService.getOrdersListener().subscribe(orders => {
       this.filterOrdersByStatuses(orders);
       this.updateTable();
     })
-    if(this.selectedState !== 'PENDING') return this.ordersService.getAssignedOrders();
-    this.ordersService.getAllUnassignedOrders();
+    if(this.selectedState !== 'PENDING') return this.ordersService.requestAssignedOrders();
+    this.ordersService.requestAllUnassignedOrders();
   }
   onCheckStates() {
     this.displayedOrders = null;

@@ -6,6 +6,7 @@ import {Subscription} from "rxjs";
 import {User} from "../../user.model";
 import {AuthService} from "../../../auth/auth.service";
 import {PhotoByOrderId} from "../../../services/categories/category/model-photos/photosById.model";
+import {ModelsService} from "../../../categories/category/models.service";
 
 @Component({
   selector: 'app-order',
@@ -26,18 +27,19 @@ export class OrderComponent implements OnInit, OnDestroy{
     private activatedRoute: ActivatedRoute,
     private ordersService: OrdersService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private modelsService: ModelsService
   ) {}
   ngOnInit() {
     this.isEmployee = false;
     this.activatedRoute.params.subscribe(params => {
       let orderId = params['orderId'];
-      this.ordersService.getProductMetricsByOrderId(orderId);
-      this.ordersService.getModelPhotos(orderId);
+      this.ordersService.requestProductMetricsByOrderId(orderId);
+      this.modelsService.requestModelPhotos(orderId);
     })
     this.orderSub = this.ordersService.getOrderListener().subscribe(order => {
       this.order = order;
-      this.ordersService.getModelPhotos(this.order['coatModel'].id);
+      this.modelsService.requestModelPhotos(this.order['coatModel'].id);
     })
     this.userSub = this.authService.getUserListener().subscribe(user => {
       this.user = user
@@ -45,7 +47,7 @@ export class OrderComponent implements OnInit, OnDestroy{
     });
     this.user = this.authService.getUser();
     this.isEmployee = this.checkIsEmployee(this.user);
-    this.orderPhotosSub = this.ordersService.getModelPhotosListener().subscribe(photos => {
+    this.orderPhotosSub = this.modelsService.getModelPhotosListener().subscribe(photos => {
       this.photos = photos;
     })
   }
@@ -70,7 +72,7 @@ export class OrderComponent implements OnInit, OnDestroy{
     reader.readAsDataURL(this.image);
   }
   onSavePhoto() {
-    this.ordersService.addPhoto(this.order, this.image);
+    this.ordersService.addPhotoToOrder(this.order, this.image);
   }
   ngOnDestroy() {
     this.orderSub.unsubscribe();

@@ -1,9 +1,7 @@
 export interface Model {
+  id?: string;
   coatType: string;
-  creationTimeDays: number;
-  id: string;
-  image: string;
-  text: string;
+  image: File;
   name: string;
   price: number;
   videoUrl: string | null;

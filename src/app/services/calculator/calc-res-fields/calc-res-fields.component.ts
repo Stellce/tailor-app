@@ -30,7 +30,7 @@ export class CalcResFieldsComponent implements OnInit, OnDestroy{
     })
     this.activatedRoute.params.subscribe(params => {
       let modelId = params['orderId'];
-      if(modelId) this.ordersService.getOrderById(modelId);
+      if(modelId) this.ordersService.requestOrderById(modelId);
     })
   }
 

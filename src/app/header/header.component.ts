@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit{
   menuSwitcher: boolean = false;
   links: {name: string, src: string, role: string}[] = [
     {name: 'Про нас', src: 'about', role: 'USER'},
-    {name: 'Каталог', src: 'categories/midi_coat', role: 'USER'}
+    {name: 'Каталог', src: 'categories', role: 'USER'}
   ];
   accessLinks: {name: string, src: string, role: string}[] = [
     {name: 'Акаунт', src: 'account', role: 'CLIENT'},

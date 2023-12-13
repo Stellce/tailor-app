@@ -11,13 +11,13 @@ import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 import {NewCustomer} from "./new-customer.model";
 import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosById.model";
+import {ModelsService} from "../../categories/category/models.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdersService {
   backendUrl: string = environment.backendUrl;
-  modelId: string;
   productMetrics: ProductMetrics;
   orderListener = new Subject<Order>();
   ordersListener = new Subject<Order[]>();
@@ -48,7 +48,7 @@ export class OrdersService {
   newCustomerDataListener = new Subject<NewCustomer>();
   orderPhotosListener = new Subject<PhotoByOrderId[]>();
   orderMetricsListener = new Subject<ProductMetrics>();
-  constructor(private authService: AuthService, private http: HttpClient, private dialog: MatDialog) { }
+  constructor(private authService: AuthService, private http: HttpClient, private dialog: MatDialog, private modelService: ModelsService) { }
 
   setSelectedCategory(category: Category) {
     this.selectedCategory = category;
@@ -56,7 +56,9 @@ export class OrdersService {
   getSelectedCategory() {
     return this.selectedCategory;
   }
-
+  getCategories() {
+    return this.categories;
+  }
   getModelPhotosListener() {
     return this.orderPhotosListener.asObservable();
   }
@@ -75,10 +77,8 @@ export class OrdersService {
   getCategoriesListener() {
     return this.categoriesListener.asObservable();
   }
-  selectModel(model: Model) {
-    this.modelId = model.id;
-  }
-  getCategories() {
+
+  requestCategories() {
     const areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
     if (areCached) return this.categoriesListener.next(this.categories);
     this.http.get<Model[]>(`${this.backendUrl}/coat-models`).subscribe({
@@ -96,7 +96,7 @@ export class OrdersService {
       }
     });
   }
-  getAssignedOrders() {
+  requestAssignedOrders() {
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.authService.getTokenHeader()}).subscribe({
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
@@ -110,7 +110,7 @@ export class OrdersService {
       }
     })
   }
-  getAllUnassignedOrders() {
+  requestAllUnassignedOrders() {
     this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.authService.getTokenHeader()}).subscribe( {
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
@@ -126,7 +126,7 @@ export class OrdersService {
     this.productMetrics = productMetrics;
     const order = {
       clientId: clientId || '',
-      coatModelId: this.modelId,
+      coatModelId: this.modelService.getSelectedModel().id,
       productMetrics: productMetrics
     }
     this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.authService.getTokenHeader()}).subscribe({
@@ -134,7 +134,7 @@ export class OrdersService {
       error: () => this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}}) : false
     });
   }
-  getOrderById(id: string) {
+  requestOrderById(id: string) {
     this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: (order) => {
         this.orderListener.next(order);
@@ -145,7 +145,7 @@ export class OrdersService {
       }
     })
   }
-  getProductMetricsByOrderId(orderId: string) {
+  requestProductMetricsByOrderId(orderId: string) {
     this.http.get<ProductMetrics>(`${this.backendUrl}/orders/${orderId}/metrics`).subscribe({
       next: (productMetrics) => {
         this.orderMetricsListener.next(productMetrics);
@@ -177,7 +177,7 @@ export class OrdersService {
   cancelOrder(order: Order) {
     this.http.patch(`${this.backendUrl}/orders/${order.id}/cancel`, {}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        this.getAssignedOrders();
+        this.requestAssignedOrders();
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення скасовано', isSuccessful: true}})
       },
       error: (err) => {
@@ -196,12 +196,12 @@ export class OrdersService {
       }
     })
   }
-  addPhoto(order: Order, file: File) {
+  addPhotoToOrder(order: Order, file: File) {
     const formData = new FormData();
     formData.append('file', file);
     this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        this.getModelPhotos(order.coatModel.id, true);
+        this.requestModelPhotos(order.coatModel.id, true);
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Фото додано', isSuccessful: true}})
       },
       error: (err) => {
@@ -210,7 +210,7 @@ export class OrdersService {
       }
     })
   }
-  getModelPhotos(coatModelId: string, isChanged?: boolean) {
+  requestModelPhotos(coatModelId: string, isChanged?: boolean) {
     let persists = this.photosByCoatModelId.find(photosByCoatModelId => photosByCoatModelId.coatModelId === coatModelId)
     if(persists && !isChanged) return this.orderPhotosListener.next(persists.photosByOrderId);
     this.http.get<{ [s: string]: string }>(`${this.backendUrl}/coat-models/${coatModelId}/images`).subscribe({
@@ -225,12 +225,57 @@ export class OrdersService {
       error: () => {}
     })
   }
+  createModel(newModel: Model) {
+    this.http.post<Model>(`${this.backendUrl}/coat-models`, newModel, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: model => this.attachPhotoToModel(model.id, newModel.image, true),
+      error: (err) => {
+        console.log(err);
+        this.dialog.open(ErrorDialogComponent);
+      }
+    })
+  }
+  updateModel(id: string, newModel: Model) {
+    this.http.put<Model>(`${this.backendUrl}/coat-models/${id}`, newModel, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: model => this.attachPhotoToModel(model.id, newModel.image, false),
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent)
+      }
+    })
+  }
+  private attachPhotoToModel(id: string, newModelPhoto: File, deleteIfError: boolean) {
+    let formData: FormData = new FormData();
+    formData.append('file', newModelPhoto);
+    this.http.patch(`${this.backendUrl}/coat-models/${id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: () => {
+        this.requestCategories();
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Модель додана', isSuccessful: true}})
+      },
+      error: (err) => {
+        console.log(err)
+        if(deleteIfError) this.deleteModel(id);
+        this.dialog.open(ErrorDialogComponent);
+      }
+    })
+  }
+  deleteModel(id: string) {
+    this.http.delete(`${this.backendUrl}/coat-models/${id}`, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: () => {
+        this.requestCategories();
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Модель видалено', isSuccessful: true}})
+      },
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent)
+      }
+    })
+  }
 
   private getOrdersOnStatus(orderStatus: string) {
     if(orderStatus === 'PENDING') {
-      this.getAllUnassignedOrders();
+      this.requestAllUnassignedOrders();
     } else {
-      this.getAssignedOrders();
+      this.requestAssignedOrders();
     }
   }
 
@@ -256,5 +301,22 @@ export class OrdersService {
       })
       return category
     })
+  }
+
+  base64ToFile(base64: string) {
+    const imageName = 'name.png';
+    const imageBlob = dataURItoBlob(base64);
+    const file = new File([imageBlob], imageName, { type: 'image/png' });
+    function dataURItoBlob(dataURI: any) {
+      const byteString = window.atob(dataURI);
+      const arrayBuffer = new ArrayBuffer(byteString.length);
+      const int8Array = new Uint8Array(arrayBuffer);
+      for (let i = 0; i < byteString.length; i++) {
+        int8Array[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([int8Array], { type: 'image/png' });
+      return blob;
+    }
+    return file
   }
 }

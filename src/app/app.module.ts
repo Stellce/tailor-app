@@ -44,6 +44,7 @@ import {UserDetailsComponent} from "./account/user-details/user-details.componen
 import {EmployeeComponent} from "./account/employees/employee/employee.component";
 import {EmployeeRegistrationComponent} from "./account/employees/employee-registration/employee-registration.component";
 import {ModelPhotosComponent} from "./services/categories/category/model-photos/model-photos.component";
+import {AddModelComponent} from "./categories/category/add-model/add-model.component";
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import {ModelPhotosComponent} from "./services/categories/category/model-photos/
     EmployeeComponent,
     EmployeeRegistrationComponent,
     UserDetailsComponent,
-    ModelPhotosComponent
+    ModelPhotosComponent,
+    AddModelComponent
   ],
   imports: [
     BrowserModule,

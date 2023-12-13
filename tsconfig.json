@@ -2,6 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strictNullChecks": false,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "resolveJsonModule": true,
@@ -10,7 +11,7 @@
     "noImplicitOverride": true,
     "strictPropertyInitialization": false,
     "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,

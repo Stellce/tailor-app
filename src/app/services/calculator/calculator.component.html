@@ -11,9 +11,10 @@
             matInput
             [formControlName]="inputField.name"
             type="number"
-            required
             [readonly]="!isEditable">
-          <mat-error>Поле обов'язкове</mat-error>
+          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['required']">Поле обов'язкове</mat-error>
+          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['min']">Замала величина</mat-error>
+          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['max']">Завелика величина</mat-error>
         </mat-form-field>
       </div>
       <mat-divider></mat-divider>
@@ -33,8 +34,10 @@
         </div>
         <mat-form-field>
           <mat-label>{{inputField.text}}</mat-label>
-          <input matInput [formControlName]="inputField.name" type="number" required [readonly]="!isEditable">
-          <mat-error>Поле обов'язкове</mat-error>
+          <input matInput [formControlName]="inputField.name" type="number" [readonly]="!isEditable">
+          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['required']">Поле обов'язкове</mat-error>
+          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['min']">Замала величина</mat-error>
+          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['max']">Завелика величина</mat-error>
         </mat-form-field>
       </div>
       <mat-divider></mat-divider>
@@ -44,7 +47,7 @@
     </div>
   </div>
 </form>
-<div class="flex-center pattern-img">
+<div class="flex-center pattern-img" *ngIf="productMetrics">
   <img [src]="patternImgPath" alt="лекала">
 </div>
 <app-calc-res-fields></app-calc-res-fields>
