@@ -78,13 +78,14 @@ export class OrdersService {
     return this.categoriesListener.asObservable();
   }
 
-  requestCategories() {
+  requestCategories(amendCached?: boolean) {
     const areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
-    if (areCached) return this.categoriesListener.next(this.categories);
+    if (areCached && !amendCached) return this.categoriesListener.next(this.categories);
     this.http.get<Model[]>(`${this.backendUrl}/coat-models`).subscribe({
       next: modelsResponse => {
         const areCached = this.categories.length > 0 && this.categories.every(category => category.models.length > 0);
-        if (areCached) return this.categoriesListener.next(this.categories);
+        if (areCached && !amendCached) return this.categoriesListener.next(this.categories);
+        this.resetCategories();
         modelsResponse.forEach(model =>
           this.categories.find(category =>
             category.coatType === model.coatType && !category.models.some(m => m === model ))?.models?.push(model));
@@ -216,9 +217,7 @@ export class OrdersService {
     this.http.get<{ [s: string]: string }>(`${this.backendUrl}/coat-models/${coatModelId}/images`).subscribe({
       next: (photos) => {
         let photosByOrderId: PhotoByOrderId[] = [];
-        for(let [id, photo] of Object.entries(photos)) {
-          photosByOrderId.push({orderId: id, photo: photo})
-        }
+        Object.entries(photos).forEach(([id, photo]) => photosByOrderId.push({orderId: id, photo: photo}))
         this.photosByCoatModelId.push({ coatModelId: coatModelId, photosByOrderId:photosByOrderId});
         this.orderPhotosListener.next(photosByOrderId);
       },
@@ -248,8 +247,8 @@ export class OrdersService {
     formData.append('file', newModelPhoto);
     this.http.patch(`${this.backendUrl}/coat-models/${id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        this.requestCategories();
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Модель додана', isSuccessful: true}})
+        this.requestCategories(true);
       },
       error: (err) => {
         console.log(err)
@@ -261,7 +260,7 @@ export class OrdersService {
   deleteModel(id: string) {
     this.http.delete(`${this.backendUrl}/coat-models/${id}`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        this.requestCategories();
+        this.requestCategories(true);
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Модель видалено', isSuccessful: true}})
       },
       error: (err) => {
@@ -318,5 +317,27 @@ export class OrdersService {
       return blob;
     }
     return file
+  }
+  private resetCategories() {
+    this.categories = [
+      {
+        coatType: 'JACKET_COAT',
+        text: 'Пальто піджак',
+        models: <Model[]>[],
+        orders: <Order[]>[]
+      },
+      {
+        coatType: 'MIDI_COAT',
+        text: 'Пальто міді',
+        models: <Model[]>[],
+        orders: <Order[]>[]
+      },
+      {
+        coatType: 'MAXI_COAT',
+        text: 'Пальто максі',
+        models: <Model[]>[],
+        orders: <Order[]>[]
+      }
+    ];
   }
 }

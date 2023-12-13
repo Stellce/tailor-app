@@ -18,9 +18,7 @@ export class ModelsService {
   private modelPhotosListener = new Subject<PhotoByOrderId[]>();
 
   constructor(
-      private http: HttpClient,
-      private authService: AuthService,
-      private dialog: MatDialog
+      private http: HttpClient
       ) {}
 
   getModelPhotosListener() {

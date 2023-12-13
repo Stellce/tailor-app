@@ -6,7 +6,6 @@
         *ngFor="let model of category.models"
         [ngClass]="{selected: selectedModel?.id === model.id}"
         (click)="onModelSelect(model)"
-        #model
       >
         <img [src]="'data:image/png;base64, ' + model.image" [alt]="category.text">
         <span>{{model.name}}</span>

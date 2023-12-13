@@ -35,8 +35,8 @@
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit" [ngStyle]="{'background': model?.name ? 'green' : ''}">{{model?.name ? 'Оновити' : 'Створити'}}</button>
       <button mat-raised-button color="warn" (click)="onDeleteModel()" type="button">Видалити</button>
+      <button mat-raised-button color="primary" type="submit" [ngStyle]="{'background': model?.name ? 'green' : ''}">{{model?.name ? 'Оновити' : 'Створити'}}</button>
     </mat-card-actions>
   </mat-card>
 </form>

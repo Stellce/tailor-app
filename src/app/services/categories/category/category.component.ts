@@ -1,11 +1,8 @@
 import {
-  AfterViewInit,
   Component,
-  ElementRef,
   Input,
   OnDestroy,
   OnInit,
-  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import {Category} from "./category.model";
@@ -26,10 +23,9 @@ import {ModelsService} from "../../../categories/category/models.service";
   styleUrls: ['./category.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy{
+export class CategoryComponent implements OnInit, OnDestroy{
   @Input()category: Category;
   @Input()hidden: boolean;
-  @ViewChild('model') model: ElementRef;
   selectedModel: Model;
   categorySub: Subscription;
   categories: Category[];
@@ -38,7 +34,6 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy{
   isAddingModel: boolean = false;
   user: User;
 
-  modelView: {width?: number, height?: number} = {};
 
   constructor(
     private ordersService: OrdersService,
@@ -62,10 +57,6 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy{
     })
     this.user = this.authService.getUser();
   }
-  ngAfterViewInit() {
-    this.modelView.width = this.model?.nativeElement.offsetWidth;
-    this.modelView.height= this.model?.nativeElement.offsetHeight;
-  }
   onSwitchAddingModel() {
     this.isAddingModel = !this.isAddingModel;
     this.selectedModel = {} as Model;
@@ -73,6 +64,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   onModelSelect(model: Model) {
+    if(this.selectedModel?.id === model.id) return;
     console.log(model)
     this.isAddingModel = false;
     this.selectedModel = model;

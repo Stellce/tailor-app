@@ -4,7 +4,6 @@ import {OrdersService} from "../../../account/orders/orders.service";
 import {mimeType} from "./mime-type.validator";
 import {Model} from "../../../services/categories/category/category-model.model";
 import {ModelsService} from "../models.service";
-import {AuthService} from "../../../auth/auth.service";
 
 @Component({
   selector: 'app-add-model',
