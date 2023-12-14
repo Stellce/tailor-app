@@ -4,6 +4,7 @@ import {OrdersService} from "../../../account/orders/orders.service";
 import {mimeType} from "./mime-type.validator";
 import {Model} from "../../../services/categories/category/category-model.model";
 import {ModelsService} from "../models.service";
+import {CategoriesService} from "../../../services/categories/categories.service";
 
 @Component({
   selector: 'app-add-model',
@@ -15,10 +16,14 @@ export class AddModelComponent implements OnInit{
   coatTypes: { coatType: string, text: string }[];
   imagePreview: string;
   model: Model;
-  constructor(private ordersService: OrdersService, private modelsService: ModelsService) {}
+  constructor(
+    private ordersService: OrdersService,
+    private modelsService: ModelsService,
+    private categoriesService: CategoriesService,
+    ) {}
 
   ngOnInit() {
-    this.coatTypes = this.ordersService.getCategories().map(category => {
+    this.coatTypes = this.categoriesService.getCategories().map(category => {
       return {coatType: category.coatType, text: category.text}
     });
     this.modelForm = new FormGroup({
@@ -46,7 +51,6 @@ export class AddModelComponent implements OnInit{
       });
     });
     this.modelsService.emitAddModelInit();
-
   }
 
   onImagePicked(event: Event) {
@@ -60,7 +64,7 @@ export class AddModelComponent implements OnInit{
     reader.readAsDataURL(file);
   }
   onSubmit() {
-    console.log(this.modelForm)
+    if(this.modelForm.invalid) return;
     const newModel: Model = {
       id: this.modelForm.controls['id'].value,
       coatType: this.modelForm.controls['coatType'].value,
@@ -69,13 +73,13 @@ export class AddModelComponent implements OnInit{
       image: this.modelForm.controls['image'].value,
       videoUrl: this.modelForm.controls['videoUrl'].value
     };
-    console.log(newModel);
-    if(this.model.name) return this.ordersService.updateModel(newModel.id, newModel);
-    this.ordersService.createModel(newModel);
+    console.log(newModel)
+    if(this.model.name) return this.modelsService.updateModel(newModel.id, newModel);
+    this.modelsService.createModel(newModel);
     this.modelForm.reset();
   }
   onDeleteModel() {
-    this.ordersService.deleteModel(this.model.id);
+    this.modelsService.deleteModel(this.model.id);
     this.modelForm.reset();
     this.modelsService.selectModel({} as Model);
   }

@@ -41,8 +41,8 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     if(this.isEditable === undefined) this.isEditable = true;
 
     this.createForm();
-    this.setFillerFormByOrderSub();
-    this.setFillerFormByUserSub();
+    this.setFormFillerByOrderSub();
+    this.setFormFillerByUserSub();
     this.metricsService.getMetrics();
 
     this.isEditableSub = this.calcService.getIsEditableListener().subscribe(isEditable => {
@@ -76,6 +76,9 @@ export class CalculatorComponent implements OnInit, OnDestroy{
         this.metricsService.postMetrics(this.productMetrics.clientMetrics);
       this.calcValues();
     }
+  }
+  findField(inputFields: InputField[], fieldName: string) {
+    return inputFields.find(field => field.name === fieldName);
   }
 
   ngOnDestroy() {
@@ -125,7 +128,7 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     this.formCreated = true;
   }
 
-  private setFillerFormByOrderSub() {
+  private setFormFillerByOrderSub() {
     this.orderSub = this.ordersService.getOrderMetricsListener().subscribe(productMetrics => {
       this.isMetricsFormFilled = true;
 
@@ -146,7 +149,7 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     })
   }
 
-  private setFillerFormByUserSub() {
+  private setFormFillerByUserSub() {
     this.metricsService.getMetricsListener().subscribe(metrics => {
       if(!metrics) return;
       this.wereMetricsRecieved = true;

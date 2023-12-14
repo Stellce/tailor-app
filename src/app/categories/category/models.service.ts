@@ -6,6 +6,8 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {AuthService} from "../../auth/auth.service";
 import {MatDialog} from "@angular/material/dialog";
+import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
+import {CategoriesService} from "../../services/categories/categories.service";
 
 @Injectable({providedIn: "root"})
 export class ModelsService {
@@ -18,7 +20,10 @@ export class ModelsService {
   private modelPhotosListener = new Subject<PhotoByOrderId[]>();
 
   constructor(
-      private http: HttpClient
+      private http: HttpClient,
+      private dialog: MatDialog,
+      private authService: AuthService,
+      private categoriesService: CategoriesService
       ) {}
 
   getModelPhotosListener() {
@@ -59,7 +64,51 @@ export class ModelsService {
       error: () => {}
     })
   }
-
+  createModel(newModel: Model) {
+    this.http.post<Model>(`${this.backendUrl}/coat-models`, newModel, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: model => this.attachPhotoToModel(model.id, newModel.image, true),
+      error: (err) => {
+        console.log(err);
+        this.dialog.open(ErrorDialogComponent);
+      }
+    })
+  }
+  updateModel(id: string, newModel: Model) {
+    this.http.put<Model>(`${this.backendUrl}/coat-models/${id}`, newModel, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: model => this.attachPhotoToModel(model.id, newModel.image, false),
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent)
+      }
+    })
+  }
+  private attachPhotoToModel(id: string, newModelPhoto: File, deleteIfError: boolean) {
+    let formData: FormData = new FormData();
+    formData.append('file', newModelPhoto);
+    this.http.patch(`${this.backendUrl}/coat-models/${id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: () => {
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Модель додана', isSuccessful: true}})
+        this.categoriesService.requestCategories(true);
+      },
+      error: (err) => {
+        console.log(err)
+        if(deleteIfError) this.deleteModel(id);
+        this.dialog.open(ErrorDialogComponent);
+      }
+    })
+  }
+  deleteModel(id: string) {
+    this.http.delete(`${this.backendUrl}/coat-models/${id}`, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: () => {
+        this.categoriesService.requestCategories(true);
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Модель видалено', isSuccessful: true}})
+      },
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent)
+      }
+    })
+  }
 
 
 

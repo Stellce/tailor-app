@@ -3,6 +3,7 @@ import {Subscription} from "rxjs";
 import {Category} from "./category/category.model";
 import {ActivatedRoute} from "@angular/router";
 import {OrdersService} from "../../account/orders/orders.service";
+import {CategoriesService} from "./categories.service";
 
 @Component({
   selector: 'app-categories',
@@ -20,10 +21,11 @@ export class CategoriesComponent implements OnInit, OnDestroy{
 
   constructor(
     private ordersService: OrdersService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private categoriesService: CategoriesService
   ) {}
   ngOnInit() {
-    this.categoriesSub = this.ordersService.getCategoriesListener().subscribe(categories => {
+    this.categoriesSub = this.categoriesService.getCategoriesListener().subscribe(categories => {
       console.log(categories)
       this.categories = categories;
       this.url = this.activatedRoute.snapshot.url
@@ -37,13 +39,13 @@ export class CategoriesComponent implements OnInit, OnDestroy{
     this.activatedRoute.params.subscribe(params => {
       this.selectedCategory = this.categories?.find(category => category.coatType === params['category'])!;
     })
-    this.ordersService.requestCategories();
+    this.categoriesService.requestCategories();
     this.updateImageIndex();
   }
 
   selectCategory(category: Category) {
     this.selectedCategory = category;
-    this.ordersService.setSelectedCategory(category);
+    this.categoriesService.setSelectedCategory(category);
   }
 
   getCategoryImage(category: Category) {

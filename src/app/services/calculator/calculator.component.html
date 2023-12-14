@@ -13,8 +13,8 @@
             type="number"
             [readonly]="!isEditable">
           <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['required']">Поле обов'язкове</mat-error>
-          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['min']">Замала величина</mat-error>
-          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['max']">Завелика величина</mat-error>
+          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['min']">Величина має бути бiльша за {{findField(inputMetrics, inputField.name).min}}</mat-error>
+          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['max']">Величина має бути менша за {{findField(inputMetrics, inputField.name).max}}</mat-error>
         </mat-form-field>
       </div>
       <mat-divider></mat-divider>
@@ -36,8 +36,8 @@
           <mat-label>{{inputField.text}}</mat-label>
           <input matInput [formControlName]="inputField.name" type="number" [readonly]="!isEditable">
           <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['required']">Поле обов'язкове</mat-error>
-          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['min']">Замала величина</mat-error>
-          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['max']">Завелика величина</mat-error>
+          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['min']">Величина має бути бiльша за {{findField(inputIncreases, inputField.name).min}}</mat-error>
+          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['max']">Величина має бути менша за {{findField(inputIncreases, inputField.name).max}}</mat-error>
         </mat-form-field>
       </div>
       <mat-divider></mat-divider>

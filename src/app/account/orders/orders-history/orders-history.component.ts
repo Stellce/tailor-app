@@ -4,6 +4,7 @@ import {Order} from "../order/order.model";
 import {ActivatedRoute} from "@angular/router";
 import {OrdersService} from "../orders.service";
 import {Category} from "../../../services/categories/category/category.model";
+import {CategoriesService} from "../../../services/categories/categories.service";
 
 @Component({
   selector: 'app-orders-history',
@@ -17,9 +18,9 @@ export class OrdersHistoryComponent implements OnInit, OnDestroy{
   displayedColumns = ['pos', 'name', 'date', 'price'];
   coatType: string;
 
-  constructor(private ordersService: OrdersService, private activatedRoute: ActivatedRoute) {}
+  constructor(private categoriesService: CategoriesService, private ordersService: OrdersService, private activatedRoute: ActivatedRoute) {}
   ngOnInit() {
-    this.categoriesSub = this.ordersService.getCategoriesListener().subscribe(categories => {
+    this.categoriesSub = this.categoriesService.getCategoriesListener().subscribe(categories => {
       this.categories = categories;
 
       this.activatedRoute.url.subscribe(url => {

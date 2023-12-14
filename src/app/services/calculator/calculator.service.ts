@@ -13,21 +13,21 @@ export class CalculatorService {
   isEditableListener = new Subject<boolean>();
 
   clientMetrics: InputField[] = [
-    {name: 'neckSemiCircumference', text: 'Напiвобхват шиї', min: 13, max: 22},
-    {name: 'chestSemiCircumference1', text:'Напiвобхват грудей перший', min: 33, max: 53},
-    {name: 'chestSemiCircumference2', text: 'Напiвобхват грудей другий', min: 36, max: 56},
+    {name: 'neckSemiCircumference', text: 'Напiвобхват шиї', min: 13.5, max: 21.5},
+    {name: 'chestSemiCircumference1', text:'Напiвобхват грудей перший', min: 33.2, max: 53.2},
+    {name: 'chestSemiCircumference2', text: 'Напiвобхват грудей другий', min: 36.4, max: 56.4},
     {name: 'chestSemiCircumference3', text: 'Напiвобхват грудей третій', min: 34, max: 54},
-    {name: 'waistSemiCircumference', text:'Напiвобхват талії', min: 23, max: 34},
-    {name: 'shoulderWidth', text: 'Ширина плечового схилу', min: 8, max: 18},
-    {name: 'chestHeight', text: 'Висота грудей перша (вiд точки основи шиї)', min: 23, max: 44},
-    {name: 'chestHeight1', text: 'Висота грудей (вiд шийної точки)', min: 16, max: 36},
-    {name: 'backArmholeHeight', text: 'Висота пройми ззаду', min: 12, max: 23},
-    {name: 'backLengthTillWaist', text: 'Довжина спини до талії', min: 30, max: 50},
-    {name: 'shoulderHeightSidelong', text: 'Висота плеча коса (для контролю)', min: 32, max: 52},
-    {name: 'chestWidth', text: 'Ширина грудей', min: 11, max: 22},
-    {name: 'chestCenter', text: 'Центр грудей', min: 4, max: 15},
-    {name: 'backWidth', text: 'Ширина спини', min: 12, max: 23},
-    {name: 'waistLengthFront', text: 'Довжина талії переду', min: 41, max: 62},
+    {name: 'waistSemiCircumference', text:'Напiвобхват талії', min: 23.8, max: 43.8},
+    {name: 'shoulderWidth', text: 'Ширина плечового схилу', min: 8.1, max: 18.1},
+    {name: 'chestHeight', text: 'Висота грудей (вiд шийної точки)', min: 16, max: 36},
+    {name: 'chestHeight1', text: 'Висота грудей перша (вiд точки основи шиї)', min: 23.7, max: 43.7},
+    {name: 'backArmholeHeight', text: 'Висота пройми ззаду', min: 12.5, max: 22.5},
+    {name: 'backLengthTillWaist', text: 'Довжина спини до талії', min: 30.1, max: 50.1},
+    {name: 'shoulderHeightSidelong', text: 'Висота плеча коса (для контролю)', min: 32.8, max: 52.8},
+    {name: 'chestWidth', text: 'Ширина грудей', min: 11.5, max: 21.5},
+    {name: 'chestCenter', text: 'Центр грудей', min: 4.6, max: 14.6},
+    {name: 'backWidth', text: 'Ширина спини', min: 9.3, max: 25.3},
+    {name: 'waistLengthFront', text: 'Довжина талії переду', min: 41.5, max: 61.5},
     {name: 'neckBaseToFrontWaistLineDistance', text: 'Відстань вiд точки основи шиї лінії талії спереду', min: 33, max: 53}
   ];
 

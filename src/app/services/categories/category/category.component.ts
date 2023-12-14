@@ -16,6 +16,7 @@ import {CalculatorService} from "../../calculator/calculator.service";
 import {AuthService} from "../../../auth/auth.service";
 import {User} from "../../../account/user.model";
 import {ModelsService} from "../../../categories/category/models.service";
+import {CategoriesService} from "../categories.service";
 
 @Component({
   selector: 'app-category',
@@ -34,23 +35,22 @@ export class CategoryComponent implements OnInit, OnDestroy{
   isAddingModel: boolean = false;
   user: User;
 
-
   constructor(
-    private ordersService: OrdersService,
     public dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private calcService: CalculatorService,
-    private modelsService: ModelsService
+    private modelsService: ModelsService,
+    private categoriesService: CategoriesService
   ) {}
   ngOnInit() {
-    this.categorySub = this.ordersService.getCategoriesListener().subscribe(categories => {
+    this.categorySub = this.categoriesService.getCategoriesListener().subscribe(categories => {
       this.categories = categories;
       this.findCategory();
     })
     this.activatedRoute.params.subscribe(params => {
       if(params) this.hidden = false
-      this.category = this.ordersService.getSelectedCategory();
+      this.category = this.categoriesService.getSelectedCategory();
       this.params = params;
       if(!this.categories) return;
       this.findCategory();
