@@ -1,4 +1,5 @@
-<div class="header" [ngClass]="menuSwitcher ? 'header-opened' : ''" [ngStyle]="menuSwitcher ? {height: 'auto'} : {}">
+<div class="header" [ngClass]="menuSwitcher ? 'header-opened' : ''" [ngStyle]="{height: menuSwitcher ? 'auto' : '',
+  'background': changeHeader ? 'linear-gradient(0deg, rgba(48, 53, 193, 0) 0%, rgb(37, 37, 37) 100%)' : 'gray'}">
   <div class="links">
     <div
       class="link"

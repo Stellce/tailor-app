@@ -3,6 +3,7 @@ import {AuthService} from "../auth/auth.service";
 import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {User} from "../account/user.model";
+import {AppService} from "../app.service";
 
 @Component({
   selector: 'app-header',
@@ -23,7 +24,12 @@ export class HeaderComponent implements OnInit{
   user: User;
   userSub: Subscription;
   allRoles: string[];
-  constructor(private authService: AuthService, private router: Router) {}
+  changeHeader: boolean;
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private appService: AppService
+  ) {}
 
   ngOnInit() {
     this.allRoles = this.authService.getAllRoles();
@@ -33,6 +39,10 @@ export class HeaderComponent implements OnInit{
       if(user.isAuth) return this.onAuth();
     })
     this.onAuth();
+    this.changeHeader = this.appService.getDoChangeHeader();
+    this.appService.getDoChangeHeaderListener().subscribe(doChange => {
+      this.changeHeader = doChange;
+    })
   }
   closeMenu() {
     this.menuSwitcher = false;
