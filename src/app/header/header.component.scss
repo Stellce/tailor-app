@@ -2,7 +2,8 @@
   display: flex;
   height: 40px;
   padding: 10px;
-  background: #3035C1;
+  background: linear-gradient(0deg, rgba(48, 53, 193, 0) 0%, rgb(37, 37, 37) 100%);
+  backdrop-filter: blur(2px);
   color: white;
   position: relative;
   font-size: 16px;
@@ -10,7 +11,7 @@
 }
 .links {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   flex-wrap: wrap;
   align-items: center;
   align-content: flex-end;

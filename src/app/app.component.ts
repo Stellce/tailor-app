@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "./auth/auth.service";
+import {NavigationStart, Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -8,12 +9,15 @@ import {AuthService} from "./auth/auth.service";
 })
 export class AppComponent implements OnInit{
   title = 'tailor-app';
-  footerContent: {name: string, src: string}[] = [
-    {name: 'Контакти', src: 'contacts'},
-    {name: 'Адреса', src: 'address'}
-  ]
-  constructor(private authService: AuthService) {}
+  isSemiTranspared: boolean = false;
+  constructor(private authService: AuthService, private router: Router) {}
   ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if(event instanceof NavigationStart) {
+        this.isSemiTranspared = event.url === '/about'
+        console.log(this.isSemiTranspared)
+      }
+    })
     this.authService.autoAuthUser();
   }
 }
