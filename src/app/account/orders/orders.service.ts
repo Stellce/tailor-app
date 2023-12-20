@@ -9,8 +9,10 @@ import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 import {NewCustomer} from "./new-customer.model";
 import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosById.model";
-import {ModelsService} from "../../categories/category/models.service";
+import {ModelsService} from "../../services/categories/category/models.service";
 import {CategoriesService} from "../../services/categories/categories.service";
+import {Data} from "@angular/router";
+import {AppService} from "../../app.service";
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +31,9 @@ export class OrdersService {
     private http: HttpClient,
     private dialog: MatDialog,
     private categoriesService: CategoriesService,
-    private modelsService: ModelsService
+    private modelsService: ModelsService,
+    private appService: AppService
   ) { }
-
-  getModelPhotosListener() {
-    return this.orderPhotosListener.asObservable();
-  }
   getNewCustomerDataListener() {
     return this.newCustomerDataListener.asObservable();
   }
@@ -47,8 +46,6 @@ export class OrdersService {
   getOrdersListener() {
     return this.ordersListener.asObservable();
   }
-
-
 
   requestAssignedOrders() {
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.authService.getTokenHeader()}).subscribe({
@@ -165,19 +162,20 @@ export class OrdersService {
     })
   }
 
+
+  fixOrdersDate(orders: Order[]) {
+    return orders.map(order => {
+      order.createdAt = this.appService.fixDateStr(order.createdAt);
+      return order;
+    })
+  }
+
   private getOrdersOnStatus(orderStatus: string) {
     if(orderStatus === 'PENDING') {
       this.requestAllUnassignedOrders();
     } else {
       this.requestAssignedOrders();
     }
-  }
-
-  private fixOrdersDate(orders: Order[]) {
-    return orders.map((order) => {
-      order.createdAt = (order.createdAt as string).replace('T', ' ');
-      return order;
-    })
   }
 
   private divideOrdersByCategories(orders: Order[]) {

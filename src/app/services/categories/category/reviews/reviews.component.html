@@ -1,0 +1,94 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>Вiдгуки</mat-expansion-panel-header>
+  <mat-card-content>
+    <span *ngIf="!user.isAuth">
+      <a [routerLink]="['/', 'registration']">Зареєструйтеся</a> або <a [routerLink]="['/', 'login']">увiйдiть</a>, щоб створити вiдгук
+    </span>
+    <span *ngIf="!allowComments && user.isAuth">Немає завершеного замовлення</span>
+    <form [formGroup]="reviewForm" (ngSubmit)="onCreateReview()" *ngIf="allowComments">
+      <mat-card class="add-review review" *ngIf="user.roles.includes('CLIENT')">
+        <div class="card-header">Створити вiдгук
+          <div class="stars">
+            <div class="star" *ngFor="let star of stars" (click)="setRating(star.rate); starX.click()" [ngClass]="{'star-selected': star?.rate <= rating}">
+              <svg width="20" height="20" >
+                <polygon points="10,1 4,19.8 19,7.8 1,7.8 16,19.8"/>
+              </svg>
+              <input formControlName="rating" type="radio" name="rating" [value]="star.rate" #starX>
+            </div>
+          </div>
+        </div>
+        <mat-card-content>
+          <mat-form-field>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="5"
+              name="content"
+              formControlName="content"
+            ></textarea>
+            <mat-error>Поле обов'язкове</mat-error>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button *ngIf="isReviewLoaded" color="warn" type="reset" (click)="onDeleteReview(review.id)">Видалити</button>
+          <button mat-raised-button [ngStyle]="{'background': isReviewLoaded ? 'green' : '', 'margin-left': '10px'}" color="primary" type="submit">{{isReviewLoaded ? 'Оновити':'Створити'}}</button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+    <div class="reviews">
+      <mat-card class="review" *ngFor="let review of reviews">
+        <div class="card-header">
+          {{review.clientFullName}}
+          <div class="stars">
+            <div class="star" *ngFor="let star of stars" [ngClass]="{'star-selected': star?.rate <= review?.rating}">
+              <svg width="20" height="20" >
+                <polygon points="10,1 4,19.8 19,7.8 1,7.8 16,19.8"/>
+              </svg>
+            </div>
+            <button mat-mini-fab color="warn" *ngIf="user.roles.includes('ADMIN')" (click)="onDeleteReview(review.id)" [ngStyle]="{'margin-left': '10px'}"><mat-icon fontIcon="close"></mat-icon></button>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          {{review.content}}
+          <span
+            class="highlighted-link"
+            *ngIf="user.roles?.includes('ADMIN') && reply['id'] !== review['id'] && !review.reply"
+            (click)="onAnswer(review.id)"
+          >Вiдповiсти</span>
+          <span>{{review.createdAt}}</span>
+        </mat-card-content>
+        <mat-card class="create-reply reply" *ngIf="reply['id'] === review['id'] && !review.reply">
+          <div class="card-header reply-header">Адмiнicтратор</div>
+          <mat-card-content>
+            <mat-form-field>
+              <textarea
+                matInput
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="5"
+                name="content"
+                [(ngModel)]="reply.content"
+                required
+              ></textarea>
+              <mat-error>Поле обов'язкове</mat-error>
+            </mat-form-field>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit" (click)="onReply(review.id)">Вiдповiсти</button>
+          </mat-card-actions>
+        </mat-card>
+        <mat-card class="reply" *ngIf="review.reply" [ngStyle]="{'background': '#f1f1f1'}">
+          <div class="card-header reply-header">Адмiнicтратор</div>
+          <mat-divider></mat-divider>
+          <mat-card-content>{{review.reply.content}}<span>{{review.reply.createdAt}}</span></mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="warn" *ngIf="user.roles.includes('ADMIN')" (click)="onDeleteReply(review.id)">Видалити</button>
+          </mat-card-actions>
+        </mat-card>
+      </mat-card>
+    </div>
+  </mat-card-content>
+  <button mat-button *ngIf="!isFirstPage" (click)="prevPage()"><mat-icon fontIcon="chevron_left"></mat-icon></button>
+  <span [ngStyle]="{'margin-left': isFirstPage ? '64px' : '', 'margin-top': '10px', 'display': 'inline-block'}">{{page+1}}</span>
+  <button mat-button *ngIf="!isLastPage" (click)="nextPage()"><mat-icon fontIcon="chevron_right"></mat-icon></button>
+</mat-expansion-panel>

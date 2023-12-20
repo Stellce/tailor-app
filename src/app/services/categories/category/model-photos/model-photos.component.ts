@@ -3,7 +3,7 @@ import {Subscription} from "rxjs";
 import {OrdersService} from "../../../../account/orders/orders.service";
 import {PhotoByOrderId} from "./photosById.model";
 import {CalculatorService} from "../../../calculator/calculator.service";
-import {ModelsService} from "../../../../categories/category/models.service";
+import {ModelsService} from "../models.service";
 
 @Component({
   selector: 'app-model-photos',

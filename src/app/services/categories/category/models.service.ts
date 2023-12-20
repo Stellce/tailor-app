@@ -1,13 +1,13 @@
 import {Injectable} from "@angular/core";
 import {Subject} from "rxjs";
-import {Model} from "../../services/categories/category/category-model.model";
-import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosById.model";
+import {Model} from "./category-model.model";
+import {PhotoByOrderId} from "./model-photos/photosById.model";
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
-import {AuthService} from "../../auth/auth.service";
+import {environment} from "../../../../environments/environment";
+import {AuthService} from "../../../auth/auth.service";
 import {MatDialog} from "@angular/material/dialog";
-import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
-import {CategoriesService} from "../../services/categories/categories.service";
+import {ErrorDialogComponent} from "../../../auth/error-dialog/error-dialog.component";
+import {CategoriesService} from "../categories.service";
 
 @Injectable({providedIn: "root"})
 export class ModelsService {

@@ -20,7 +20,6 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   url: string;
 
   constructor(
-    private ordersService: OrdersService,
     private activatedRoute: ActivatedRoute,
     private categoriesService: CategoriesService
   ) {}
@@ -59,7 +58,7 @@ export class CategoriesComponent implements OnInit, OnDestroy{
 
   private updateImageIndex() {
     this.imageInterval = setInterval(() => {
-      this.categoryIndex = this.categoryIndex >= this.categories.length-1 ? 0 : this.categoryIndex += 1;
+      this.categoryIndex = this.categoryIndex >= this.categories?.length-1 ? 0 : this.categoryIndex += 1;
     }, 5000);
   }
 

@@ -1,5 +1,5 @@
-<div class="spinner-wrapper">
-  <mat-spinner *ngIf="!categories"></mat-spinner>
+<div class="spinner-wrapper" *ngIf="!categories">
+  <mat-spinner></mat-spinner>
 </div>
 <div class="categories-wrapper" *ngIf="categories">
   <div class="categories-flex">

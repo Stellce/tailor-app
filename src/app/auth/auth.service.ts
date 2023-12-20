@@ -23,7 +23,8 @@ export class AuthService {
   tokenTimer: any;
   user: User = {
     isAuth: false,
-    roles: []
+    roles: [],
+    username: ''
   };
   allRoles: string[] = [
     'CLIENT', 'EMPLOYEE', 'ADMIN'
@@ -36,9 +37,6 @@ export class AuthService {
   }
   getToken() {
     return this.token;
-  }
-  getAllRoles() {
-    return this.allRoles;
   }
   getUser() {
     return this.user;
@@ -128,6 +126,7 @@ export class AuthService {
     this.token = token;
     let decoded: TailorJwtPayload = jwtDecode(this.token);
     this.user.roles = decoded.roles.replace(/[\[\]'\s]+/g, '').split(',');
+    this.user.username = decoded.sub;
     this.user.isAuth = true;
     this.userListener.next(this.user);
   }

@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, Optional} from '@angular/core';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 
 @Component({
@@ -9,5 +9,5 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 export class ErrorDialogComponent {
   activationDonePath: string = './assets/activation-done.svg';
   activationFailedPath: string = './assets/activation-failed.svg';
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {message: string, isSuccessful: boolean}) {}
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: {message: string, isSuccessful: boolean}) {}
 }

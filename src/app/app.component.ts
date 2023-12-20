@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {AuthService} from "./auth/auth.service";
 import {NavigationStart, Router} from "@angular/router";
 import {AppService} from "./app.service";
@@ -11,6 +11,7 @@ import {AppService} from "./app.service";
 export class AppComponent implements OnInit{
   title = 'tailor-app';
   isSemiTranspared: boolean = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,

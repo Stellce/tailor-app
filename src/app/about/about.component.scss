@@ -1,7 +1,7 @@
 .about {
   display: flex;
   flex-direction: column;
-  background-image: url("../../assets/about.jpeg");
+  background-image: url("../../assets/about.jpg");
   background-repeat: no-repeat;
   margin: 0 auto;
   background-size: cover;
@@ -14,10 +14,10 @@
 mat-card {
   width: 75dvw;
   max-width: 1200px;
-  margin: 15px auto;
+  margin: 150px auto;
   font-size: 14px;
   border-radius: 1rem;
-  background: rgba(217, 217, 217, 0.75);
+  background: rgba(217, 217, 217, 0.3);
 }
 .img-wrap img{
   width: 100%;

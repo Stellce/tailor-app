@@ -10,12 +10,11 @@ import {Model} from "./category-model.model";
 import {VideoDialogComponent} from "./video-dialog/video-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute, Params} from "@angular/router";
-import {OrdersService} from "../../../account/orders/orders.service";
 import {Subscription} from "rxjs";
 import {CalculatorService} from "../../calculator/calculator.service";
 import {AuthService} from "../../../auth/auth.service";
 import {User} from "../../../account/user.model";
-import {ModelsService} from "../../../categories/category/models.service";
+import {ModelsService} from "./models.service";
 import {CategoriesService} from "../categories.service";
 
 @Component({
@@ -65,7 +64,6 @@ export class CategoryComponent implements OnInit, OnDestroy{
 
   onModelSelect(model: Model) {
     if(this.selectedModel?.id === model.id) return;
-    console.log(model)
     this.isAddingModel = false;
     this.selectedModel = model;
     this.modelsService.getAddModelInitListener().subscribe(() => {

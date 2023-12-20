@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit{
   ]
   user: User;
   userSub: Subscription;
-  allRoles: string[];
   changeHeader: boolean;
   constructor(
     private authService: AuthService,
@@ -32,7 +31,6 @@ export class HeaderComponent implements OnInit{
   ) {}
 
   ngOnInit() {
-    this.allRoles = this.authService.getAllRoles();
     this.user = this.authService.getUser();
     this.userSub = this.authService.getUserListener().subscribe(user => {
       this.user = user;

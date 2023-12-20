@@ -16,4 +16,9 @@ export class AppService {
   changeHeaderListener(change: boolean) {
     this.doChangeHeaderListener.next(change);
   }
+
+  fixDateStr(str: string) {
+    return str.replace('T', ' ').split('.')[0];
+  }
+
 }

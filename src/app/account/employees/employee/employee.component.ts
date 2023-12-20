@@ -7,6 +7,8 @@ import {EmployeesService} from "../employees.service";
 import {Employee} from "./employee.model";
 import {TranslatorService} from "../translator.service";
 import {Field} from "../field.model";
+import {YesNoDialogComponent} from "../../yes-no-dialog/yes-no-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-employee',
@@ -27,7 +29,8 @@ export class EmployeeComponent implements OnInit, OnDestroy{
     private activatedRoute: ActivatedRoute,
     private employeesService: EmployeesService,
     private translator: TranslatorService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
   ngOnInit() {
     this.userSub = this.authService.getUserListener().subscribe(user => {
@@ -60,8 +63,13 @@ export class EmployeeComponent implements OnInit, OnDestroy{
   }
 
   onDeleteEmployee() {
-    this.employeesService.deleteEmployee(this.employee.id!);
-    this.router.navigate(['./'], {relativeTo: this.activatedRoute.parent});
+    const dialogRef = this.dialog.open(YesNoDialogComponent, {data: {message: 'Видалити робiтника?'}})
+    dialogRef.afterClosed().subscribe(res => {
+      if(res.event === 'Yes') {
+        this.employeesService.deleteEmployee(this.employee.id!);
+        this.router.navigate(['./'], {relativeTo: this.activatedRoute.parent});
+      }
+    })
   }
 
   ngOnDestroy() {

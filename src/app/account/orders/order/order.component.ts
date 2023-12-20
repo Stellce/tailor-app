@@ -6,7 +6,7 @@ import {Subscription} from "rxjs";
 import {User} from "../../user.model";
 import {AuthService} from "../../../auth/auth.service";
 import {PhotoByOrderId} from "../../../services/categories/category/model-photos/photosById.model";
-import {ModelsService} from "../../../categories/category/models.service";
+import {ModelsService} from "../../../services/categories/category/models.service";
 
 @Component({
   selector: 'app-order',

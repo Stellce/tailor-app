@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {OrdersService} from "../../../account/orders/orders.service";
+import {OrdersService} from "../../../../account/orders/orders.service";
 import {mimeType} from "./mime-type.validator";
-import {Model} from "../../../services/categories/category/category-model.model";
+import {Model} from "../category-model.model";
 import {ModelsService} from "../models.service";
-import {CategoriesService} from "../../../services/categories/categories.service";
+import {CategoriesService} from "../../categories.service";
 
 @Component({
   selector: 'app-add-model',

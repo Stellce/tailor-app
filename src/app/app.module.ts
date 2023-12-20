@@ -44,7 +44,9 @@ import {UserDetailsComponent} from "./account/user-details/user-details.componen
 import {EmployeeComponent} from "./account/employees/employee/employee.component";
 import {EmployeeRegistrationComponent} from "./account/employees/employee-registration/employee-registration.component";
 import {ModelPhotosComponent} from "./services/categories/category/model-photos/model-photos.component";
-import {AddModelComponent} from "./categories/category/add-model/add-model.component";
+import {AddModelComponent} from "./services/categories/category/add-model/add-model.component";
+import {ReviewsComponent} from "./services/categories/category/reviews/reviews.component";
+import {YesNoDialogComponent} from "./account/yes-no-dialog/yes-no-dialog.component";
 
 @NgModule({
   declarations: [
@@ -73,7 +75,9 @@ import {AddModelComponent} from "./categories/category/add-model/add-model.compo
     EmployeeRegistrationComponent,
     UserDetailsComponent,
     ModelPhotosComponent,
-    AddModelComponent
+    AddModelComponent,
+    ReviewsComponent,
+    YesNoDialogComponent
   ],
   imports: [
     BrowserModule,
