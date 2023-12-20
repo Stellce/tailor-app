@@ -41,6 +41,7 @@ export class ReviewsComponent implements OnInit{
   reply: NewReview = {id: ''} as NewReview;
   user: User;
   coatModelId: string;
+  modelSub: Subscription;
   constructor(
     private reviewsService: ReviewsService,
     private modelsService: ModelsService,
@@ -51,8 +52,15 @@ export class ReviewsComponent implements OnInit{
   ) {}
 
   ngOnInit() {
-    this.coatModelId = this.modelsService.getSelectedModel().id;
     this.user = this.authService.getUser();
+    this.coatModelId = this.modelsService.getSelectedModel().id;
+    this.modelSub = this.modelsService.getSelectedModelListener().subscribe(model => {
+      this.coatModelId = model.id;
+      this.reviewsService.getReviews(this.coatModelId, this.page);
+      this.review = {} as Review;
+      this.updateForm();
+      this.isReviewLoaded = false;
+    })
     this.reviewsSub = this.reviewsService.getReviewListener().subscribe(reviews => {
       this.reviews = reviews['content'].map(review => {
         review.createdAt = this.appService.fixDateStr(review.createdAt);
@@ -68,11 +76,15 @@ export class ReviewsComponent implements OnInit{
       }
     })
     this.reviewsService.getReviews(this.coatModelId, this.page);
+    this.createForm();
+    if(this.user?.isAuth)this.hasCompletedOrder();
+  }
+
+  private createForm() {
     this.reviewForm = new FormGroup({
       content: new FormControl('', Validators.required),
       rating: new FormControl('', Validators.required)
     });
-    if(this.user?.isAuth)this.hasCompletedOrder();
   }
   private updateForm() {
     this.reviewForm.patchValue({

@@ -89,6 +89,6 @@
     </div>
   </mat-card-content>
   <button mat-button *ngIf="!isFirstPage" (click)="prevPage()"><mat-icon fontIcon="chevron_left"></mat-icon></button>
-  <span [ngStyle]="{'margin-left': isFirstPage ? '64px' : '', 'margin-top': '10px', 'display': 'inline-block'}">{{page+1}}</span>
+  <span *ngIf="reviews && reviews.length !== 0" [ngStyle]="{'margin-left': isFirstPage ? '64px' : '', 'margin-top': '10px', 'display': 'inline-block'}">{{page+1}}</span>
   <button mat-button *ngIf="!isLastPage" (click)="nextPage()"><mat-icon fontIcon="chevron_right"></mat-icon></button>
 </mat-expansion-panel>
