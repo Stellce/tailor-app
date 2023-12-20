@@ -57,7 +57,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy{
       error: err => {
         this.isLoading = false;
         console.log(err);
-        console.log('Achtung!')
       }
     })
     this.accountService.getUserDetails();

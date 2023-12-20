@@ -11,6 +11,7 @@ import {AppService} from "../app.service";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit{
+  logoPath: string = '../../assets/logoW.svg'
   menuSwitcher: boolean = false;
   links: {name: string, src: string, role: string}[] = [
     {name: 'Про нас', src: 'about', role: 'USER'},

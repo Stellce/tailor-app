@@ -75,9 +75,7 @@ export class CalculatorService {
   }
   calculate(productMetrics: ProductMetrics) {
     let calcObj = JSON.parse(JSON.stringify(productMetrics))
-    console.log(calcObj)
     this.http.post<{[s: string]: string}>(`${this.backendUrl}/patterns/calculate`, calcObj).subscribe(res => {
-      console.log(res)
       this.handleCalcValues(res);
     });
   }

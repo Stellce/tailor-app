@@ -11,7 +11,6 @@ import {NewCustomer} from "./new-customer.model";
 import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosById.model";
 import {ModelsService} from "../../services/categories/category/models.service";
 import {CategoriesService} from "../../services/categories/categories.service";
-import {Data} from "@angular/router";
 import {AppService} from "../../app.service";
 
 @Injectable({

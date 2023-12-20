@@ -7,6 +7,22 @@
   position: relative;
   font-size: 16px;
   font-style: inherit;
+  z-index: 5;
+}
+.logo {
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+.logo img {
+  max-height: 45px;
+  width: 100%;
 }
 .links {
   display: flex;
@@ -61,6 +77,9 @@
 }
 
 @media (max-width: 700px) {
+  .logo {
+    display: none;
+  }
   .links {
     width: 100%;
     justify-content: space-between;
@@ -74,8 +93,13 @@
   }
 }
 @media (max-width: 500px) {
+  .logo {
+    display: flex;
+    left: 20%;
+    top: 0;
+  }
   .header {
-    height: 24px;
+    //height: 24px;
   }
   .links {
     width: 100%;
@@ -110,8 +134,5 @@
   }
   .header-opened > * {
     display: block;
-  }
-  .login {
-    //padding: 15px;
   }
 }

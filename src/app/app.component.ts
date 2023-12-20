@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "./auth/auth.service";
 import {NavigationStart, Router} from "@angular/router";
 import {AppService} from "./app.service";
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit{
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if(event instanceof NavigationStart) {
-        this.isSemiTranspared = event.url === '/about'
+        this.isSemiTranspared = event.url === '/about' || event.url === '';
       }
       this.appService.changeHeaderListener(this.isSemiTranspared);
     })

@@ -73,7 +73,6 @@ export class AddModelComponent implements OnInit{
       image: this.modelForm.controls['image'].value,
       videoUrl: this.modelForm.controls['videoUrl'].value
     };
-    console.log(newModel)
     if(this.model.name) return this.modelsService.updateModel(newModel.id, newModel);
     this.modelsService.createModel(newModel);
     this.modelForm.reset();

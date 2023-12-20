@@ -2,7 +2,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {Category} from "./category/category.model";
 import {ActivatedRoute} from "@angular/router";
-import {OrdersService} from "../../account/orders/orders.service";
 import {CategoriesService} from "./categories.service";
 
 @Component({
@@ -25,7 +24,6 @@ export class CategoriesComponent implements OnInit, OnDestroy{
   ) {}
   ngOnInit() {
     this.categoriesSub = this.categoriesService.getCategoriesListener().subscribe(categories => {
-      console.log(categories)
       this.categories = categories;
       this.url = this.activatedRoute.snapshot.url
         .map(el => el.path)

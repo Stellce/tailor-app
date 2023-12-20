@@ -5,7 +5,6 @@ import {ActivatedRoute} from "@angular/router";
 import {OrdersService} from "../orders.service";
 import {Category} from "../../../services/categories/category/category.model";
 import {CategoriesService} from "../../../services/categories/categories.service";
-import {AppService} from "../../../app.service";
 
 @Component({
   selector: 'app-orders-history',

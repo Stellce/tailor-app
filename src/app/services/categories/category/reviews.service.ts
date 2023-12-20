@@ -6,7 +6,6 @@ import {AuthService} from "../../../auth/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../../auth/error-dialog/error-dialog.component";
 import {Observable, Subject} from "rxjs";
-import {Reply} from "./reviews/reply.model";
 import {NewReview} from "./reviews/new-review.model";
 import {NewReply} from "./reviews/new-reply.model";
 
@@ -28,10 +27,7 @@ export class ReviewsService {
   getReviews(coatModelId: string, page?: number) {
     if(!page) page = 0;
     let params = new HttpParams().set('page', page);
-    console.log(params);
     this.http.get<{content: Review[], last: boolean, first: boolean}>(`${this.backendUrl}/reviews/${coatModelId}`, {params: params}).subscribe(reviews => {
-      console.log(`Got reviews`)
-      console.log(reviews)
       this._reviewListener.next(reviews);
     })
   }
@@ -94,7 +90,7 @@ export class ReviewsService {
   deleteReply(replyId: string, coatModelId: string, page: number) {
     this.http.delete(`${this.backendUrl}/reviews/${replyId}/reply`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        this.getReviews(coatModelId, 0);
+        this.getReviews(coatModelId, page);
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Вiдповiдь видалено', isSuccessful: true}})
       },
       error: () => this.dialog.open(ErrorDialogComponent)

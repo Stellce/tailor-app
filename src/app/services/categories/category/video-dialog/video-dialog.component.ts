@@ -14,7 +14,6 @@ export class VideoDialogComponent implements OnInit, AfterContentChecked{
   ngOnInit() {
     let preparedUrl = this.prepareUrl(this.data.videoUrl);
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(preparedUrl);
-    console.log(this.videoUrl)
   }
 
   ngAfterContentChecked() {
