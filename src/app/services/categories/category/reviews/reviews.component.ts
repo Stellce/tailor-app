@@ -140,6 +140,8 @@ export class ReviewsComponent implements OnInit{
       if(res.event === 'Yes') {
         this.reviewsService.deleteReview(reviewId, this.coatModelId);
         this.rating = 0;
+        this.reviewForm.reset();
+        this.isReviewLoaded = false;
       }
     })
   }

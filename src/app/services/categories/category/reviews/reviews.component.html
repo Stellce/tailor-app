@@ -30,7 +30,7 @@
           </mat-form-field>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button *ngIf="isReviewLoaded" color="warn" type="reset" (click)="onDeleteReview(review.id)">Видалити</button>
+          <button mat-raised-button *ngIf="review" color="warn" type="button" (click)="onDeleteReview(review.id)">Видалити</button>
           <button mat-raised-button [ngStyle]="{'background': isReviewLoaded ? 'green' : '', 'margin-left': '10px'}" color="primary" type="submit">{{isReviewLoaded ? 'Оновити':'Створити'}}</button>
         </mat-card-actions>
       </mat-card>
