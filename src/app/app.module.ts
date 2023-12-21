@@ -10,7 +10,6 @@ import {MatButtonModule} from "@angular/material/button";
 import {HttpClientModule} from "@angular/common/http";
 import { AboutComponent } from './about/about.component';
 import { CategoriesComponent } from './services/categories/categories.component';
-import { PricesComponent } from './prices/prices.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
 import { LoginComponent } from './auth/login/login.component';
 import {MatCardModule} from "@angular/material/card";
@@ -33,7 +32,6 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/m
 import {MatExpansionModule} from "@angular/material/expansion";
 import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {CalculatorComponent} from "./services/calculator/calculator.component";
-import {ServicesComponent} from "./services/services.component";
 import {OrderComponent} from "./account/orders/order/order.component";
 import {CalcResFieldsComponent} from "./services/calculator/calc-res-fields/calc-res-fields.component";
 import {DialogDataComponent} from "./auth/dialog-data/dialog-data.component";
@@ -54,7 +52,6 @@ import {YesNoDialogComponent} from "./account/yes-no-dialog/yes-no-dialog.compon
     HeaderComponent,
     AboutComponent,
     CategoriesComponent,
-    PricesComponent,
     RegistrationComponent,
     LoginComponent,
     SamePasswordsDirective,
@@ -65,7 +62,6 @@ import {YesNoDialogComponent} from "./account/yes-no-dialog/yes-no-dialog.compon
     AccountComponent,
     OrdersHistoryComponent,
     CalculatorComponent,
-    ServicesComponent,
     OrderComponent,
     OrdersComponent,
     CalcResFieldsComponent,

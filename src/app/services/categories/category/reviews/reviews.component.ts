@@ -42,6 +42,8 @@ export class ReviewsComponent implements OnInit{
   user: User;
   coatModelId: string;
   modelSub: Subscription;
+  isReviewFormFreezed: boolean = false;
+
   constructor(
     private reviewsService: ReviewsService,
     private modelsService: ModelsService,
@@ -62,7 +64,10 @@ export class ReviewsComponent implements OnInit{
       this.isReviewLoaded = false;
     })
     this.reviewsSub = this.reviewsService.getReviewListener().subscribe(reviews => {
-      this.reviews = reviews['content'].map(review => {
+      console.log('next')
+      this.isReviewFormFreezed = false;
+      if(!reviews.content) return;
+      this.reviews = reviews.content.map(review => {
         review.createdAt = this.appService.fixDateStr(review.createdAt);
         if(review.reply)review.reply.createdAt = this.appService.fixDateStr(review.reply.createdAt);
         return review;
@@ -120,8 +125,9 @@ export class ReviewsComponent implements OnInit{
     this.rating = rating;
   }
   onCreateReview() {
+    this.isReviewFormFreezed = true;
     const newReview: NewReview = {
-      id: this.review['id'],
+      id: this.review?.id || '',
       content: this.reviewForm.controls['content'].value,
       rating: this.reviewForm.controls['rating'].value,
       coatModelId: this.coatModelId
@@ -137,11 +143,12 @@ export class ReviewsComponent implements OnInit{
   onDeleteReview(reviewId: string) {
     const dialogRef = this.dialog.open(YesNoDialogComponent, {data: {message: 'Видалити вiдгук?'}})
     dialogRef.afterClosed().subscribe(res => {
-      if(res.event === 'Yes') {
+      if(res && res.event === 'Yes') {
         this.reviewsService.deleteReview(reviewId, this.coatModelId);
         this.rating = 0;
         this.reviewForm.reset();
         this.isReviewLoaded = false;
+        this.isReviewFormFreezed = true;
       }
     })
   }

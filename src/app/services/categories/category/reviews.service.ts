@@ -8,13 +8,14 @@ import {ErrorDialogComponent} from "../../../auth/error-dialog/error-dialog.comp
 import {Observable, Subject} from "rxjs";
 import {NewReview} from "./reviews/new-review.model";
 import {NewReply} from "./reviews/new-reply.model";
+import {ReviewsRes} from "./reviews/reviews-res.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReviewsService {
   backendUrl: string = environment.backendUrl;
-  private _reviewListener = new Subject<{ content: Review[], last: boolean, first: boolean }>();
+  private _reviewListener = new Subject<ReviewsRes>();
   constructor(
     private http: HttpClient,
     private authService: AuthService,
@@ -68,7 +69,10 @@ export class ReviewsService {
         this.getReviews(coatModelId, 0);
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Вiдгук видалено', isSuccessful: true}})
       },
-      error: () => this.dialog.open(ErrorDialogComponent)
+      error: () => {
+        this._reviewListener.next({} as ReviewsRes);
+        this.dialog.open(ErrorDialogComponent)
+      }
     })
   }
 
