@@ -73,6 +73,10 @@ export class OrderComponent implements OnInit, OnDestroy{
   }
   onSavePhoto() {
     this.ordersService.addPhotoToOrder(this.order, this.image);
+    this.photoPreview = '';
+  }
+  onRemovePhoto() {
+    this.ordersService.removePhotoFromOrder(this.order.id);
   }
   ngOnDestroy() {
     this.orderSub.unsubscribe();

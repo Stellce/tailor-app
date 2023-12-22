@@ -23,7 +23,6 @@ export class OrdersService {
   ordersListener = new Subject<Order[]>();
 
   newCustomerDataListener = new Subject<NewCustomer>();
-  orderPhotosListener = new Subject<PhotoByOrderId[]>();
   orderMetricsListener = new Subject<ProductMetrics>();
   constructor(
     private authService: AuthService,
@@ -157,6 +156,18 @@ export class OrdersService {
       error: (err) => {
         console.log(err);
         this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}});
+      }
+    })
+  }
+  removePhotoFromOrder(orderId: string) {
+    this.http.delete(`${this.backendUrl}/orders/${orderId}/image`, {headers: this.authService.getTokenHeader()}).subscribe({
+      next: () => {
+        this.requestOrderById(orderId);
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Фото усунено', isSuccessful: true}});
+      },
+      error: (err) => {
+        console.log(err);
+        this.dialog.open(ErrorDialogComponent);
       }
     })
   }

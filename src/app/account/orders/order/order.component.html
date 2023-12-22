@@ -40,6 +40,14 @@
   >
     <mat-icon>close</mat-icon>| <span>Скасувати замовлення</span>
   </button>
+  <button
+      mat-raised-button
+      color="warn"
+      *ngIf="order && order.status === 'COMPLETED' && (user?.roles!.includes('EMPLOYEE') || user?.roles!.includes('ADMIN'))"
+      (click)="onRemovePhoto()"
+  >
+    <mat-icon>close</mat-icon> Видалити фото
+  </button>
   <mat-card
     *ngIf="user['roles'] && order && !(!user.roles!.includes('CLIENT') && order['status'] == 'PENDING')"
     [ngStyle]="{'backgroundColor': order.status === 'CANCELLED' ? '#f44336' : order.status === 'COMPLETED' ? 'green' : '#3f51b5', 'color': 'white', 'fontFamily': 'Inter, sans-serif', 'padding': '15px'}"

@@ -64,7 +64,6 @@ export class ReviewsComponent implements OnInit{
       this.isReviewLoaded = false;
     })
     this.reviewsSub = this.reviewsService.getReviewListener().subscribe(reviews => {
-      console.log('next')
       this.isReviewFormFreezed = false;
       if(!reviews.content) return;
       this.reviews = reviews.content.map(review => {
