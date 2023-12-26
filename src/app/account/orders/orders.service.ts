@@ -8,7 +8,7 @@ import {ProductMetrics} from "../../services/calculator/product-metrics.model";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 import {NewCustomer} from "./new-customer.model";
-import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosById.model";
+import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosByOrderId.model";
 import {ModelsService} from "../../services/categories/category/models.service";
 import {CategoriesService} from "../../services/categories/categories.service";
 import {AppService} from "../../app.service";
@@ -17,13 +17,16 @@ import {AppService} from "../../app.service";
   providedIn: 'root'
 })
 export class OrdersService {
-  backendUrl: string = environment.backendUrl;
-  productMetrics: ProductMetrics;
-  orderListener = new Subject<Order>();
-  ordersListener = new Subject<Order[]>();
-
-  newCustomerDataListener = new Subject<NewCustomer>();
-  orderMetricsListener = new Subject<ProductMetrics>();
+  private backendUrl: string = environment.backendUrl;
+  private productMetrics: ProductMetrics;
+  private assignedOrders: Order[];
+  private unassignedOrders: Order[];
+  private orderListener = new Subject<Order>();
+  private ordersListener = new Subject<Order[]>();
+  private orderPhotoListener = new Subject<string>();
+  private orderMetricsListener = new Subject<ProductMetrics>();
+  private newCustomerDataListener = new Subject<NewCustomer>();
+  private isLoadingListener = new Subject<boolean>();
   constructor(
     private authService: AuthService,
     private http: HttpClient,
@@ -32,6 +35,15 @@ export class OrdersService {
     private modelsService: ModelsService,
     private appService: AppService
   ) { }
+  getAssignedOrders() {
+    return this.assignedOrders;
+  }
+  getOrderPhotoListener() {
+    return this.orderPhotoListener.asObservable();
+  }
+  getIsLoadingListener() {
+    return this.isLoadingListener.asObservable();
+  }
   getNewCustomerDataListener() {
     return this.newCustomerDataListener.asObservable();
   }
@@ -45,12 +57,19 @@ export class OrdersService {
     return this.ordersListener.asObservable();
   }
 
-  requestAssignedOrders() {
+  requestAssignedOrders(isUpdated?: boolean) {
+    this.isLoadingListener.next(true);
+    if(this.assignedOrders?.length > 0 && !isUpdated) {
+      this.ordersListener.next(this.assignedOrders);
+      return;
+    }
+    this.isLoadingListener.next(true);
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.authService.getTokenHeader()}).subscribe({
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
+        this.assignedOrders = orders;
         this.ordersListener.next(orders);
-        this.divideOrdersByCategories(orders);
+        this.addOrdersToCategories(orders);
         this.categoriesService.requestCategories();
       },
       error: (err) => {
@@ -59,10 +78,16 @@ export class OrdersService {
       }
     })
   }
-  requestAllUnassignedOrders() {
+  requestAllUnassignedOrders(isUpdated?: boolean) {
+    this.isLoadingListener.next(true);
+    if(this.unassignedOrders?.length > 0 && !isUpdated) {
+      this.ordersListener.next(this.unassignedOrders);
+      return;
+    }
     this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.authService.getTokenHeader()}).subscribe( {
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
+        this.unassignedOrders = orders;
         this.ordersListener.next(orders);
       },
       error: (err) => {
@@ -72,6 +97,7 @@ export class OrdersService {
     })
   }
   createOrder(productMetrics:  ProductMetrics, clientId?: string) {
+    if(!this.authService.getToken()) return;
     this.productMetrics = productMetrics;
     const order = {
       clientId: clientId || '',
@@ -80,16 +106,22 @@ export class OrdersService {
     }
     this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення створено', isSuccessful: true}}),
-      error: () => this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}}) : false
+      error: () => this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}})
     });
   }
-  requestOrderById(id: string) {
-    this.http.get<Order>(`${this.backendUrl}/orders/${id}`, {headers: this.authService.getTokenHeader()}).subscribe({
+  requestOrderById(orderId: string) {
+    try {
+      let order =
+        this.assignedOrders?.find(order => order.id === orderId) ||
+        this.unassignedOrders?.find(order => order.id === orderId);
+      if(order) return this.orderListener.next(order);
+    } catch (e) {}
+    this.http.get<Order>(`${this.backendUrl}/orders/${orderId}`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: (order) => {
         this.orderListener.next(order);
       },
       error: (err) => {
-        console.log(err)
+        console.log(err);
         this.dialog.open(ErrorDialogComponent);
       }
     })
@@ -102,6 +134,7 @@ export class OrdersService {
     })
   }
   assignOrder(order: Order) {
+    this.isLoadingListener.next(true);
     this.http.patch(`${this.backendUrl}/orders/assign/${order.id}`, {}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getOrdersOnStatus(order.status);
@@ -113,6 +146,7 @@ export class OrdersService {
     })
   }
   finishOrder(order: Order) {
+    this.isLoadingListener.next(true);
     this.http.patch(`${this.backendUrl}/orders/${order.id}/completed`, {}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getOrdersOnStatus(order.status);
@@ -124,6 +158,7 @@ export class OrdersService {
     })
   }
   cancelOrder(order: Order) {
+    this.isLoadingListener.next(true);
     this.http.patch(`${this.backendUrl}/orders/${order.id}/cancel`, {}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.requestAssignedOrders();
@@ -150,7 +185,8 @@ export class OrdersService {
     formData.append('file', file);
     this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        this.modelsService.requestModelPhotos(order.coatModel.id, true);
+        // this.modelsService.requestModelPhotos(order.coatModel.id, true);
+        this.requestOrderPhoto(order);
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Фото додано', isSuccessful: true}})
       },
       error: (err) => {
@@ -171,7 +207,20 @@ export class OrdersService {
       }
     })
   }
-
+  requestOrderPhoto(order: Order) {
+    let orderId = order.id;
+    let photo = this.assignedOrders?.find(order => order.id === orderId).image;
+    if(photo) return this.orderPhotoListener.next(photo);
+    this.http.get(`${this.backendUrl}/orders/${orderId}/image`, {responseType: "text", headers: this.authService.getTokenHeader()}).subscribe({
+      next: (photo) => {
+        order.image = photo;
+        this.orderPhotoListener.next(photo);
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
 
   fixOrdersDate(orders: Order[]) {
     return orders.map(order => {
@@ -182,15 +231,15 @@ export class OrdersService {
 
   private getOrdersOnStatus(orderStatus: string) {
     if(orderStatus === 'PENDING') {
-      this.requestAllUnassignedOrders();
+      this.requestAllUnassignedOrders(true);
     } else {
-      this.requestAssignedOrders();
+      this.requestAssignedOrders(true);
     }
   }
 
-  private divideOrdersByCategories(orders: Order[]) {
+  private addOrdersToCategories(orders: Order[]) {
     orders = JSON.parse(JSON.stringify(orders));
-    this.categoriesService.categories.forEach(category => category.orders = []);
+    // this.categoriesService.categories.forEach(category => category.orders = []);
     orders.forEach(order =>
       this.categoriesService.categories.find(category =>
         category.coatType === order.coatModel.coatType)?.orders.push(order));

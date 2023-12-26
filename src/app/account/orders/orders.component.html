@@ -5,8 +5,8 @@
       <mat-option *ngFor="let state of states" [value]='state.name'>{{state.text}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <div class="spinner-wrapper">
-    <mat-spinner *ngIf="!displayedOrders"></mat-spinner>
+  <div class="spinner-wrapper" *ngIf="!displayedOrders">
+    <mat-spinner></mat-spinner>
   </div>
   <div class="orders-table" *ngIf="displayedOrders">
     <mat-table [dataSource]="displayedOrders">

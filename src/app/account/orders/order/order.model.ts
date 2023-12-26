@@ -6,6 +6,7 @@ export interface Order {
   id: string;
   createdAt: string;
   status: string;
+  image: string;
   coatModel: Model;
   patternData: {[s: string]: string};
   productMetrics: ProductMetrics;

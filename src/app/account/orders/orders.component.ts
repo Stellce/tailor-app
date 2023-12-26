@@ -26,11 +26,13 @@ export class OrdersComponent implements OnInit, OnDestroy{
   user: User;
   userSub: Subscription;
   isAdmin: boolean = false;
-  isLoading: boolean;
+  isLoading: boolean = false;
+  isLoadingSub: Subscription;
 
   constructor(private ordersService: OrdersService, private activatedRoute: ActivatedRoute, private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
+    this.isLoading = true;
     this.setUserUpdater();
 
     this.activatedRoute.params.subscribe(params => {
@@ -39,7 +41,12 @@ export class OrdersComponent implements OnInit, OnDestroy{
       this.ordersService.requestAllUnassignedOrders();
     })
 
+    this.isLoadingSub = this.ordersService.getIsLoadingListener().subscribe(isLoading => {
+      this.isLoading = isLoading;
+    })
+
     this.ordersSub = this.ordersService.getOrdersListener().subscribe(orders => {
+      this.isLoading = false;
       this.filterOrdersByStatuses(orders);
       this.updateTable();
     })

@@ -34,14 +34,19 @@ export class CategoriesService {
   ];
   selectedCategory: Category;
   categoriesListener = new Subject<Category[]>();
+  selectedCategoryNameListener = new Subject<string>();
 
-  constructor(private authService: AuthService, private http: HttpClient, private dialog: MatDialog) { }
+  constructor(private http: HttpClient, private dialog: MatDialog) { }
 
   setSelectedCategory(category: Category) {
     this.selectedCategory = category;
+    this.selectedCategoryNameListener.next(category.coatType);
   }
   getSelectedCategory() {
     return this.selectedCategory;
+  }
+  getSelectedCategoryNameListener() {
+    return this.selectedCategoryNameListener.asObservable();
   }
   getCategories() {
     return this.categories;

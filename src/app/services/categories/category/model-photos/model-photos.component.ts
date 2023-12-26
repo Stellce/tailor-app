@@ -1,9 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {OrdersService} from "../../../../account/orders/orders.service";
-import {PhotoByOrderId} from "./photosById.model";
+import {PhotoByOrderId} from "./photosByOrderId.model";
 import {CalculatorService} from "../../../calculator/calculator.service";
 import {ModelsService} from "../models.service";
+import {Order} from "../../../../account/orders/order/order.model";
 
 @Component({
   selector: 'app-model-photos',
@@ -13,27 +14,33 @@ import {ModelsService} from "../models.service";
 export class ModelPhotosComponent implements OnInit, OnDestroy{
   @Input() modelId: string;
   @Input() isClickable: boolean;
-  @Input() orderId: string;
-  photosById: PhotoByOrderId[];
+  @Input() order: Order;
+  photosById: PhotoByOrderId[] | null;
   photosSub: Subscription;
   selectedPhotoId: string;
-  nearestDivision: number;
+  columnsNum: number;
+  orderPhotoSub: Subscription;
 
   constructor(private ordersService: OrdersService, private calcService: CalculatorService, private modelsService: ModelsService) {}
 
   ngOnInit() {
+    this.photosById = null;
     if(this.isClickable === undefined) this.isClickable = true;
-    this.photosSub = this.modelsService.getModelPhotosListener().subscribe(photosById => {
-      if(this.orderId) {
-        this.photosById = photosById.filter(photoById => photoById.orderId == this.orderId);
-      } else {
+    if(this.order?.id) {
+      this.orderPhotoSub = this.ordersService.getOrderPhotoListener().subscribe(photo => {
+        if(!photo) return this.photosById = [] as PhotoByOrderId[];
+        this.photosById = [{orderId: this.order.id, photo: photo}]
+      });
+      this.ordersService.requestOrderPhoto(this.order);
+    } else {
+      this.photosSub = this.modelsService.getModelPhotosListener().subscribe(photosById => {
         this.photosById = photosById;
-      }
-      this.nearestDivision = this.findDivision();
-      this.selectedPhotoId = '';
-    })
+        this.columnsNum = this.findDivision();
+      })
+      this.modelsService.requestModelPhotos(this.modelId);
+    }
+    this.selectedPhotoId = '';
     this.ordersService.getOrderMetricsListener().subscribe(metrics => this.calcService.calculate(metrics));
-    this.modelsService.requestModelPhotos(this.modelId);
   }
   onShowCalculations(orderId: string) {
     if(!this.isClickable) return;
@@ -47,7 +54,9 @@ export class ModelPhotosComponent implements OnInit, OnDestroy{
     this.calcService.isEditableEmitter(true);
   }
   ngOnDestroy() {
-    this.photosSub.unsubscribe();
+    this.photosSub?.unsubscribe();
+    this.orderPhotoSub?.unsubscribe();
+    this.photosById = null;
   }
   private findDivision() {
     let len = this.photosById.length;

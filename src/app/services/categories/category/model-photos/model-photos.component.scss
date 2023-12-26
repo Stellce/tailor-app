@@ -16,14 +16,18 @@
   position: relative;
   width: 100%;
   transition: transform 0.2s;
-  cursor: pointer;
 }
 .photo img {
   width: 100%;
 }
-.photo:not(.selected):hover{
+.photo:not(.selected, .frozen):hover{
   transform: scale(1.03);
   cursor: pointer;
+}
+.frozen {
+  cursor: default;
+  transition: none;
+  transform: none;
 }
 .selected {
   transform: scale(1.05);

@@ -5,13 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatIconModule} from "@angular/material/icon";
-import {MatButtonModule} from "@angular/material/button";
-import {HttpClientModule} from "@angular/common/http";
 import { AboutComponent } from './about/about.component';
 import { CategoriesComponent } from './services/categories/categories.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
 import { LoginComponent } from './auth/login/login.component';
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
+import {HttpClientModule} from "@angular/common/http";
 import {MatCardModule} from "@angular/material/card";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -30,13 +30,13 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import {MatExpansionModule} from "@angular/material/expansion";
+import {MatSelectModule} from "@angular/material/select";
 import {OrdersHistoryComponent} from "./account/orders/orders-history/orders-history.component";
 import {CalculatorComponent} from "./services/calculator/calculator.component";
 import {OrderComponent} from "./account/orders/order/order.component";
 import {CalcResFieldsComponent} from "./services/calculator/calc-res-fields/calc-res-fields.component";
 import {DialogDataComponent} from "./auth/dialog-data/dialog-data.component";
 import {OrdersComponent} from "./account/orders/orders.component";
-import {MatSelectModule} from "@angular/material/select";
 import {EmployeesComponent} from "./account/employees/employees.component";
 import {UserDetailsComponent} from "./account/user-details/user-details.component";
 import {EmployeeComponent} from "./account/employees/employee/employee.component";
@@ -84,7 +84,6 @@ import {YesNoDialogComponent} from "./account/yes-no-dialog/yes-no-dialog.compon
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
@@ -93,10 +92,11 @@ import {YesNoDialogComponent} from "./account/yes-no-dialog/yes-no-dialog.compon
     MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    ReactiveFormsModule,
     MatMomentDateModule,
     MatExpansionModule,
-    MatSelectModule
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true, hasBackdrop: false}}

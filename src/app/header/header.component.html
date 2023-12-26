@@ -13,7 +13,7 @@
       class="link"
       *ngFor="let link of links"
       [routerLink]="link.src"
-      [ngClass]="{'highlighted-link': isActive(link.src.split('/')[0])}"
+      [ngClass]="{'highlighted-link': isActive(link.src[0])}"
       (click)="closeMenu()"
     ><span>{{link.name}}</span></div>
 

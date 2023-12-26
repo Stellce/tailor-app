@@ -43,7 +43,7 @@
   <button
       mat-raised-button
       color="warn"
-      *ngIf="order && order.status === 'COMPLETED' && (user?.roles!.includes('EMPLOYEE') || user?.roles!.includes('ADMIN'))"
+      *ngIf="order && order.status === 'COMPLETED' && (user?.roles!.includes('EMPLOYEE') || user?.roles!.includes('ADMIN')) && hasPhoto()"
       (click)="onRemovePhoto()"
   >
     <mat-icon>close</mat-icon> Видалити фото
@@ -57,5 +57,5 @@
   <button *ngIf="isEmployee && order  && order.status === 'COMPLETED'" mat-button type="button" color='primary' (click)="filePicker.click()">Додати фото</button>
   <input type="file" #filePicker (change)="onImagePicked($event)">
 </div>
-<app-model-photos *ngIf="order" [modelId]="order.coatModel.id" [isClickable]="false" [orderId]="order.id"></app-model-photos>
+<app-model-photos *ngIf="order && order.status == 'COMPLETED'" [modelId]="order.coatModel.id" [isClickable]="false" [order]="order"></app-model-photos>
 <app-calculator [isEditable]="false"></app-calculator>

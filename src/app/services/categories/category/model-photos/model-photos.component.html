@@ -1,8 +1,12 @@
 <div class="spinner-wrapper" *ngIf="!photosById">
   <mat-spinner></mat-spinner>
 </div>
-<div class="photos-grid" *ngIf="photosById" [ngStyle]="{'grid-template-columns': 'repeat('+ nearestDivision +',1fr)'}">
-  <div class="photo" *ngFor="let photo of photosById" (click)="onShowCalculations(photo.orderId)" [ngClass]="{'selected': selectedPhotoId === photo.orderId}">
+<div class="photos-grid" *ngIf="photosById" [ngStyle]="{'grid-template-columns': 'repeat('+ columnsNum +',1fr)'}">
+  <div
+    class="photo"
+    *ngFor="let photo of photosById"
+    (click)="onShowCalculations(photo.orderId)"
+    [ngClass]="{'selected': selectedPhotoId === photo.orderId, 'frozen': !isClickable}">
     <img [src]="'data:image/png;base64, ' + photo.photo" alt="Фото моделi">
   </div>
 </div>

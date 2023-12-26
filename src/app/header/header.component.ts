@@ -4,6 +4,7 @@ import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {User} from "../account/user.model";
 import {AppService} from "../app.service";
+import {CategoriesService} from "../services/categories/categories.service";
 
 @Component({
   selector: 'app-header',
@@ -13,22 +14,24 @@ import {AppService} from "../app.service";
 export class HeaderComponent implements OnInit{
   logoPath: string = './assets/logoW.svg'
   menuSwitcher: boolean = false;
-  links: {name: string, src: string, role: string}[] = [
-    {name: 'Про нас', src: 'about', role: 'USER'},
-    {name: 'Каталог', src: 'categories', role: 'USER'}
+  links: {name: string, src: string[], role: string}[] = [
+    {name: 'Про нас', src: ['about'], role: 'USER'},
+    {name: 'Каталог', src: ['categories'], role: 'USER'}
   ];
-  accessLinks: {name: string, src: string, role: string}[] = [
-    {name: 'Акаунт', src: 'account', role: 'CLIENT'},
-    {name: 'Замовлення', src: 'orders/pending', role: 'EMPLOYEE'},
-    {name: 'Працiвники', src: 'employees', role: 'ADMIN'}
+  accessLinks: {name: string, src: string[], role: string}[] = [
+    {name: 'Акаунт', src: ['account'], role: 'CLIENT'},
+    {name: 'Замовлення', src: ['orders', 'pending'], role: 'EMPLOYEE'},
+    {name: 'Працiвники', src: ['employees'], role: 'ADMIN'}
   ]
   user: User;
   userSub: Subscription;
   changeHeader: boolean;
+  selectedCategoryName: string;
   constructor(
     private authService: AuthService,
     private router: Router,
-    private appService: AppService
+    private appService: AppService,
+    private categoriesService: CategoriesService
   ) {}
 
   ngOnInit() {
@@ -42,6 +45,12 @@ export class HeaderComponent implements OnInit{
     this.appService.getDoChangeHeaderListener().subscribe(doChange => {
       this.changeHeader = doChange;
     })
+    this.categoriesService.getSelectedCategoryNameListener().subscribe(categoryName => {
+      categoryName = categoryName.toLowerCase();
+      this.selectedCategoryName = categoryName;
+      this.links.find(link => link.src.includes('categories')).src = ['categories', categoryName];
+      console.log(categoryName)
+    });
   }
   closeMenu() {
     this.menuSwitcher = false;
