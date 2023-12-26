@@ -11,12 +11,12 @@ import {CategoriesService} from "./categories.service";
 })
 export class CategoriesComponent implements OnInit, OnDestroy{
   @Input()isCategoryHidden: boolean = false;
-  categoriesSub: Subscription;
-  categories: Category[];
-  selectedCategory: Category;
-  imageInterval: any;
-  categoryIndex: number = 0;
-  url: string;
+  private categoriesSub: Subscription;
+  protected categories: Category[];
+  protected selectedCategory: Category;
+  private imageInterval: any;
+  private categoryIndex: number = 0;
+  protected url: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,

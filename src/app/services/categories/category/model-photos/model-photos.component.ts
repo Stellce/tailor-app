@@ -15,11 +15,11 @@ export class ModelPhotosComponent implements OnInit, OnDestroy{
   @Input() modelId: string;
   @Input() isClickable: boolean;
   @Input() order: Order;
-  photosById: PhotoByOrderId[] | null;
-  photosSub: Subscription;
-  selectedPhotoId: string;
-  columnsNum: number;
-  orderPhotoSub: Subscription;
+  protected columnsNum: number;
+  protected selectedPhotoId: string;
+  protected photosById: PhotoByOrderId[] | null;
+  private photosSub: Subscription;
+  private orderPhotoSub: Subscription;
 
   constructor(private ordersService: OrdersService, private calcService: CalculatorService, private modelsService: ModelsService) {}
 

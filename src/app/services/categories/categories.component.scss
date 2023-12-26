@@ -26,7 +26,6 @@
   color: black;
 }
 .category {
-  //max-width: 90%;
   width: 100%;
   height: 100%;
   display: flex;
@@ -52,13 +51,11 @@
   content: '';
   width: 100%;
   aspect-ratio: 1/1.5;
-  //height: calc(100% + 10px);
   background-color: #ccc;
   border-radius: 10px;
   position: absolute;
   top: 0;
   left: 0;
-  //transform: translateY(-50%);
 }
 .category:not(.selected) {
   position: relative;

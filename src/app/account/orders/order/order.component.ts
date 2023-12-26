@@ -14,16 +14,16 @@ import {ModelsService} from "../../../services/categories/category/models.servic
   styleUrl: './order.component.scss'
 })
 export class OrderComponent implements OnInit, OnDestroy{
-  order: Order;
-  orderSub: Subscription;
-  user: User;
-  userSub: Subscription;
-  image: File;
-  photoPreview: string;
-  photos: PhotoByOrderId[];
-  orderPhotosSub: Subscription;
-  isEmployee: boolean;
-  isLoading: boolean = false;
+  protected order: Order;
+  private orderSub: Subscription;
+  protected user: User;
+  private userSub: Subscription;
+  private image: File;
+  protected photoPreview: string;
+  private photos: PhotoByOrderId[];
+  private orderPhotosSub: Subscription;
+  protected isEmployee: boolean;
+  protected isLoading: boolean = false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private ordersService: OrdersService,

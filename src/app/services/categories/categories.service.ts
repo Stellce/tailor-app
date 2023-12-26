@@ -11,8 +11,8 @@ import {environment} from "../../../environments/environment";
 
 @Injectable({providedIn: 'root'})
 export class CategoriesService {
-  backendUrl: string = environment.backendUrl;
-  categories: Category[] = [
+  private backendUrl: string = environment.backendUrl;
+  private categories: Category[] = [
     {
       coatType: 'JACKET_COAT',
       text: 'Пальто піджак',
@@ -32,9 +32,9 @@ export class CategoriesService {
       orders: <Order[]>[]
     }
   ];
-  selectedCategory: Category;
-  categoriesListener = new Subject<Category[]>();
-  selectedCategoryNameListener = new Subject<string>();
+  private selectedCategory: Category;
+  private categoriesListener = new Subject<Category[]>();
+  private selectedCategoryNameListener = new Subject<string>();
 
   constructor(private http: HttpClient, private dialog: MatDialog) { }
 

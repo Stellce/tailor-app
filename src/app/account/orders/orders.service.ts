@@ -18,7 +18,6 @@ import {AppService} from "../../app.service";
 })
 export class OrdersService {
   private backendUrl: string = environment.backendUrl;
-  private productMetrics: ProductMetrics;
   private assignedOrders: Order[];
   private unassignedOrders: Order[];
   private orderListener = new Subject<Order>();
@@ -59,11 +58,7 @@ export class OrdersService {
 
   requestAssignedOrders(isUpdated?: boolean) {
     this.isLoadingListener.next(true);
-    if(this.assignedOrders?.length > 0 && !isUpdated) {
-      this.ordersListener.next(this.assignedOrders);
-      return;
-    }
-    this.isLoadingListener.next(true);
+    if(this.assignedOrders?.length > 0 && !isUpdated) return this.ordersListener.next(this.assignedOrders);
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.authService.getTokenHeader()}).subscribe({
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
@@ -73,17 +68,14 @@ export class OrdersService {
         this.categoriesService.requestCategories();
       },
       error: (err) => {
-        console.log(err)
+        console.log(err);
         this.dialog.open(ErrorDialogComponent);
       }
     })
   }
   requestAllUnassignedOrders(isUpdated?: boolean) {
     this.isLoadingListener.next(true);
-    if(this.unassignedOrders?.length > 0 && !isUpdated) {
-      this.ordersListener.next(this.unassignedOrders);
-      return;
-    }
+    if(this.unassignedOrders?.length > 0 && !isUpdated) return this.ordersListener.next(this.unassignedOrders);
     this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.authService.getTokenHeader()}).subscribe( {
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
@@ -98,7 +90,6 @@ export class OrdersService {
   }
   createOrder(productMetrics:  ProductMetrics, clientId?: string) {
     if(!this.authService.getToken()) return;
-    this.productMetrics = productMetrics;
     const order = {
       clientId: clientId || '',
       coatModelId: this.modelsService.getSelectedModel().id,
@@ -185,7 +176,6 @@ export class OrdersService {
     formData.append('file', file);
     this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        // this.modelsService.requestModelPhotos(order.coatModel.id, true);
         this.requestOrderPhoto(order);
         this.dialog.open(ErrorDialogComponent, {data: {message: 'Фото додано', isSuccessful: true}})
       },
@@ -209,7 +199,7 @@ export class OrdersService {
   }
   requestOrderPhoto(order: Order) {
     let orderId = order.id;
-    let photo = this.assignedOrders?.find(order => order.id === orderId).image;
+    let photo = this.assignedOrders?.find(order => order.id === orderId)['image'];
     if(photo) return this.orderPhotoListener.next(photo);
     this.http.get(`${this.backendUrl}/orders/${orderId}/image`, {responseType: "text", headers: this.authService.getTokenHeader()}).subscribe({
       next: (photo) => {
@@ -223,10 +213,7 @@ export class OrdersService {
   }
 
   fixOrdersDate(orders: Order[]) {
-    return orders.map(order => {
-      order.createdAt = this.appService.fixDateStr(order.createdAt);
-      return order;
-    })
+    return orders.map(order => ({...order, createdAt: this.appService.fixDateStr(order.createdAt)}))
   }
 
   private getOrdersOnStatus(orderStatus: string) {
@@ -239,9 +226,9 @@ export class OrdersService {
 
   private addOrdersToCategories(orders: Order[]) {
     orders = JSON.parse(JSON.stringify(orders));
-    // this.categoriesService.categories.forEach(category => category.orders = []);
+    this.categoriesService.getCategories().forEach(category => category.orders = []);
     orders.forEach(order =>
-      this.categoriesService.categories.find(category =>
+      this.categoriesService.getCategories().find(category =>
         category.coatType === order.coatModel.coatType)?.orders.push(order));
   }
 

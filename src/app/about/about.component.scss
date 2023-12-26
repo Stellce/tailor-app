@@ -17,7 +17,6 @@
   margin: 150px auto;
   font-size: 24px;
   border-radius: 1rem;
-  //background: rgba(217, 217, 217, 0.3);
   color: white;
 }
 .img-wrap img{
@@ -33,6 +32,7 @@ p {
   margin-bottom: 1.5rem;
   line-height: 52px;
   word-break: normal;
+  padding-left: 10px;
 }
 p, ul {
   text-shadow: 1px 1px 2px pink;
@@ -42,7 +42,7 @@ p, ul {
 ul {
   font-size: 35px;
   line-height: 35px;
-  padding-left: 10px;
+  padding-left: 30px;
 }
 li {
   margin: 10px;

@@ -12,21 +12,21 @@ import {CategoriesService} from "../services/categories/categories.service";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit{
-  logoPath: string = './assets/logoW.svg'
-  menuSwitcher: boolean = false;
-  links: {name: string, src: string[], role: string}[] = [
+  protected logoPath: string = './assets/logoW.svg'
+  protected menuSwitcher: boolean = false;
+  protected links: {name: string, src: string[], role: string}[] = [
     {name: 'Про нас', src: ['about'], role: 'USER'},
     {name: 'Каталог', src: ['categories'], role: 'USER'}
   ];
-  accessLinks: {name: string, src: string[], role: string}[] = [
+  private accessLinks: {name: string, src: string[], role: string}[] = [
     {name: 'Акаунт', src: ['account'], role: 'CLIENT'},
     {name: 'Замовлення', src: ['orders', 'pending'], role: 'EMPLOYEE'},
     {name: 'Працiвники', src: ['employees'], role: 'ADMIN'}
   ]
-  user: User;
-  userSub: Subscription;
-  changeHeader: boolean;
-  selectedCategoryName: string;
+  protected user: User;
+  private userSub: Subscription;
+  protected changeHeader: boolean;
+  private selectedCategoryName: string;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -49,7 +49,6 @@ export class HeaderComponent implements OnInit{
       categoryName = categoryName.toLowerCase();
       this.selectedCategoryName = categoryName;
       this.links.find(link => link.src.includes('categories')).src = ['categories', categoryName];
-      console.log(categoryName)
     });
   }
   closeMenu() {
