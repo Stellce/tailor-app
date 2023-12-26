@@ -91,10 +91,11 @@ export class AuthService {
         this.saveAuthData(token, new Date(decoded.exp! * 1000));
         this.router.navigate(['/categories/midi_coat']);
       },
-      error: () => {
+      error: (err) => {
         this.user.isAuth = false;
         this.userListener.next(this.user);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Неправильний логiн, або пароль', isSuccessful: false}});
+        if(err['status']===403) return this.dialog.open(ErrorDialogComponent, {data: {message: 'Неправильний логiн, або пароль', isSuccessful: false}});
+        this.dialog.open(ErrorDialogComponent);
       }
     });
   }

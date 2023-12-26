@@ -18,7 +18,7 @@ export class AppService {
   }
 
   fixDateStr(str: string) {
-    return str.replace('T', ' ').split('.')[0];
+    return new Date(str).toLocaleString();
   }
 
 }
