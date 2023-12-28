@@ -39,6 +39,9 @@ mat-form-field {
   height: 100%;
   object-fit: contain;
 }
+mat-spinner {
+  max-height: 35px;
+}
 @media (max-width: 900px) {
   .span-wrapper span {
     max-width: 200px;

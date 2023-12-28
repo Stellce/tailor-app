@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {AuthService} from "../auth.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-recover-password',
@@ -8,13 +9,14 @@ import {AuthService} from "../auth.service";
   styleUrl: './recover-password.component.scss'
 })
 export class RecoverPasswordComponent implements OnInit{
-  token: string;
-  hide1: boolean = true;
-  hide2: boolean = true;
-  constructor(protected authService: AuthService) {}
+  protected token: string;
+  protected hide1: boolean = true;
+  protected hide2: boolean = true;
+  constructor(protected authService: AuthService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
-    this.token = this.authService.getToken();
+    this.token = this.activatedRoute.snapshot.params['token'];
+    // this.authService.setToken(this.token);
   }
 
   onRecover(f: NgForm) {
@@ -23,7 +25,9 @@ export class RecoverPasswordComponent implements OnInit{
   }
 
   onPasswordChange(f: NgForm) {
+    console.log(f);
     if(f.invalid) return;
-    this.authService.passwordChange(f.controls['password'].value);
+    console.log(f)
+    this.authService.passwordChange(f.controls['password'].value, this.token);
   }
 }

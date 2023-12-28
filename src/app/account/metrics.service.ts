@@ -12,8 +12,12 @@ import {AuthService} from "../auth/auth.service";
 export class MetricsService {
   backendUrl = environment.backendUrl;
   metricsListener = new Subject<{[s: string]: number}>();
+  wereMetricsPosted = new Subject<boolean>();
 
   constructor(private http: HttpClient, private dialog: MatDialog, private authService: AuthService) {}
+  getWereMetricsPosted() {
+    return this.wereMetricsPosted.asObservable();
+  }
   getMetricsListener() {
     return this.metricsListener.asObservable();
   }
@@ -28,9 +32,9 @@ export class MetricsService {
 
   postMetrics(metrics: {[s: string]: number}) {
     this.http.post(`${this.backendUrl}/clients/metrics`, {...metrics}, {headers: this.authService.getTokenHeader()}).subscribe({
-      next: () => {},
+      next: () => this.wereMetricsPosted.next(true),
       error: err => {
-        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Метрики за замовчуванням не встановлено'}}) : false;
+        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Метрики за замовчуванням не встановлено', isSuccessful: false}}) : false;
         console.log(err)
       }
     })
@@ -40,7 +44,7 @@ export class MetricsService {
     this.http.put(`${this.backendUrl}/clients/metrics`, {...metrics}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {},
       error: err => {
-        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Метрики за замовчуванням не оновлено'}}) : false;
+        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Метрики за замовчуванням не оновлено', isSuccessful: false}}) : false;
         console.log(err)
       }
     })

@@ -43,7 +43,7 @@
       <mat-divider></mat-divider>
     </div>
     <div class="submit-button-wrapper" *ngIf="isEditable">
-      <button mat-raised-button color="primary" type="submit">Далі</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="isCalculating">Далі</button><mat-spinner *ngIf="isCalculating"></mat-spinner>
     </div>
   </div>
 </form>

@@ -96,7 +96,9 @@ export class OrdersService {
       productMetrics: productMetrics
     }
     this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.authService.getTokenHeader()}).subscribe({
-      next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення створено', isSuccessful: true}}),
+      next: () => {
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення створено', isSuccessful: true}})
+      },
       error: () => this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}})
     });
   }

@@ -5,6 +5,7 @@
   <span>
     Аккаунт активовано
   </span>
+  <button mat-raised-button color="primary" [routerLink]="['/', 'categories']">До каталогу</button>
 </mat-card>
 <mat-card *ngIf="isActivated === undefined">
   <div class="activation-image">
@@ -19,6 +20,6 @@
     <img [src]="activationFailedPath" alt="Аккаунт не активовано">
   </div>
   <span>
-    Виникла помилка
+    Посилання недiйсне
   </span>
 </mat-card>

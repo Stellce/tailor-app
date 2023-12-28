@@ -32,8 +32,8 @@ const routes: Routes = [
   {path: 'employees', component: EmployeesComponent, children: [
       {path: ':employeeId', component: EmployeeComponent}
     ]},
-  {path: 'recover', component: RecoverPasswordComponent},
-  {path: 'recover/:token', component: RecoverPasswordComponent},
+  {path: 'recover-password', component: RecoverPasswordComponent},
+  {path: 'recover-password/:token', component: RecoverPasswordComponent},
   {path: '**', redirectTo: 'about'}
 ];
 

@@ -28,6 +28,10 @@ export class AuthService {
   allRoles: string[] = [
     'CLIENT', 'EMPLOYEE', 'ADMIN'
   ];
+  isLoadingListener = new Subject<boolean>();
+  private isLoading: boolean = false;
+  private isRegistered: boolean = false;
+  private isRegisteredListener = new Subject<boolean>();
 
   constructor(private http: HttpClient, private router: Router, public dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
@@ -42,6 +46,18 @@ export class AuthService {
   }
   getUserListener() {
     return this.userListener.asObservable();
+  }
+  getIsLoadingListener() {
+    return this.isLoadingListener.asObservable();
+  }
+  getIsLoading() {
+    return this.isLoading;
+  }
+  getIsRegistered() {
+    return this.isRegistered;
+  }
+  getIsRegisteredListener() {
+    return this.isRegisteredListener.asObservable();
   }
 
   autoAuthUser() {
@@ -67,14 +83,31 @@ export class AuthService {
   register(user: Customer) {
     this.http.post(`${this.backendUrl}/clients/register`, user).subscribe({
       next: () => {
-        this.router.navigate(['/']);
-        this.dialog.open(ErrorDialogComponent, {data: "Перевiрте пошту"})
+        this.dialog.open(ErrorDialogComponent, {data: {message: "Перевiрте пошту", isSuccessful: true}});
+        this.isLoadingListener.next(false);
+        this.isRegisteredListener.next(true);
       },
       error: (err) => {
         console.log(err);
         this.dialog.open(ErrorDialogComponent, {data: {message: '', isSuccessful: false}});
-        this.router.navigate(['/']);
-      }
+        this.isLoadingListener.next(false);
+      },
+      complete: () => this.isLoadingListener.next(false)
+    });
+  }
+  repeatEmail(user: Customer) {
+    this.http.post(`${this.backendUrl}/clients/register/resend-email`, user).subscribe({
+      next: () => {
+        this.dialog.open(ErrorDialogComponent, {data: {message: "Перевiрте пошту", isSuccessful: true}});
+        this.isLoadingListener.next(false);
+        this.isRegisteredListener.next(true);
+      },
+      error: (err) => {
+        console.log(err);
+        this.dialog.open(ErrorDialogComponent, {data: {message: '', isSuccessful: false}});
+        this.isLoadingListener.next(false);
+      },
+      complete: () => this.isLoadingListener.next(false)
     });
   }
   login(user: Customer) {
@@ -109,7 +142,6 @@ export class AuthService {
     },
     error: () => {
       this.user.isAuth = false;
-      this.dialog.open(ErrorDialogComponent, {data: {message: '', isSuccessful: false}});
       this.userListener.next(this.user);
     }
     })
@@ -128,7 +160,7 @@ export class AuthService {
     this.http.get(`${this.backendUrl}/users/recover-password/send-email`, {params: params, responseType: "text"}).subscribe({
       next: (token) => {
         this.token = token;
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Перевiрте пошту', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Перевiрте пошту', isSuccessful: true}});
       },
       error: (err) => {
         console.log(err)
@@ -137,13 +169,20 @@ export class AuthService {
     })
   }
 
-  passwordChange(password: string) {
+  passwordChange(password: string, token: string) {
     const params = new HttpParams()
-      .set('token', this.token)
+      .set('token', token)
       .set('pass', password);
-    this.http.post(`${this.backendUrl}/users/recover-password`, {}, {params: params}).subscribe({
-      next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Пароль змiнено', isSuccessful: true}}),
-      error: () => this.dialog.open(ErrorDialogComponent)
+    this.http.post(`${this.backendUrl}/users/recover-password`, {}, {params: params, responseType: "text"}).subscribe({
+      next: (token) => {
+        this.authenticate(token);
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Пароль змiнено', isSuccessful: true}});
+        this.router.navigate(['/', 'categories']);
+      },
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent)
+      }
     })
   }
 

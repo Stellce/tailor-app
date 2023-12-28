@@ -59,6 +59,7 @@ export class CalculatorService {
     {name: 'fileDart', text: 'Виточка пілочки', res: ''},
     {name: 'backDart', text: 'Виточка спинки', res: ''}]
   resFieldsListener = new Subject<ResField[]>();
+  private isCalculatingListener = new Subject<boolean>();
   constructor(private http: HttpClient) {}
 
   getIsEditableListener() {
@@ -73,9 +74,12 @@ export class CalculatorService {
   getInputFieldsScnd() {
     return this.clientIncrease;
   }
+  getIsCalculatingListener() {
+    return this.isCalculatingListener.asObservable();
+  }
   calculate(productMetrics: ProductMetrics) {
-    let calcObj = JSON.parse(JSON.stringify(productMetrics))
-    this.http.post<{[s: string]: string}>(`${this.backendUrl}/patterns/calculate`, calcObj).subscribe(res => {
+    this.http.post<{[s: string]: string}>(`${this.backendUrl}/patterns/calculate`, productMetrics).subscribe(res => {
+      this.isCalculatingListener.next(false);
       this.handleCalcValues(res);
     });
   }

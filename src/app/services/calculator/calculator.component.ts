@@ -29,6 +29,10 @@ export class CalculatorComponent implements OnInit, OnDestroy{
 
   productMetrics: ProductMetrics;
   wereMetricsRecieved: boolean = false;
+  wereMetricsPostedSub: Subscription;
+
+  isCalculating: boolean = false;
+  isCalculatingSub: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -56,6 +60,8 @@ export class CalculatorComponent implements OnInit, OnDestroy{
         this.metricsService.getMetrics();
       }
     });
+    this.wereMetricsPostedSub = this.metricsService.getWereMetricsPosted().subscribe(posted => this.wereMetricsRecieved = posted);
+    this.isCalculatingSub = this.calcService.getIsCalculatingListener().subscribe(isCalculating => this.isCalculating = isCalculating);
   }
 
   toNextForm() {
@@ -65,6 +71,7 @@ export class CalculatorComponent implements OnInit, OnDestroy{
   calculate() {
     if(this.increasesForm.invalid || this.metricsForm.invalid) return;
     this.writeMetrics();
+    this.isCalculating = true;
     if(this.authService.getUser().roles?.includes('EMPLOYEE' || 'ADMIN')) {
       this.dialog.open(DialogDataComponent);
       this.ordersService.getNewCustomerDataListener().subscribe(newCustomer => {
@@ -84,6 +91,7 @@ export class CalculatorComponent implements OnInit, OnDestroy{
   ngOnDestroy() {
     this.orderSub.unsubscribe();
     this.isEditableSub.unsubscribe();
+    this.wereMetricsPostedSub.unsubscribe();
   }
 
   private calcValues(clientId?: string) {

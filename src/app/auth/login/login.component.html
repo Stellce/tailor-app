@@ -37,10 +37,10 @@
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
         <mat-error *ngIf="password.hasError('required')">
-          Ведiть пароль
+          Введiть пароль
         </mat-error>
       </mat-form-field>
-      <a [routerLink]="['/', 'recover']">Змiнити пароль</a>
+      <a [routerLink]="['/', 'recover-password']">Змiнити пароль</a>
     </mat-card-content>
     <mat-card-actions>
       <button class="loginButton" mat-raised-button type="submit" color="primary">Увійти</button>
