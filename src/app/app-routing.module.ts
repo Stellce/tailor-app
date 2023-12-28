@@ -11,6 +11,7 @@ import {OrderComponent} from "./account/orders/order/order.component";
 import {EmployeeComponent} from "./account/employees/employee/employee.component";
 import {EmployeesComponent} from "./account/employees/employees.component";
 import {CategoriesComponent} from "./services/categories/categories.component";
+import {RecoverPasswordComponent} from "./auth/recover-password/recover-password.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'about', pathMatch: 'full'},
@@ -31,6 +32,8 @@ const routes: Routes = [
   {path: 'employees', component: EmployeesComponent, children: [
       {path: ':employeeId', component: EmployeeComponent}
     ]},
+  {path: 'recover', component: RecoverPasswordComponent},
+  {path: 'recover/:token', component: RecoverPasswordComponent},
   {path: '**', redirectTo: 'about'}
 ];
 

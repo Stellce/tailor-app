@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Customer} from "./customer.model";
 import {Subject} from "rxjs";
@@ -8,7 +8,6 @@ import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "./error-dialog/error-dialog.component";
 import {jwtDecode} from 'jwt-decode';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {SnackBarComponent} from "./registration/snack-bar/snack-bar.component";
 import {TailorJwtPayload} from "./JwtPayload";
 import {User} from "../account/user.model";
 
@@ -69,9 +68,10 @@ export class AuthService {
     this.http.post(`${this.backendUrl}/clients/register`, user).subscribe({
       next: () => {
         this.router.navigate(['/']);
-        this._snackBar.openFromComponent(SnackBarComponent, {duration: 5000, data: "Перевiрте пошту"});
+        this.dialog.open(ErrorDialogComponent, {data: "Перевiрте пошту"})
       },
-      error: () => {
+      error: (err) => {
+        console.log(err);
         this.dialog.open(ErrorDialogComponent, {data: {message: '', isSuccessful: false}});
         this.router.navigate(['/']);
       }
@@ -121,6 +121,30 @@ export class AuthService {
     this.user.roles = [];
     this.userListener.next(this.user);
     this.clearAuthData();
+  }
+
+  recover(email: string) {
+    const params = new HttpParams().set('email', email);
+    this.http.get(`${this.backendUrl}/users/recover-password/send-email`, {params: params, responseType: "text"}).subscribe({
+      next: (token) => {
+        this.token = token;
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Перевiрте пошту', isSuccessful: true}})
+      },
+      error: (err) => {
+        console.log(err)
+        this.dialog.open(ErrorDialogComponent)
+      }
+    })
+  }
+
+  passwordChange(password: string) {
+    const params = new HttpParams()
+      .set('token', this.token)
+      .set('pass', password);
+    this.http.post(`${this.backendUrl}/users/recover-password`, {}, {params: params}).subscribe({
+      next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Пароль змiнено', isSuccessful: true}}),
+      error: () => this.dialog.open(ErrorDialogComponent)
+    })
   }
 
   private authenticate(token: string) {

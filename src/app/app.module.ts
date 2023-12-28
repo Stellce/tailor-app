@@ -45,6 +45,7 @@ import {ModelPhotosComponent} from "./services/categories/category/model-photos/
 import {AddModelComponent} from "./services/categories/category/add-model/add-model.component";
 import {ReviewsComponent} from "./services/categories/category/reviews/reviews.component";
 import {YesNoDialogComponent} from "./account/yes-no-dialog/yes-no-dialog.component";
+import {RecoverPasswordComponent} from "./auth/recover-password/recover-password.component";
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import {YesNoDialogComponent} from "./account/yes-no-dialog/yes-no-dialog.compon
     ModelPhotosComponent,
     AddModelComponent,
     ReviewsComponent,
-    YesNoDialogComponent
+    YesNoDialogComponent,
+    RecoverPasswordComponent
   ],
   imports: [
     BrowserModule,
