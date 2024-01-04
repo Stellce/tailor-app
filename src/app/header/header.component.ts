@@ -12,7 +12,7 @@ import {CategoriesService} from "../services/categories/categories.service";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit{
-  protected logoPath: string = './assets/logoW.svg'
+  protected logoPath: string = './assets/logoS.svg'
   protected menuSwitcher: boolean = false;
   protected links: {name: string, src: string[], role: string}[] = [
     {name: 'Про нас', src: ['about'], role: 'USER'},
