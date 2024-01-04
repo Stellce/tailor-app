@@ -35,12 +35,6 @@ export class OrdersComponent implements OnInit, OnDestroy{
     this.isLoading = true;
     this.setUserUpdater();
 
-    this.activatedRoute.params.subscribe(params => {
-     this.selectedState = params['status'].toUpperCase();
-      if (this.selectedState !== 'PENDING') return this.ordersService.requestAssignedOrders();
-      this.ordersService.requestAllUnassignedOrders();
-    })
-
     this.isLoadingSub = this.ordersService.getIsLoadingListener().subscribe(isLoading => {
       this.isLoading = isLoading;
     })
@@ -50,8 +44,12 @@ export class OrdersComponent implements OnInit, OnDestroy{
       this.filterOrdersByStatuses(orders);
       this.updateTable();
     })
-    if(this.selectedState !== 'PENDING') return this.ordersService.requestAssignedOrders();
-    this.ordersService.requestAllUnassignedOrders();
+
+    this.activatedRoute.params.subscribe(params => {
+      this.selectedState = params['status'].toUpperCase();
+      if (this.selectedState !== 'PENDING') return this.ordersService.requestAssignedOrders();
+      this.ordersService.requestAllUnassignedOrders();
+    })
   }
   onCheckStates() {
     this.displayedOrders = null;

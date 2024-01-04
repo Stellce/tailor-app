@@ -26,7 +26,8 @@ export class MetricsService {
     this.http.get<{[s: string]: number}>(`${this.backendUrl}/clients/metrics`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: metrics => {
         this.metricsListener.next(metrics);
-      }
+      },
+      error: () => {}
     })
   }
 

@@ -36,5 +36,6 @@ export class CalcResFieldsComponent implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     this.resFieldsSub.unsubscribe();
+    this.ordersSub.unsubscribe();
   }
 }

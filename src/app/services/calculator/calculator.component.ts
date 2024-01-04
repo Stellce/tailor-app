@@ -47,7 +47,7 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     this.createForm();
     this.setFormFillerByOrderSub();
     this.setFormFillerByUserSub();
-    this.metricsService.getMetrics();
+    if(this.isEditable) this.metricsService.getMetrics();
 
     this.isEditableSub = this.calcService.getIsEditableListener().subscribe(isEditable => {
       this.isEditable = isEditable;
@@ -57,7 +57,7 @@ export class CalculatorComponent implements OnInit, OnDestroy{
         this.metricsForm.reset();
         this.increasesForm.reset();
 
-        this.metricsService.getMetrics();
+        if(this.isEditable) this.metricsService.getMetrics();
       }
     });
     this.wereMetricsPostedSub = this.metricsService.getWereMetricsPosted().subscribe(posted => this.wereMetricsRecieved = posted);

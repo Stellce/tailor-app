@@ -56,9 +56,8 @@ export class OrdersService {
     return this.ordersListener.asObservable();
   }
 
-  requestAssignedOrders(isUpdated?: boolean) {
+  requestAssignedOrders() {
     this.isLoadingListener.next(true);
-    if(this.assignedOrders?.length > 0 && !isUpdated) return this.ordersListener.next(this.assignedOrders);
     this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.authService.getTokenHeader()}).subscribe({
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
@@ -73,9 +72,8 @@ export class OrdersService {
       }
     })
   }
-  requestAllUnassignedOrders(isUpdated?: boolean) {
+  requestAllUnassignedOrders() {
     this.isLoadingListener.next(true);
-    if(this.unassignedOrders?.length > 0 && !isUpdated) return this.ordersListener.next(this.unassignedOrders);
     this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.authService.getTokenHeader()}).subscribe( {
       next: (orders) => {
         orders = this.fixOrdersDate(orders);
@@ -105,8 +103,8 @@ export class OrdersService {
   requestOrderById(orderId: string) {
     try {
       let order =
-        this.assignedOrders?.find(order => order.id === orderId) ||
-        this.unassignedOrders?.find(order => order.id === orderId);
+        this.assignedOrders?.find(order => order.id === orderId && order['patternData']) ||
+        this.unassignedOrders?.find(order => order.id === orderId && order['patternData']);
       if(order) return this.orderListener.next(order);
     } catch (e) {}
     this.http.get<Order>(`${this.backendUrl}/orders/${orderId}`, {headers: this.authService.getTokenHeader()}).subscribe({
@@ -200,9 +198,10 @@ export class OrdersService {
     })
   }
   requestOrderPhoto(order: Order) {
+    if(order.status !== 'COMPLETED') return;
     let orderId = order.id;
-    let photo = this.assignedOrders?.find(order => order.id === orderId)['image'];
-    if(photo) return this.orderPhotoListener.next(photo);
+    let cachedOrder: Order = this.assignedOrders?.find(order => order.id === orderId && order.status === 'COMPLETED');
+    if(cachedOrder && cachedOrder['image']) return this.orderPhotoListener.next(cachedOrder['image']);
     this.http.get(`${this.backendUrl}/orders/${orderId}/image`, {responseType: "text", headers: this.authService.getTokenHeader()}).subscribe({
       next: (photo) => {
         order.image = photo;
@@ -220,9 +219,9 @@ export class OrdersService {
 
   private getOrdersOnStatus(orderStatus: string) {
     if(orderStatus === 'PENDING') {
-      this.requestAllUnassignedOrders(true);
+      this.requestAllUnassignedOrders();
     } else {
-      this.requestAssignedOrders(true);
+      this.requestAssignedOrders();
     }
   }
 
