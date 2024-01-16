@@ -15,13 +15,13 @@ export class HeaderComponent implements OnInit{
   protected logoPath: string = './assets/logoS.svg'
   protected menuSwitcher: boolean = false;
   protected links: {name: string, src: string[], role: string}[] = [
-    {name: 'Про нас', src: ['about'], role: 'USER'},
-    {name: 'Каталог', src: ['categories'], role: 'USER'}
+    {name: 'Main', src: ['about'], role: 'USER'},
+    {name: 'Catalog', src: ['categories'], role: 'USER'}
   ];
   private accessLinks: {name: string, src: string[], role: string}[] = [
-    {name: 'Акаунт', src: ['account'], role: 'CLIENT'},
-    {name: 'Замовлення', src: ['orders', 'pending'], role: 'EMPLOYEE'},
-    {name: 'Працiвники', src: ['employees'], role: 'ADMIN'}
+    {name: 'Account', src: ['account'], role: 'CLIENT'},
+    {name: 'Orders', src: ['orders', 'pending'], role: 'EMPLOYEE'},
+    {name: 'Employees', src: ['employees'], role: 'ADMIN'}
   ]
   protected user: User;
   private userSub: Subscription;

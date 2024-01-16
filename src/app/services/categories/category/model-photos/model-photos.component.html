@@ -7,7 +7,8 @@
     *ngFor="let photo of photosById"
     (click)="onShowCalculations(photo.orderId)"
     [ngClass]="{'selected': selectedPhotoId === photo.orderId, 'frozen': !isClickable}">
-    <img [src]="'data:image/png;base64, ' + photo.photo" alt="Фото моделi">
+    <img [src]="'data:image/png;base64, ' + photo.photo" alt="
+">
   </div>
 </div>
-<p *ngIf="photosById && photosById.length == 0">Ще немає фото</p>
+<p *ngIf="photosById && photosById.length == 0">Photo is empty</p>

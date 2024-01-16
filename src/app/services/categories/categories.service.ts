@@ -3,7 +3,6 @@ import {Category} from "./category/category.model";
 import {Model} from "./category/category-model.model";
 import {Order} from "../../account/orders/order/order.model";
 import {Subject} from "rxjs";
-import {AuthService} from "../../auth/auth.service";
 import {HttpClient} from "@angular/common/http";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
@@ -15,19 +14,19 @@ export class CategoriesService {
   private categories: Category[] = [
     {
       coatType: 'JACKET_COAT',
-      text: 'Пальто піджак',
+      text: 'Jacket coat',
       models: <Model[]>[],
       orders: <Order[]>[]
     },
     {
       coatType: 'MIDI_COAT',
-      text: 'Пальто міді',
+      text: 'Midi coat',
       models: <Model[]>[],
       orders: <Order[]>[]
     },
     {
       coatType: 'MAXI_COAT',
-      text: 'Пальто максі',
+      text: 'Maxi coat',
       models: <Model[]>[],
       orders: <Order[]>[]
     }
@@ -79,19 +78,19 @@ export class CategoriesService {
     this.categories = [
       {
         coatType: 'JACKET_COAT',
-        text: 'Пальто піджак',
+        text: 'Jacket coat',
         models: <Model[]>[],
         orders: <Order[]>[]
       },
       {
         coatType: 'MIDI_COAT',
-        text: 'Пальто міді',
+        text: 'Midi coat',
         models: <Model[]>[],
         orders: <Order[]>[]
       },
       {
         coatType: 'MAXI_COAT',
-        text: 'Пальто максі',
+        text: 'Maxi coat',
         models: <Model[]>[],
         orders: <Order[]>[]
       }

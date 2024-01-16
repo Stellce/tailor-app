@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-header>Данi працiвника</mat-card-header>
+  <mat-card-header>Employee data</mat-card-header>
   <mat-card-content>
     <mat-spinner *ngIf="isLoading" [ngStyle]="{margin: '0 auto'}"></mat-spinner>
     <div class="employee-data" *ngIf="!isLoading">
@@ -11,7 +11,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="!isLoading">
-    <button mat-raised-button color="warn" (click)="onDeleteEmployee()"><mat-icon>close</mat-icon>Звiльнити</button>
+    <button mat-raised-button color="warn" (click)="onDeleteEmployee()"><mat-icon>close</mat-icon>Fire</button>
   </mat-card-actions>
 </mat-card>
 

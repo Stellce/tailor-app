@@ -35,7 +35,7 @@ export class MetricsService {
     this.http.post(`${this.backendUrl}/clients/metrics`, {...metrics}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => this.wereMetricsPosted.next(true),
       error: err => {
-        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Метрики за замовчуванням не встановлено', isSuccessful: false}}) : false;
+        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Metrics were not set yet', isSuccessful: false}}) : false;
         console.log(err)
       }
     })
@@ -45,7 +45,7 @@ export class MetricsService {
     this.http.put(`${this.backendUrl}/clients/metrics`, {...metrics}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {},
       error: err => {
-        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Метрики за замовчуванням не оновлено', isSuccessful: false}}) : false;
+        this.authService.getToken() ? this.dialog.open(ErrorDialogComponent, {data: {message: 'Default metrics were not set', isSuccessful: false}}) : false;
         console.log(err)
       }
     })

@@ -1,12 +1,12 @@
 <div class="header" [ngClass]="menuSwitcher ? 'header-opened' : ''" [ngStyle]="{height: menuSwitcher ? 'auto' : '',
   'background': changeHeader && !menuSwitcher ? 'linear-gradient(0deg, rgba(48, 53, 193, 0) 0%, #575757 100%)' : '#575757'}">
   <div class="logo" [ngStyle]="{'display': menuSwitcher ? 'none' : ''}" routerLink="about">
-    <img [src]="logoPath" alt="лого">
+    <img [src]="logoPath" alt="logo">
     <span><b>CloTech</b></span>
   </div>
   <div class="links">
     <div class="logo-link" routerLink="about">
-      <img [src]="logoPath" alt="лого">
+      <img [src]="logoPath" alt="logo">
       <span><b>CloTech</b></span>
     </div>
     <div
@@ -38,13 +38,13 @@
       >
       <span
         *ngIf="menuSwitcher || window.innerWidth > 800"
-      >Увійти</span>
+      >Log in</span>
       <mat-icon>person</mat-icon>
     </div>
     <div class="login" [routerLink]="['/']" *ngIf="user.isAuth" (click)="onLogout()">
       <span
         *ngIf="menuSwitcher || window.innerWidth > 800"
-      >Вийти</span>
+      >Log out</span>
       <mat-icon>logout</mat-icon>
     </div>
   </div>

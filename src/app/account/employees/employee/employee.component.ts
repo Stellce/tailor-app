@@ -63,7 +63,7 @@ export class EmployeeComponent implements OnInit, OnDestroy{
   }
 
   onDeleteEmployee() {
-    const dialogRef = this.dialog.open(YesNoDialogComponent, {data: {message: 'Видалити робiтника?'}})
+    const dialogRef = this.dialog.open(YesNoDialogComponent, {data: {message: 'Delete employee?'}})
     dialogRef.afterClosed().subscribe(res => {
       if(res.event === 'Yes') {
         this.employeesService.deleteEmployee(this.employee.id!);

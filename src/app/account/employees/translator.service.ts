@@ -5,11 +5,11 @@ import { Injectable } from '@angular/core';
 })
 export class TranslatorService {
   dictionary: {word: string, translate: string}[] = [
-    {word: 'firstName', translate: 'Iм\'я'},
-    {word: 'lastName', translate: 'Прiзвище'},
-    {word: 'email', translate: 'Пошта'},
-    {word: 'phoneNumber', translate: 'Номер телефону'},
-    {word: 'registeredAt', translate: 'Зареєстровано'}
+    {word: 'firstName', translate: 'Name'},
+    {word: 'lastName', translate: 'Surname'},
+    {word: 'email', translate: 'Email'},
+    {word: 'phoneNumber', translate: 'Phone number'},
+    {word: 'registeredAt', translate: 'Registered at'}
   ]
   constructor() { }
 

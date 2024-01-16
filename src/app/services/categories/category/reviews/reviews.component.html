@@ -1,13 +1,13 @@
 <mat-expansion-panel>
-  <mat-expansion-panel-header>Вiдгуки</mat-expansion-panel-header>
+  <mat-expansion-panel-header>Reviews</mat-expansion-panel-header>
   <mat-card-content>
     <span *ngIf="!user.isAuth">
-      <a [routerLink]="['/', 'registration']">Зареєструйтеся</a> або <a [routerLink]="['/', 'login']">увiйдiть</a>, щоб створити вiдгук
+      <a [routerLink]="['/', 'registration']">Register</a> or <a [routerLink]="['/', 'login']">log in</a>, to post review
     </span>
-    <span *ngIf="!allowComments && user.isAuth">Немає завершеного замовлення</span>
+    <span *ngIf="!allowComments && user.isAuth">You do not have completed order of that coat</span>
     <form [formGroup]="reviewForm" (ngSubmit)="onCreateReview()" *ngIf="allowComments">
       <mat-card class="add-review review" *ngIf="user.roles.includes('CLIENT')">
-        <div class="card-header">Створити вiдгук
+        <div class="card-header">Post review
           <div class="stars">
             <div class="star" *ngFor="let star of stars" (click)="setRating(star.rate); starX.click()" [ngClass]="{'star-selected': star?.rate <= rating}">
               <svg width="20" height="20" >
@@ -26,17 +26,17 @@
               name="content"
               formControlName="content"
             ></textarea>
-            <mat-error>Поле обов'язкове</mat-error>
+            <mat-error>Field required</mat-error>
           </mat-form-field>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button *ngIf="review" color="warn" type="button" (click)="onDeleteReview(review.id)" [disabled]="isReviewFormFreezed">Видалити</button>
-          <button mat-raised-button [ngStyle]="{'background': isReviewLoaded ? 'green' : '', 'margin-left': '10px'}" color="primary" type="submit" [disabled]="isReviewFormFreezed">{{isReviewLoaded ? 'Оновити':'Створити'}}</button>
+          <button mat-raised-button *ngIf="review" color="warn" type="button" (click)="onDeleteReview(review.id)" [disabled]="isReviewFormFreezed">Delete</button>
+          <button mat-raised-button [ngStyle]="{'background': isReviewLoaded ? 'green' : '', 'margin-left': '10px'}" color="primary" type="submit" [disabled]="isReviewFormFreezed">{{isReviewLoaded ? 'Update':'Create'}}</button>
         </mat-card-actions>
       </mat-card>
     </form>
     <div class="reviews">
-      <span *ngIf="!reviews || reviews?.length == 0">Ще немає вiдгукiв</span>
+      <span *ngIf="!reviews || reviews?.length == 0">There are no reviews</span>
       <mat-card class="review" *ngFor="let review of reviews">
         <div class="card-header">
           {{review.clientFullName}}
@@ -56,11 +56,11 @@
             class="highlighted-link"
             *ngIf="user.roles?.includes('ADMIN') && reply['id'] !== review['id'] && !review.reply"
             (click)="onAnswer(review.id)"
-          >Вiдповiсти</span>
+          >Answer</span>
           <span>{{review.createdAt}}</span>
         </mat-card-content>
         <mat-card class="create-reply reply" *ngIf="reply['id'] === review['id'] && !review.reply">
-          <div class="card-header reply-header">Адмiнicтратор</div>
+          <div class="card-header reply-header">Administrator</div>
           <mat-card-content>
             <mat-form-field>
               <textarea
@@ -71,19 +71,19 @@
                 [(ngModel)]="reply.content"
                 required
               ></textarea>
-              <mat-error>Поле обов'язкове</mat-error>
+              <mat-error>Field required</mat-error>
             </mat-form-field>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-raised-button color="primary" type="submit" (click)="onReply(review.id)">Вiдповiсти</button>
+            <button mat-raised-button color="primary" type="submit" (click)="onReply(review.id)">Answer</button>
           </mat-card-actions>
         </mat-card>
         <mat-card class="reply" *ngIf="review.reply" [ngStyle]="{'background': '#f1f1f1'}">
-          <div class="card-header reply-header">Адмiнicтратор</div>
+          <div class="card-header reply-header">Administrator</div>
           <mat-divider></mat-divider>
           <mat-card-content>{{review.reply.content}}<span>{{review.reply.createdAt}}</span></mat-card-content>
           <mat-card-actions>
-            <button mat-raised-button color="warn" *ngIf="user.roles.includes('ADMIN')" (click)="onDeleteReply(review.id)" [disabled]="isReviewFormFreezed">Видалити</button>
+            <button mat-raised-button color="warn" *ngIf="user.roles.includes('ADMIN')" (click)="onDeleteReply(review.id)" [disabled]="isReviewFormFreezed">Delete</button>
           </mat-card-actions>
         </mat-card>
       </mat-card>

@@ -1,11 +1,11 @@
 <mat-card>
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
-    <mat-card-header>Персональнi данi</mat-card-header>
+    <mat-card-header>Personal data</mat-card-header>
     <mat-card-content>
       <div class="field">
-        <span>Дата народження</span>
+        <span>Date of birth</span>
         <mat-form-field>
-          <mat-label>Дата народження</mat-label>
+          <mat-label>Date of birth</mat-label>
           <input
             [matDatepicker]="picker"
             name="birthDate"
@@ -14,25 +14,25 @@
             formControlName="birthDate">
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker disabled="false"></mat-datepicker>
-          <mat-error>Поле обов'язкове</mat-error>
+          <mat-error>Field required</mat-error>
         </mat-form-field>
       </div>
       <div class="field">
-        <span>Номер телефону</span>
+        <span>Phone number</span>
         <mat-form-field>
-          <mat-label>Номер телефону</mat-label>
+          <mat-label>Phone number</mat-label>
           <input
             name="phoneNumber"
             type="number"
             required
             matInput
             formControlName="phoneNumber">
-          <mat-error>Поле обов'язкове</mat-error>
+          <mat-error>Field required</mat-error>
         </mat-form-field>
       </div>
       <mat-divider></mat-divider>
     </mat-card-content>
-    <mat-card-header>Адреса</mat-card-header>
+    <mat-card-header>Address</mat-card-header>
     <mat-card-content formGroupName="address">
       <div class="field" *ngFor="let addressField of newAddress; let i = index">
         <span>{{addressField.text}}</span>
@@ -43,12 +43,12 @@
             [required]="addressField.name !== 'apartmentNumber'"
             [formControlName]="addressField.name"
             matInput>
-          <mat-error>Поле обов'язкове</mat-error>
+          <mat-error>Field required</mat-error>
         </mat-form-field>
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit">Зберегти</button>
+      <button mat-raised-button color="primary" type="submit">Save</button>
     </mat-card-actions>
   </form>
 </mat-card>

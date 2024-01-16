@@ -30,7 +30,7 @@ export class EmployeesService {
       },
       error: (err) => {
         console.log(err);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Невдала спроба отримання даних працiвника'}});
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Bad attempt to request employee data'}});
       }
     })
   }
@@ -42,7 +42,7 @@ export class EmployeesService {
       error: (err) => {
         console.log(err)
         let errorText = '';
-        if (err['status'] === 409) errorText = 'Акаунт вже iснує';
+        if (err['status'] === 409) errorText = 'Account was deleted';
         this.dialog.open(ErrorDialogComponent, {data: {message: errorText, isSuccessful: false}})
       }
     })
@@ -54,7 +54,7 @@ export class EmployeesService {
       },
       error: (err) => {
         let errorText = '';
-        if (err['status'] === 409) errorText = 'Працiвник має незавершенi замовлення';
+        if (err['status'] === 409) errorText = 'Employee has uncompleted orders';
         this.dialog.open(ErrorDialogComponent, {data: {message: errorText, isSuccessful: false}})
       }
     })

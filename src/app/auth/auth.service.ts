@@ -28,7 +28,7 @@ export class AuthService {
   allRoles: string[] = [
     'CLIENT', 'EMPLOYEE', 'ADMIN'
   ];
-  isLoadingListener = new Subject<boolean>();
+  private isLoadingListener = new Subject<boolean>();
   private isLoading: boolean = false;
   private isRegistered: boolean = false;
   private isRegisteredListener = new Subject<boolean>();
@@ -83,7 +83,7 @@ export class AuthService {
   register(user: Customer) {
     this.http.post(`${this.backendUrl}/clients/register`, user).subscribe({
       next: () => {
-        this.dialog.open(ErrorDialogComponent, {data: {message: "Перевiрте пошту", isSuccessful: true}});
+        this.dialog.open(ErrorDialogComponent, {data: {message: "Check email, please", isSuccessful: true}});
         this.isLoadingListener.next(false);
         this.isRegisteredListener.next(true);
       },
@@ -98,7 +98,7 @@ export class AuthService {
   repeatEmail(user: Customer) {
     this.http.post(`${this.backendUrl}/clients/register/resend-email`, user).subscribe({
       next: () => {
-        this.dialog.open(ErrorDialogComponent, {data: {message: "Перевiрте пошту", isSuccessful: true}});
+        this.dialog.open(ErrorDialogComponent, {data: {message: "Check email, please", isSuccessful: true}});
         this.isLoadingListener.next(false);
         this.isRegisteredListener.next(true);
       },
@@ -127,7 +127,7 @@ export class AuthService {
       error: (err) => {
         this.user.isAuth = false;
         this.userListener.next(this.user);
-        if(err['status']===403) return this.dialog.open(ErrorDialogComponent, {data: {message: 'Неправильний логiн, або пароль', isSuccessful: false}});
+        if(err['status']===403) return this.dialog.open(ErrorDialogComponent, {data: {message: 'Invalid credentials', isSuccessful: false}});
         this.dialog.open(ErrorDialogComponent);
       }
     });
@@ -160,7 +160,7 @@ export class AuthService {
     this.http.get(`${this.backendUrl}/users/recover-password/send-email`, {params: params, responseType: "text"}).subscribe({
       next: (token) => {
         this.token = token;
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Перевiрте пошту', isSuccessful: true}});
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Check your email', isSuccessful: true}});
       },
       error: (err) => {
         console.log(err)
@@ -176,7 +176,7 @@ export class AuthService {
     this.http.post(`${this.backendUrl}/users/recover-password`, {}, {params: params, responseType: "text"}).subscribe({
       next: (token) => {
         this.authenticate(token);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Пароль змiнено', isSuccessful: true}});
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Password changed', isSuccessful: true}});
         this.router.navigate(['/', 'categories']);
       },
       error: (err) => {

@@ -18,10 +18,10 @@ export class OrdersComponent implements OnInit, OnDestroy{
   displayedColumns: string[] = ['pos', 'name', 'date', 'price'];
   selectedState: string = 'PENDING';
   states: {name: string, text: string}[] = [
-    {name: 'PENDING', text: 'Очiкується'},
-    {name: 'IN_PROGRESS', text: 'Виробляється'},
-    {name: 'COMPLETED', text: 'Завершено'},
-    {name: 'CANCELLED', text: 'Скасовано'}
+    {name: 'PENDING', text: 'Pending'},
+    {name: 'IN_PROGRESS', text: 'In progress'},
+    {name: 'COMPLETED', text: 'Completed'},
+    {name: 'CANCELLED', text: 'Cancelled'}
   ]
   user: User;
   userSub: Subscription;

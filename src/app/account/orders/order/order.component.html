@@ -7,11 +7,11 @@
   </div>
   <div class="scnd-column">
     <div class="add-image" *ngIf="isEmployee && order && order.status === 'COMPLETED'">
-      <span *ngIf="!photoPreview">Нове фото ще не обрано</span>
+      <span *ngIf="!photoPreview">New photo was not uploaded</span>
       <div class="image-preview" *ngIf="photoPreview && photoPreview !== ''">
-        <img [src]="photoPreview" alt="Додати фото">
+        <img [src]="photoPreview" alt="Add photo">
       </div>
-      <button mat-raised-button color="primary" *ngIf="photoPreview" (click)="onSavePhoto()">Зберегти фото</button>
+      <button mat-raised-button color="primary" *ngIf="photoPreview" (click)="onSavePhoto()">Save photo</button>
     </div>
   </div>
 </div>
@@ -22,7 +22,7 @@
     color="primary"
     (click)="onAssignOrder(order)"
   >
-    <mat-icon>check</mat-icon>| <span>Прийняти замовлення</span>
+    <mat-icon>check</mat-icon>| <span>Accept order</span>
   </button>
   <button
     mat-raised-button
@@ -30,7 +30,7 @@
     [ngStyle]="{background: 'green', color: 'white'}"
     (click)="onFinishOrder(order)"
   >
-    <mat-icon>done_all</mat-icon>|Завершити замовлення
+    <mat-icon>done_all</mat-icon>|Cancel the order
   </button>
   <button
     mat-raised-button
@@ -38,7 +38,7 @@
     color="warn"
     (click)="onCancelOrder(order)"
   >
-    <mat-icon>close</mat-icon>| <span>Скасувати замовлення</span>
+    <mat-icon>close</mat-icon>| <span>Cancel the order</span>
   </button>
   <button
       mat-raised-button
@@ -46,15 +46,15 @@
       *ngIf="order && order.status === 'COMPLETED' && (user?.roles!.includes('EMPLOYEE') || user?.roles!.includes('ADMIN')) && hasPhoto()"
       (click)="onRemovePhoto()"
   >
-    <mat-icon>close</mat-icon> Видалити фото
+    <mat-icon>close</mat-icon> Delete photo
   </button>
   <mat-card
     *ngIf="user['roles'] && order && !(!user.roles!.includes('CLIENT') && order['status'] == 'PENDING')"
     [ngStyle]="{'backgroundColor': order.status === 'CANCELLED' ? '#f44336' : order.status === 'COMPLETED' ? 'green' : '#3f51b5', 'color': 'white', 'fontFamily': 'Inter, sans-serif', 'padding': '15px'}"
   >
-    Замовлення {{order.status === 'COMPLETED' ? 'завершено' : order.status === 'CANCELLED' ? 'скасовано' : 'виготовляється'}}
+    Order {{order.status === 'COMPLETED' ? 'completed' : order.status === 'CANCELLED' ? 'cancelled' : 'pending'}}
   </mat-card>
-  <button *ngIf="isEmployee && order  && order.status === 'COMPLETED'" mat-button type="button" color='primary' (click)="filePicker.click()">Додати фото</button>
+  <button *ngIf="isEmployee && order  && order.status === 'COMPLETED'" mat-button type="button" color='primary' (click)="filePicker.click()">Add photo</button>
   <input type="file" #filePicker (change)="onImagePicked($event)">
 </div>
 <app-model-photos *ngIf="order && order.status == 'COMPLETED'" [modelId]="order.coatModel.id" [isClickable]="false" [order]="order"></app-model-photos>

@@ -87,7 +87,7 @@ export class ModelsService {
     formData.append('file', newModelPhoto);
     this.http.patch(`${this.backendUrl}/coat-models/${id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Модель додана', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Model created', isSuccessful: true}})
         this.categoriesService.requestCategories(true);
       },
       error: (err) => {
@@ -101,7 +101,7 @@ export class ModelsService {
     this.http.delete(`${this.backendUrl}/coat-models/${id}`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.categoriesService.requestCategories(true);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Модель видалено', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Model deleted', isSuccessful: true}})
       },
       error: (err) => {
         console.log(err)

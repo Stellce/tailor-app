@@ -9,15 +9,15 @@
       <mat-cell *matCellDef="let order">{{order.num}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Назва</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
       <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.name}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef>Дата</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
       <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.createdAt}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="price">
-      <mat-header-cell *matHeaderCellDef>Ціна</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
       <mat-cell [routerLink]="order.id" routerLinkActive="selected" *matCellDef="let order">{{order.coatModel.price}}</mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -25,6 +25,6 @@
   </mat-table>
 </div>
 <div class="no-orders">
-  <span *ngIf="tableData.length === 0">Ще немає замовлень</span>
+  <span *ngIf="tableData.length === 0">Orders list is empty</span>
 </div>
 <router-outlet></router-outlet>

@@ -15,21 +15,21 @@ import {ReviewsRes} from "./reviews/reviews-res.model";
 })
 export class ReviewsService {
   backendUrl: string = environment.backendUrl;
-  private _reviewListener = new Subject<ReviewsRes>();
+  private reviewListener = new Subject<ReviewsRes>();
   constructor(
     private http: HttpClient,
     private authService: AuthService,
     private dialog: MatDialog
   ) { }
   getReviewListener(): Observable<{ content: Review[], last: boolean, first: boolean }> {
-    return this._reviewListener.asObservable();
+    return this.reviewListener.asObservable();
   }
 
   getReviews(coatModelId: string, page?: number) {
     if(!page) page = 0;
     let params = new HttpParams().set('page', page);
     this.http.get<{content: Review[], last: boolean, first: boolean}>(`${this.backendUrl}/reviews/${coatModelId}`, {params: params}).subscribe(reviews => {
-      this._reviewListener.next(reviews);
+      this.reviewListener.next(reviews);
     })
   }
 
@@ -38,7 +38,7 @@ export class ReviewsService {
     this.http.post(`${this.backendUrl}/reviews`, {...review}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getReviews(coatModelId, page);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Вiдгук створено', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Review created', isSuccessful: true}})
       },
       error: (err) => {
         console.log(err);
@@ -55,7 +55,7 @@ export class ReviewsService {
     this.http.put(`${this.backendUrl}/reviews/${review.id}`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getReviews(coatModelId, page);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Вiдгук оновлено', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Review updated', isSuccessful: true}})
       },
       error: (err) => {
         console.log(err)
@@ -67,22 +67,21 @@ export class ReviewsService {
     this.http.delete(`${this.backendUrl}/reviews/${reviewId}`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getReviews(coatModelId, 0);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Вiдгук видалено', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Review deleted', isSuccessful: true}})
       },
       error: () => {
-        this._reviewListener.next({} as ReviewsRes);
+        this.reviewListener.next({} as ReviewsRes);
         this.dialog.open(ErrorDialogComponent)
       }
     })
   }
-
   createReply(newReply: NewReply, reviewId: string, coatModelId: string) {
     const formData = new FormData();
     formData.append('content', newReply.content);
     this.http.post(`${this.backendUrl}/reviews/${reviewId}/reply`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getReviews(coatModelId);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Вiдповiдь вiдправлена', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Answer was sent', isSuccessful: true}})
       },
       error: (err) => {
         console.log(err);
@@ -95,7 +94,7 @@ export class ReviewsService {
     this.http.delete(`${this.backendUrl}/reviews/${replyId}/reply`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.getReviews(coatModelId, page);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Вiдповiдь видалено', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Answer deleted', isSuccessful: true}})
       },
       error: () => this.dialog.open(ErrorDialogComponent)
     })

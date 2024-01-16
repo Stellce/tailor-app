@@ -10,13 +10,13 @@
         <img [src]="'data:image/png;base64, ' + model.image" [alt]="category.text">
         <span>{{model.name}}</span>
         <div class="video-bubble bubble" (click)="openVideo(model.videoUrl!)"><mat-icon>videocam</mat-icon></div>
-        <div class="price-bubble bubble">Цiна: {{model.price}}</div>
+        <div class="price-bubble bubble">Price: {{model.price}}</div>
         <div class="photo-bubble bubble" [ngClass]="{'selected-bubble': selectedModel?.id === model.id && arePhotosShowen}" (click)="onShowPhotos(model.id)"><mat-icon>image</mat-icon></div>
       </div>
       <div class="add-model model" *ngIf="isAdmin()" (click)="onSwitchAddingModel()" [ngClass]="{'selected-add-model': isAddingModel}">
         <div class="inner-add-model">
           <mat-icon fontIcon="add"></mat-icon>
-          <p>Додати модель</p>
+          <p>Add model</p>
         </div>
       </div>
     </div>

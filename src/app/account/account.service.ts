@@ -35,7 +35,7 @@ export class AccountService {
     let headers = new HttpHeaders();
     headers = headers.set("Authorization", "Bearer " + token);
     this.http.post(this.backendUrl + '/clients/details', details, {headers: headers}).subscribe({
-      next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Данi збережено', isSuccessful: true}}),
+      next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Data saved', isSuccessful: true}}),
       error: () => this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}})
     })
   }
@@ -44,7 +44,7 @@ export class AccountService {
     let headers = new HttpHeaders();
     headers = headers.set("Authorization", "Bearer " + token);
     this.http.put(this.backendUrl + '/clients/details', details, {headers: headers}).subscribe({
-      next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Данi збережено', isSuccessful: true}}),
+      next: () => this.dialog.open(ErrorDialogComponent, {data: {message: 'Data saved', isSuccessful: true}}),
       error: () => this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}}),
     })
   }

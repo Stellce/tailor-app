@@ -131,7 +131,7 @@ export class ReviewsComponent implements OnInit{
       rating: this.reviewForm.controls['rating'].value,
       coatModelId: this.coatModelId
     }
-    if(!this.rating) return this.dialog.open(ErrorDialogComponent, {data: {message: 'Введiть оцiнку'}});
+    if(!this.rating) return this.dialog.open(ErrorDialogComponent, {data: {message: 'Rate required'}});
     if(this.reviewForm.invalid) return;
     if(this.isReviewLoaded) {
       this.reviewsService.updateReview(newReview, this.coatModelId, this.page);
@@ -140,7 +140,7 @@ export class ReviewsComponent implements OnInit{
     }
   }
   onDeleteReview(reviewId: string) {
-    const dialogRef = this.dialog.open(YesNoDialogComponent, {data: {message: 'Видалити вiдгук?'}})
+    const dialogRef = this.dialog.open(YesNoDialogComponent, {data: {message: 'Delete review?'}})
     dialogRef.afterClosed().subscribe(res => {
       if(res && res.event === 'Yes') {
         this.reviewsService.deleteReview(reviewId, this.coatModelId);
@@ -160,7 +160,7 @@ export class ReviewsComponent implements OnInit{
   }
 
   onDeleteReply(reviewId: string) {
-    const dialogRef = this.dialog.open(YesNoDialogComponent, {data: {message: 'Видалити вiдповiдь?'}})
+    const dialogRef = this.dialog.open(YesNoDialogComponent, {data: {message: 'Delete answer?'}})
     dialogRef.afterClosed().subscribe(res => {
       if(res.event === 'Yes') {
         this.reviewsService.deleteReply(reviewId, this.coatModelId, this.page);
@@ -168,5 +168,4 @@ export class ReviewsComponent implements OnInit{
       }
     })
   }
-  protected readonly Array = Array;
 }

@@ -8,7 +8,6 @@ import {ProductMetrics} from "../../services/calculator/product-metrics.model";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 import {NewCustomer} from "./new-customer.model";
-import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosByOrderId.model";
 import {ModelsService} from "../../services/categories/category/models.service";
 import {CategoriesService} from "../../services/categories/categories.service";
 import {AppService} from "../../app.service";
@@ -95,7 +94,7 @@ export class OrdersService {
     }
     this.http.post<{[s: string]: string}>(`${this.backendUrl}/orders`, order, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення створено', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Order created', isSuccessful: true}})
       },
       error: () => this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}})
     });
@@ -153,7 +152,7 @@ export class OrdersService {
     this.http.patch(`${this.backendUrl}/orders/${order.id}/cancel`, {}, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.requestAssignedOrders();
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Замовлення скасовано', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Order cancelled', isSuccessful: true}})
       },
       error: (err) => {
         this.dialog.open(ErrorDialogComponent, {data: {isSuccessful: false}});
@@ -177,7 +176,7 @@ export class OrdersService {
     this.http.patch(`${this.backendUrl}/orders/${order.id}/image`, formData, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.requestOrderPhoto(order);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Фото додано', isSuccessful: true}})
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Photo saved', isSuccessful: true}})
       },
       error: (err) => {
         console.log(err);
@@ -189,7 +188,7 @@ export class OrdersService {
     this.http.delete(`${this.backendUrl}/orders/${orderId}/image`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: () => {
         this.requestOrderById(orderId);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Фото усунено', isSuccessful: true}});
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Photo deleted', isSuccessful: true}});
       },
       error: (err) => {
         console.log(err);

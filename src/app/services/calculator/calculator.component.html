@@ -12,15 +12,15 @@
             [formControlName]="inputField.name"
             type="number"
             [readonly]="!isEditable">
-          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['required']">Поле обов'язкове</mat-error>
-          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['min']">Величина має бути бiльша за {{findField(inputMetrics, inputField.name).min}}</mat-error>
-          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['max']">Величина має бути менша за {{findField(inputMetrics, inputField.name).max}}</mat-error>
+          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['required']">Field required</mat-error>
+          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['min']">Value must be greater, than {{findField(inputMetrics, inputField.name).min}}</mat-error>
+          <mat-error *ngIf="metricsForm.get(inputField.name).errors?.['max']">Value must be less, than {{findField(inputMetrics, inputField.name).max}}</mat-error>
         </mat-form-field>
       </div>
       <mat-divider></mat-divider>
     </div>
     <div class="submit-button-wrapper" *ngIf="!isMetricsFormFilled && isEditable">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!isEditable">Далі</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!isEditable">Next</button>
     </div>
   </div>
 </form>
@@ -35,19 +35,19 @@
         <mat-form-field>
           <mat-label>{{inputField.text}}</mat-label>
           <input matInput [formControlName]="inputField.name" type="number" [readonly]="!isEditable">
-          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['required']">Поле обов'язкове</mat-error>
-          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['min']">Величина має бути бiльша за {{findField(inputIncreases, inputField.name).min}}</mat-error>
-          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['max']">Величина має бути менша за {{findField(inputIncreases, inputField.name).max}}</mat-error>
+          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['required']">Field required</mat-error>
+          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['min']">Value must be greater, than {{findField(inputIncreases, inputField.name).min}}</mat-error>
+          <mat-error *ngIf="increasesForm.get(inputField.name).errors?.['max']">Value must be less, than {{findField(inputIncreases, inputField.name).max}}</mat-error>
         </mat-form-field>
       </div>
       <mat-divider></mat-divider>
     </div>
     <div class="submit-button-wrapper" *ngIf="isEditable">
-      <button mat-raised-button color="primary" type="submit" [disabled]="isCalculating">Далі</button><mat-spinner *ngIf="isCalculating"></mat-spinner>
+      <button mat-raised-button color="primary" type="submit" [disabled]="isCalculating">Next</button><mat-spinner *ngIf="isCalculating"></mat-spinner>
     </div>
   </div>
 </form>
 <div class="flex-center pattern-img" *ngIf="productMetrics">
-  <img [src]="patternImgPath" alt="лекала">
+  <img [src]="patternImgPath" alt="Pattern">
 </div>
 <app-calc-res-fields></app-calc-res-fields>

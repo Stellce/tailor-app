@@ -2,23 +2,23 @@
   <div class="users-table">
     <mat-table [dataSource]="employees" *ngIf="displayedColumns">
       <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef>Iм'я</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
         <mat-cell *matCellDef="let employee">{{employee.firstName}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="lastName">
-        <mat-header-cell *matHeaderCellDef>Прiзвище</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Surname</mat-header-cell>
         <mat-cell *matCellDef="let employee">{{employee.lastName}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="email">
-        <mat-header-cell *matHeaderCellDef>Пошта</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
         <mat-cell *matCellDef="let employee">{{employee.email}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="phoneNumber">
-        <mat-header-cell *matHeaderCellDef>Телефон</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
         <mat-cell *matCellDef="let employee">{{employee.phoneNumber}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="registeredAt">
-        <mat-header-cell *matHeaderCellDef>Зареєстровано</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Registered at</mat-header-cell>
         <mat-cell *matCellDef="let employee">{{employee.registeredAt}}</mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -26,7 +26,7 @@
     </mat-table>
   </div>
   <div class="no-employees" *ngIf="employees?.length === 0">
-    <span>Ще немає працiвникiв</span>
+    <span>Employees list is empty</span>
   </div>
   <mat-divider></mat-divider>
   <router-outlet></router-outlet>

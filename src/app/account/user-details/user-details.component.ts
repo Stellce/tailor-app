@@ -13,11 +13,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy{
   userDetails: UserDetails;
   userDetailsSub: Subscription;
   newAddress: {name: string, text: string, oldValue?: string}[] = [
-    {name: 'city', text: 'Мiсто'},
-    {name: 'street', text: 'Вулиця'},
-    {name: 'buildingNumber', text: 'Номер будинку'},
-    {name: 'apartmentNumber', text: 'Номер квартири'},
-    {name: 'zipCode', text: 'Поштовий код'}
+    {name: 'city', text: 'City'},
+    {name: 'street', text: 'Street'},
+    {name: 'buildingNumber', text: 'Building number'},
+    {name: 'apartmentNumber', text: 'Apartment number'},
+    {name: 'zipCode', text: 'Zip code'}
   ]
   userForm: FormGroup;
   isLoading: boolean = false;

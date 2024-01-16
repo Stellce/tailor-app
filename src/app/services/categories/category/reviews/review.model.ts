@@ -1,3 +1,5 @@
+import {Reply} from "./reply.model";
+
 export interface Review {
   id: string;
   clientUsername: string;
@@ -5,5 +7,5 @@ export interface Review {
   content: string;
   rating: number;
   createdAt: string;
-  reply: {content: string, createdAt: string};
+  reply: Reply;
 }
