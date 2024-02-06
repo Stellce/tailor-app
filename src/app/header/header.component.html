@@ -1,10 +1,20 @@
-<div class="header" [ngClass]="menuSwitcher ? 'header-opened' : ''" [ngStyle]="menuSwitcher ? {height: 'auto'} : {}">
+<div class="header" [ngClass]="menuSwitcher ? 'header-opened' : ''" [ngStyle]="{height: menuSwitcher ? 'auto' : '',
+  'background': changeHeader && !menuSwitcher ? 'linear-gradient(0deg, rgba(48, 53, 193, 0) 0%, #575757 100%)' : '#575757'}">
+  <div class="logo" [ngStyle]="{'display': menuSwitcher ? 'none' : ''}" routerLink="about">
+    <img [src]="logoPath" alt="logo">
+    <span><b>CloTech</b></span>
+  </div>
   <div class="links">
+    <div class="logo-link" routerLink="about">
+      <img [src]="logoPath" alt="logo">
+      <span><b>CloTech</b></span>
+    </div>
     <div
       class="link"
       *ngFor="let link of links"
       [routerLink]="link.src"
-      routerLinkActive="highlighted-link"
+      [ngClass]="{'highlighted-link': isActive(link.src[0])}"
+      (click)="closeMenu()"
     ><span>{{link.name}}</span></div>
 
     <div class="menu">
@@ -15,19 +25,27 @@
           *ngFor="let link of links"
           [routerLink]="link.src"
           routerLinkActive="menu-link-active"
+          (click)="closeMenu()"
         ><span>{{link.name}}</span></div>
       </div>
-      </div>
+    </div>
     <div
-      class="registration"
+      class="login"
       [routerLink]="'login'"
       routerLinkActive="menu-link-active"
-    >
+      *ngIf="!user.isAuth"
+      (click)="closeMenu()"
+      >
       <span
-        *ngIf="menuSwitcher || window.innerWidth > 600"
-      >Увійти</span>
-      <mat-icon
-      >person</mat-icon>
+        *ngIf="menuSwitcher || window.innerWidth > 800"
+      >Log in</span>
+      <mat-icon>person</mat-icon>
+    </div>
+    <div class="login" [routerLink]="['/']" *ngIf="user.isAuth" (click)="onLogout()">
+      <span
+        *ngIf="menuSwitcher || window.innerWidth > 800"
+      >Log out</span>
+      <mat-icon>logout</mat-icon>
     </div>
   </div>
 </div>

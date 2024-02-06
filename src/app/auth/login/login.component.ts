@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {AuthService} from "../auth.service";
-import {User} from "../user.model";
+import {Customer} from "../customer.model";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   isLoading: boolean = false;
   constructor(private authService: AuthService) {}
   ngOnInit() {
-    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+    this.authStatusSub = this.authService.getUserListener().subscribe(
       () => this.isLoading = false
     )
   }
@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit, OnDestroy{
   onLogin(form: NgForm) {
     if(form.invalid) return;
     this.isLoading = true;
-    let user: User = form.value;
-    this.authService.sendLogin(user);
+    let user: Customer = form.value;
+    this.authService.login(user);
   }
 
   ngOnDestroy() {

@@ -1,9 +1,15 @@
-<app-header></app-header>
+<app-header
+  [ngStyle]="{
+    'position': isSemiTranspared ? 'absolute':'static',
+    'left': 0,
+    'right': 0,
+  }"></app-header>
 <main>
   <router-outlet></router-outlet>
 </main>
 <footer>
   <div class="footer-content">
-    <span class="cont" *ngFor="let cont of footerContent" [routerLink]="cont.src">{{cont.name}}</span>
+  <p>Address: Berlin, str.Nobody 2, 40007</p>
+    <p>Contacts: corp&#64;corp.net</p>
   </div>
 </footer>

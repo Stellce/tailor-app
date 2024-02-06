@@ -1,0 +1,31 @@
+.dialog-data {
+  max-width: 500px;
+  background: white;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+}
+.activation-image img{
+  height: 128px;
+  width: 128px;
+}
+.dialog-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+@media (max-width: 300px) {
+  .activation-image img {
+    width: 64px;
+    height: 64px;
+  }
+  mat-card span {
+    width: 50%;
+    text-align: center;
+  }
+}

@@ -2,12 +2,12 @@
 <mat-card xmlns="http://www.w3.org/1999/html" *ngIf="!isLoading">
   <form #regForm="ngForm" (ngSubmit)="onLogin(regForm)">
     <mat-card-header>
-      <mat-card-title>Вхід</mat-card-title>
-      <mat-card-subtitle>Будь ласка, <a [routerLink]="['/', 'registration']">зареєструйтеся</a>, якщо ви тут вперше</mat-card-subtitle>
+      <mat-card-title>Login</mat-card-title>
+      <mat-card-subtitle>Please, <a [routerLink]="['/', 'registration']">register</a>, if it's your first time</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <mat-form-field>
-        <mat-label>Пошта</mat-label>
+        <mat-label>Email</mat-label>
         <input
           matInput
           type="email"
@@ -17,15 +17,15 @@
           email
           #email = "ngModel">
         <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
-          Неправильна пошта
+          Invalid email
         </mat-error>
         <mat-error *ngIf="email.hasError('required')">
-          Введiть пошту
+          Email required
         </mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Пароль</mat-label>
+        <mat-label>Password</mat-label>
         <input
           matInput
           [type]="hide ? 'password' : 'text'"
@@ -33,16 +33,17 @@
           ngModel
           required
         #password="ngModel">
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Сховати пароль'">
+        <button mat-icon-button matSuffix type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
         <mat-error *ngIf="password.hasError('required')">
-          Ведiть пароль
+          Password required
         </mat-error>
       </mat-form-field>
+      <a [routerLink]="['/', 'recover-password']">Reset password</a>
     </mat-card-content>
     <mat-card-actions>
-      <button class="loginButton" mat-raised-button type="submit" color="primary">Увійти</button>
+      <button class="loginButton" mat-raised-button type="submit" color="primary">Log in</button>
     </mat-card-actions>
   </form>
 </mat-card>

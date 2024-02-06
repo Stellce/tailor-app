@@ -1,0 +1,61 @@
+<div class="spinner-wrapper">
+  <mat-spinner *ngIf="!order"></mat-spinner>
+</div>
+<div class="order-description">
+  <div class="order-image">
+    <img [src]="'data:image/png;base64, ' + order['coatModel'].image" [alt]="order['coatModel']" *ngIf="order">
+  </div>
+  <div class="scnd-column">
+    <div class="add-image" *ngIf="isEmployee && order && order.status === 'COMPLETED'">
+      <span *ngIf="!photoPreview">New photo was not uploaded</span>
+      <div class="image-preview" *ngIf="photoPreview && photoPreview !== ''">
+        <img [src]="photoPreview" alt="Add photo">
+      </div>
+      <button mat-raised-button color="primary" *ngIf="photoPreview" (click)="onSavePhoto()">Save photo</button>
+    </div>
+  </div>
+</div>
+<div class="status">
+  <button
+    mat-raised-button
+    *ngIf="order && order.status === 'PENDING' && isEmployee"
+    color="primary"
+    (click)="onAssignOrder(order)"
+  >
+    <mat-icon>check</mat-icon>| <span>Accept order</span>
+  </button>
+  <button
+    mat-raised-button
+    *ngIf="order && order.status === 'IN_PROGRESS' && !user?.roles!.includes('CLIENT')"
+    [ngStyle]="{background: 'green', color: 'white'}"
+    (click)="onFinishOrder(order)"
+  >
+    <mat-icon>done_all</mat-icon>|Cancel the order
+  </button>
+  <button
+    mat-raised-button
+    *ngIf="order && (order.status === 'PENDING' || order.status === 'IN_PROGRESS') && user?.roles!.includes('CLIENT')"
+    color="warn"
+    (click)="onCancelOrder(order)"
+  >
+    <mat-icon>close</mat-icon>| <span>Cancel the order</span>
+  </button>
+  <button
+      mat-raised-button
+      color="warn"
+      *ngIf="order && order.status === 'COMPLETED' && (user?.roles!.includes('EMPLOYEE') || user?.roles!.includes('ADMIN')) && hasPhoto()"
+      (click)="onRemovePhoto()"
+  >
+    <mat-icon>close</mat-icon> Delete photo
+  </button>
+  <mat-card
+    *ngIf="user['roles'] && order && !(!user.roles!.includes('CLIENT') && order['status'] == 'PENDING')"
+    [ngStyle]="{'backgroundColor': order.status === 'CANCELLED' ? '#f44336' : order.status === 'COMPLETED' ? 'green' : '#3f51b5', 'color': 'white', 'fontFamily': 'Inter, sans-serif', 'padding': '15px'}"
+  >
+    Order {{order.status === 'COMPLETED' ? 'completed' : order.status === 'CANCELLED' ? 'cancelled' : 'pending'}}
+  </mat-card>
+  <button *ngIf="isEmployee && order  && order.status === 'COMPLETED'" mat-button type="button" color='primary' (click)="filePicker.click()">Add photo</button>
+  <input type="file" #filePicker (change)="onImagePicked($event)">
+</div>
+<app-model-photos *ngIf="order && order.status == 'COMPLETED'" [modelId]="order.coatModel.id" [isClickable]="false" [order]="order"></app-model-photos>
+<app-calculator [isEditable]="false"></app-calculator>

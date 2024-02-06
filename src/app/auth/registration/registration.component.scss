@@ -1,15 +1,42 @@
 mat-card {
   max-width: 500px;
-  margin: 10dvh auto;
+  margin: 10vh auto;
 }
 mat-card-content {
   display: flex;
   flex-direction: column;
   margin: 10px auto;
 }
-.registerButton {
+mat-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.repeat-email {
+  display: flex;
+  align-items: center;
+}
+.register-button {
   width: 100% !important;
 }
 mat-spinner {
   margin: 300px auto;
+}
+.names {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.names mat-form-field {
+  width: 230px !important;
+}
+
+@media (max-width: 550px) {
+  .names {
+    flex-direction: column;
+  }
+  .names mat-form-field {
+    width: 100% !important;
+  }
 }

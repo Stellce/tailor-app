@@ -2,30 +2,58 @@
   display: flex;
   height: 40px;
   padding: 10px;
-  background: #3035C1;
+  backdrop-filter: blur(2px);
   color: white;
   position: relative;
   font-size: 16px;
   font-style: inherit;
+  z-index: 5;
+  max-width: 2000px;
+  margin: 0 auto;
+}
+.logo {
+  cursor: pointer;
+  position: absolute;
+  left: 10px;
+  top: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+.logo img, .logo-link img {
+  max-height: 40px;
+  width: 100%;
+}
+.logo-link {
+  display: none;
+  height: 40px;
+  cursor: pointer;
+  align-items: center;
+  font-size: 24px;
 }
 .links {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   flex-wrap: wrap;
   align-items: center;
-  align-content: flex-end;
-  width: 60dvw;
+  align-content: center;
+  width: 60vw;
   margin: 0 auto 0;
   height: 100%;
 }
 .link:first-child {
   min-width: 64px;
+  max-width: 150px;
 }
 .menu {
   display: none;
 }
 .menu-content {
   display: none;
+  margin: 10px auto;
+  flex-direction: column;
 }
 .menu-link-active {
   color: #FF39F7;
@@ -33,19 +61,16 @@
 .highlighted-link {
   border-bottom: 4px solid #FF39F7;
 }
-.links > :not(.highlighted-link, .registration, mat-icon, .menu) {
-  border-bottom: 4px solid #d9d9d9;
-}
 .link, .menu-link {
   height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10dvw;
+  width: 10vw;
   margin: 0 0;
   cursor: pointer;
 }
-.registration {
+.login {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,29 +80,39 @@
   cursor: pointer;
   gap: 5px;
 }
-.registration span {
+.login span {
   display: inline-block;
 }
 
-@media (max-width: 660px) {
-  .header {
-    //padding: 10px 0;
+@media (max-width: 700px) {
+  .logo {
+    display: none;
+  }
+  .logo-link {
+    display: flex;
   }
   .links {
     width: 100%;
     justify-content: space-between;
   }
   .link {
-    width: 20dvw;
+    max-width: 20vw;
+    min-width: 100px;
   }
-  .registration, .menu {
+  .link:first-child {
+    min-width: 50px;
+  }
+  .login, .menu {
     position: inherit;
     margin-bottom: -4px;
   }
 }
-@media (max-width: 300px) {
-  .header {
-    height: 24px;
+@media (max-width: 600px) {
+  .logo-link {
+    display: flex;
+    left: calc(50% - 60px);
+    top: 10px;
+    position: absolute;
   }
   .links {
     width: 100%;

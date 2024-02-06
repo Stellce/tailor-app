@@ -1,0 +1,59 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  background-image: url("../../assets/about.jpg");
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  background-size: cover;
+  background-position: center top;
+}
+.card-wrapper {
+  height: 100vh;
+  margin: 0;
+}
+.card {
+  width: 75%;
+  max-width: 1200px;
+  margin: 150px auto;
+  font-size: 24px;
+  border-radius: 1rem;
+  color: white;
+}
+.img-wrap img{
+  width: 100%;
+}
+.img-wrap {
+  float: left;
+  width: 20vw;
+  max-width: 350px;
+  margin: 15px;
+}
+p {
+  margin-bottom: 1.5rem;
+  line-height: 52px;
+  word-break: normal;
+  padding-left: 10px;
+}
+p, ul {
+  text-shadow: 1px 1px 2px pink;
+  font-size: 48px;
+  text-align: justify;
+}
+ul {
+  font-size: 35px;
+  line-height: 35px;
+  padding-left: 30px;
+}
+li {
+  margin: 10px;
+}
+
+@media (max-width: 750px) {
+  .img-wrap{
+    width: calc(100% - 30px);
+  }
+  .card {
+    width: 100%;
+    margin: 150px auto;
+  }
+}

@@ -1,0 +1,34 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+mat-expansion-panel {
+  max-width: 1200px;
+  width: 90%;
+  margin: 20px auto 0;
+}
+mat-expansion-panel-header {
+  font-size: 18px;
+}
+mat-card-header {
+  font-size: 18px;
+}
+.outer {
+  width: 100%;
+  background: #e8e8e8;
+  margin: 0 auto;
+}
+.categories-card {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 15px;
+}
+
+@media (max-width: 320px) {
+  .categories-card {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 5px;
+  }
+}

@@ -1,26 +1,41 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
-<mat-card xmlns="http://www.w3.org/1999/html" *ngIf="!isLoading">
-  <form #f="ngForm" (ngSubmit)="onRegister(f)">
+<mat-card xmlns="http://www.w3.org/1999/html" [ngStyle]="{'display': isLoading ? 'none' : 'block'}">
+  <form #f="ngForm" (submit)="onRegister(f)">
   <mat-card-header>
-    <mat-card-title>Реєстрація</mat-card-title>
-    <mat-card-subtitle>Будь ласка, зареєструйтеся, якщо ви тут вперше, або <a [routerLink]="['/', 'login']">увійдіть</a></mat-card-subtitle>
+    <mat-card-title>Registration</mat-card-title>
+    <mat-card-subtitle>Please, register, if it is your first time, or <a [routerLink]="['/', 'login']">log in</a></mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
+    <div class="names">
+      <mat-form-field>
+        <mat-label>Surname</mat-label>
+        <input
+          matInput
+          type="text"
+          name="lastName"
+          ngModel
+          required
+          #surname = "ngModel">
+        <mat-error *ngIf="surname.hasError('required')">
+          Surname required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          type="text"
+          name="firstName"
+          ngModel
+          required
+          #name = "ngModel">
+        <mat-error *ngIf="name.hasError('required')">
+          Name required
+        </mat-error>
+      </mat-form-field>
+    </div>
     <mat-form-field>
-      <mat-label>Ім'я</mat-label>
-      <input
-        matInput
-        type="name"
-        name="name"
-        ngModel
-        required
-        #name = "ngModel">
-      <mat-error *ngIf="name.hasError('required')">
-        Введiть Ім'я
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Пошта</mat-label>
+      <mat-label>Email</mat-label>
       <input
         matInput
         type="email"
@@ -30,61 +45,63 @@
         email
         #email = "ngModel">
       <mat-error *ngIf="email.hasError('required')">
-        Введiть пошту
+        Email required
       </mat-error>
       <mat-error *ngIf="email.hasError('email')">
-        Неправильна пошта
+        Invalid email
       </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Пароль</mat-label>
+      <mat-label>Password</mat-label>
       <input
         matInput
-        [type]="hide ? 'password' : 'text'"
+        [type]="hide1 ? 'password' : 'text'"
         name="password"
         ngModel
         required
-        [appSamePasswords]="passwordRepeat"
         #password = "ngModel">
-      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Сховати пароль'">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <button mat-icon-button matSuffix type="button" (click)="hide1 = !hide1" [attr.aria-label]="'Hide password'">
+        <mat-icon>{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
       <mat-error *ngIf="password.hasError('required')">
-        Введiть пароль
-      </mat-error>
-      <mat-error
-        *ngIf="password.hasError('notSamePass') &&
-               passwordRepeat.hasError('notSamePass') &&
-               !password.hasError('required')">
-        Паролi не спiвпадають
+        Password required
       </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Підтвердити пароль</mat-label>
+      <mat-label>Confirm password</mat-label>
       <input
         matInput
-        [type]="hide ? 'password' : 'text'"
+        [type]="hide2 ? 'password' : 'text'"
         name="passwordRepeat"
         ngModel
         required
         [appSamePasswords]="password"
         #passwordRepeat = "ngModel">
-      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Сховати пароль'">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <button mat-icon-button matSuffix type="button" (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'">
+        <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
       <mat-error *ngIf="passwordRepeat.hasError('required')">
-        Введiть пароль
+        Password requireq
       </mat-error>
       <mat-error
         *ngIf="passwordRepeat.hasError('notSamePass') &&
                password.hasError('notSamePass') &&
                !passwordRepeat.hasError('required')">
-        Паролi не спiвпадають
+        Passwords are not same
       </mat-error>
     </mat-form-field>
   </mat-card-content>
   <mat-card-actions>
-    <button class="registerButton" mat-raised-button type="submit" color="primary">Зареєструватися</button>
-  </mat-card-actions>
+    <button class="register-button" *ngIf="!isRegistered" mat-raised-button type="submit" color="primary">Register</button>
+    <div class="repeat-email">
+      <span>Hadn't recieved email yet?</span><button mat-button type="button" color="primary" [disabled]="leftSecondsToRepeatEmail > 0" (click)="onRegister(f)">Send again</button>
+      <div class="repeat-interval" [ngStyle]="{'position': 'relative'}" *ngIf="leftSecondsToRepeatEmail > 0">
+        <mat-spinner [ngStyle]="{'margin': '0 auto', 'max-height': '35px'}"></mat-spinner>
+        <span [ngStyle]="{'position': 'absolute', 'left': '47%', 'top': '20%'}">
+        {{leftSecondsToRepeatEmail}}
+      </span>
+      </div>
+    </div>
+    </mat-card-actions>
   </form>
 </mat-card>

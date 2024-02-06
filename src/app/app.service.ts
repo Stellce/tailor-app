@@ -1,14 +1,24 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {ImageResponse} from "./imageResponse.model";
-import {environment} from "../environments/environment";
+import {Subject} from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class AppService {
-  backendUrl = environment.backendUrl;
-  constructor(private http: HttpClient) {}
-
-  getHomeImages() {
-    this.http.get<ImageResponse>(`${this.backendUrl}/homepage/images`);
+  private doChangeHeader: boolean = false;
+  doChangeHeaderListener = new Subject<boolean>();
+  getDoChangeHeader() {
+    return this.doChangeHeader;
   }
+
+  getDoChangeHeaderListener() {
+    return this.doChangeHeaderListener.asObservable();
+  }
+
+  changeHeaderListener(change: boolean) {
+    this.doChangeHeaderListener.next(change);
+  }
+
+  fixDateStr(str: string) {
+    return new Date(str).toLocaleString();
+  }
+
 }

@@ -1,0 +1,66 @@
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  padding: 10px;
+  font-size: 18px;
+}
+.stars {
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+mat-expansion-panel-header {
+  font-size: 18px;
+}
+.reply {
+  width: 90%;
+  margin: 10px auto;
+}
+.highlighted-link {
+  cursor: pointer;
+  color: #1f1fdc;
+}
+.stars {
+  display: flex;
+}
+.star-selected svg{
+  fill: yellow !important;
+}
+.star svg {
+  font-size: 15px;
+  fill: grey;
+}
+.star:hover ~ .star svg{
+  fill: grey;
+}
+.star input {
+  display: none;
+}
+mat-form-field {
+  width: 100%;
+}
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+mat-divider {
+  height: 5px;
+}
+.reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 300px) {
+  .card-header {
+    flex-direction: column;
+  }
+}

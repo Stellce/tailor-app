@@ -1,0 +1,21 @@
+<div class="spinner-wrapper" *ngIf="!categories">
+  <mat-spinner></mat-spinner>
+</div>
+<div class="categories-wrapper" *ngIf="categories">
+  <div class="categories-flex">
+    <a
+      class="category"
+      [ngClass]="{selected: selectedCategory && selectedCategory.coatType === category.coatType}"
+      *ngFor="let category of categories"
+      [routerLink]="['/', url, category.coatType.toLowerCase()]"
+      [routerLinkActive]="['selected']"
+      (click)="selectCategory(category)"
+      >
+      <div class="category-image">
+        <img [src]="'data:image/png;base64, ' + getCategoryImage(category)" [alt]="category.text">
+      </div>
+      <span>{{category.text}}</span>
+    </a>
+  </div>
+</div>
+<app-category *ngIf="!isCategoryHidden"></app-category>

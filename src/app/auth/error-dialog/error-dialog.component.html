@@ -1,4 +1,12 @@
-<h1 mat-dialog-title>Щось пiшло не так</h1>
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close (click)="onHome()">Ok</button>
+<h1 mat-dialog-title *ngIf="!data || !data.isSuccessful">Something went wrong</h1>
+<div class="dialog-data">
+  <div class="activation-image">
+    <img *ngIf="data && data.isSuccessful" [src]="activationDonePath" alt="Success">
+    <img *ngIf="data && !data.isSuccessful && data.isSuccessful !== undefined || !data" [src]="activationFailedPath" alt="Error">
+  </div>
+  <p *ngIf="data && data.message">{{data.message}}</p>
+  <p *ngIf="!data || !data.message">Something went wrong</p>
+</div>
+<div mat-dialog-actions class="dialog-actions">
+  <button mat-button mat-dialog-close>Ok</button>
 </div>
