@@ -92,7 +92,7 @@ export class OrderComponent implements OnInit, OnDestroy{
     this.ordersService.removePhotoFromOrder(this.order.id);
   }
   hasPhoto() {
-    return !!this.ordersService.getAssignedOrders()?.find(order => order.id === this.order.id).image;
+    return !!this.order.image;
   }
   ngOnDestroy() {
     this.orderSub.unsubscribe();
@@ -101,6 +101,6 @@ export class OrderComponent implements OnInit, OnDestroy{
     this.router.navigate(['./'], {relativeTo: this.activatedRoute.parent});
   }
   private checkIsEmployee(user: User) {
-    return user.roles?.some(role => ['ADMIN', 'EMPLOYEE'].includes(role))|| false
+    return user.roles?.some(role => ['ADMIN', 'EMPLOYEE'].includes(role)) || false;
   }
 }

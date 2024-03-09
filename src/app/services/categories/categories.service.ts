@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 import {environment} from "../../../environments/environment";
+import {ShortOrder} from "../../account/orders/order/short-order.model";
 
 @Injectable({providedIn: 'root'})
 export class CategoriesService {
@@ -17,19 +18,19 @@ export class CategoriesService {
       coatType: 'JACKET_COAT',
       text: 'Пальто піджак',
       models: <Model[]>[],
-      orders: <Order[]>[]
+      orders: <ShortOrder[]>[]
     },
     {
       coatType: 'MIDI_COAT',
       text: 'Пальто міді',
       models: <Model[]>[],
-      orders: <Order[]>[]
+      orders: <ShortOrder[]>[]
     },
     {
       coatType: 'MAXI_COAT',
       text: 'Пальто максі',
       models: <Model[]>[],
-      orders: <Order[]>[]
+      orders: <ShortOrder[]>[]
     }
   ];
   private selectedCategory: Category;
@@ -81,19 +82,19 @@ export class CategoriesService {
         coatType: 'JACKET_COAT',
         text: 'Пальто піджак',
         models: <Model[]>[],
-        orders: <Order[]>[]
+        orders: <ShortOrder[]>[]
       },
       {
         coatType: 'MIDI_COAT',
         text: 'Пальто міді',
         models: <Model[]>[],
-        orders: <Order[]>[]
+        orders: <ShortOrder[]>[]
       },
       {
         coatType: 'MAXI_COAT',
         text: 'Пальто максі',
         models: <Model[]>[],
-        orders: <Order[]>[]
+        orders: <ShortOrder[]>[]
       }
     ];
   }

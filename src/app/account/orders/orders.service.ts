@@ -8,20 +8,18 @@ import {ProductMetrics} from "../../services/calculator/product-metrics.model";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "../../auth/error-dialog/error-dialog.component";
 import {NewCustomer} from "./new-customer.model";
-import {PhotoByOrderId} from "../../services/categories/category/model-photos/photosByOrderId.model";
 import {ModelsService} from "../../services/categories/category/models.service";
 import {CategoriesService} from "../../services/categories/categories.service";
 import {AppService} from "../../app.service";
+import {ShortOrder} from "./order/short-order.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdersService {
   private backendUrl: string = environment.backendUrl;
-  private assignedOrders: Order[];
-  private unassignedOrders: Order[];
   private orderListener = new Subject<Order>();
-  private ordersListener = new Subject<Order[]>();
+  private shortOrdersListener = new Subject<ShortOrder[]>();
   private orderPhotoListener = new Subject<string>();
   private orderMetricsListener = new Subject<ProductMetrics>();
   private newCustomerDataListener = new Subject<NewCustomer>();
@@ -34,9 +32,6 @@ export class OrdersService {
     private modelsService: ModelsService,
     private appService: AppService
   ) { }
-  getAssignedOrders() {
-    return this.assignedOrders;
-  }
   getOrderPhotoListener() {
     return this.orderPhotoListener.asObservable();
   }
@@ -53,16 +48,15 @@ export class OrdersService {
     return this.orderMetricsListener.asObservable();
   }
   getOrdersListener() {
-    return this.ordersListener.asObservable();
+    return this.shortOrdersListener.asObservable();
   }
 
   requestAssignedOrders() {
     this.isLoadingListener.next(true);
-    this.http.get<Order[]>(this.backendUrl + '/orders', {headers: this.authService.getTokenHeader()}).subscribe({
+    this.http.get<ShortOrder[]>(this.backendUrl + '/orders', {headers: this.authService.getTokenHeader()}).subscribe({
       next: (orders) => {
-        orders = this.fixOrdersDate(orders);
-        this.assignedOrders = orders;
-        this.ordersListener.next(orders);
+        orders = this.fixShortOrdersDate(orders);
+        this.shortOrdersListener.next(orders);
         this.addOrdersToCategories(orders);
         this.categoriesService.requestCategories();
       },
@@ -74,11 +68,10 @@ export class OrdersService {
   }
   requestAllUnassignedOrders() {
     this.isLoadingListener.next(true);
-    this.http.get<Order[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.authService.getTokenHeader()}).subscribe( {
+    this.http.get<ShortOrder[]>(`${this.backendUrl}/orders/unassigned`, {headers: this.authService.getTokenHeader()}).subscribe( {
       next: (orders) => {
-        orders = this.fixOrdersDate(orders);
-        this.unassignedOrders = orders;
-        this.ordersListener.next(orders);
+        orders = this.fixShortOrdersDate(orders);
+        this.shortOrdersListener.next(orders);
       },
       error: (err) => {
         console.log(err)
@@ -101,12 +94,6 @@ export class OrdersService {
     });
   }
   requestOrderById(orderId: string) {
-    try {
-      let order =
-        this.assignedOrders?.find(order => order.id === orderId && order['patternData']) ||
-        this.unassignedOrders?.find(order => order.id === orderId && order['patternData']);
-      if(order) return this.orderListener.next(order);
-    } catch (e) {}
     this.http.get<Order>(`${this.backendUrl}/orders/${orderId}`, {headers: this.authService.getTokenHeader()}).subscribe({
       next: (order) => {
         this.orderListener.next(order);
@@ -200,11 +187,8 @@ export class OrdersService {
   requestOrderPhoto(order: Order) {
     if(order.status !== 'COMPLETED') return;
     let orderId = order.id;
-    let cachedOrder: Order = this.assignedOrders?.find(order => order.id === orderId && order.status === 'COMPLETED');
-    if(cachedOrder && cachedOrder['image']) return this.orderPhotoListener.next(cachedOrder['image']);
     this.http.get(`${this.backendUrl}/orders/${orderId}/image`, {responseType: "text", headers: this.authService.getTokenHeader()}).subscribe({
       next: (photo) => {
-        order.image = photo;
         this.orderPhotoListener.next(photo);
       },
       error: (err) => {
@@ -213,8 +197,8 @@ export class OrdersService {
     })
   }
 
-  fixOrdersDate(orders: Order[]) {
-    return orders.map(order => ({...order, createdAt: this.appService.fixDateStr(order.createdAt)}))
+  fixShortOrdersDate(orders: ShortOrder[]) {
+    return orders.map(order => ({...order, createdAt: this.appService.fixDateStr(order.createdAt)})) ;
   }
 
   private getOrdersOnStatus(orderStatus: string) {
@@ -225,12 +209,13 @@ export class OrdersService {
     }
   }
 
-  private addOrdersToCategories(orders: Order[]) {
-    orders = JSON.parse(JSON.stringify(orders));
+  private addOrdersToCategories(orders: ShortOrder[]) {
+    orders = structuredClone(orders);
     this.categoriesService.getCategories().forEach(category => category.orders = []);
     orders.forEach(order =>
       this.categoriesService.getCategories().find(category =>
-        category.coatType === order.coatModel.coatType)?.orders.push(order));
+        category.coatType === order.coatModel.coatType)?.orders.push(order)
+    );
   }
 
   base64ToFile(base64: string) {

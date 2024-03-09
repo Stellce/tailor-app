@@ -28,7 +28,7 @@ export class CalculatorService {
     {name: 'chestCenter', text: 'Центр грудей', min: 4.6, max: 14.6},
     {name: 'backWidth', text: 'Ширина спини', min: 9.3, max: 25.3},
     {name: 'waistLengthFront', text: 'Довжина талії переду', min: 41.5, max: 61.5},
-    {name: 'neckBaseToFrontWaistLineDistance', text: 'Відстань вiд точки основи шиї лінії талії спереду', min: 33, max: 53}
+    {name: 'neckBaseToFrontWaistLineDistance', text: 'Відстань вiд точки основи шиї до лінії талії спереду', min: 33, max: 53}
   ];
 
   clientIncrease: InputField[] = [

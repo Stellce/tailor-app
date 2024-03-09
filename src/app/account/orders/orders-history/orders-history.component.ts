@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {OrdersService} from "../orders.service";
 import {Category} from "../../../services/categories/category/category.model";
 import {CategoriesService} from "../../../services/categories/categories.service";
+import {ShortOrder} from "../order/short-order.model";
 
 @Component({
   selector: 'app-orders-history',
@@ -14,7 +15,7 @@ import {CategoriesService} from "../../../services/categories/categories.service
 export class OrdersHistoryComponent implements OnInit, OnDestroy{
   categories: Category[];
   categoriesSub: Subscription;
-  tableData: Order[] = <Order[]>[];
+  tableData: ShortOrder[] = <ShortOrder[]>[];
   displayedColumns = ['pos', 'name', 'date', 'price'];
   coatType: string;
 
@@ -32,7 +33,7 @@ export class OrdersHistoryComponent implements OnInit, OnDestroy{
         this.tableData = this.categories.find(category => category.coatType === this.coatType)?.orders.filter(order => order.status !== 'CANCELLED') || [];
       })
       this.categories.map(category => {
-        category.orders = this.ordersService.fixOrdersDate(category.orders)
+        category.orders = this.ordersService.fixShortOrdersDate(category.orders);
         return category;
       })
     })

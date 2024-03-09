@@ -5,6 +5,7 @@ import {OrdersService} from "./orders.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {User} from "../user.model";
+import {ShortOrder} from "./order/short-order.model";
 
 @Component({
   selector: 'app-orders',
@@ -12,8 +13,8 @@ import {User} from "../user.model";
   styleUrl: './orders.component.scss'
 })
 export class OrdersComponent implements OnInit, OnDestroy{
-  ordersByStatuses: {status: string, orders: Order[]}[];
-  displayedOrders: Order[] | null;
+  ordersByStatuses: {status: string, orders: ShortOrder[]}[];
+  displayedOrders: ShortOrder[] | null;
   ordersSub: Subscription;
   displayedColumns: string[] = ['pos', 'name', 'date', 'price'];
   selectedState: string = 'PENDING';
@@ -69,7 +70,7 @@ export class OrdersComponent implements OnInit, OnDestroy{
     this.isAdmin = !!this.user.roles?.includes('ADMIN');
   }
 
-  private filterOrdersByStatuses(orders: Order[]) {
+  private filterOrdersByStatuses(orders: ShortOrder[]) {
     this.ordersByStatuses = [
       {status: 'PENDING', orders: []},
       {status: 'IN_PROGRESS', orders: []},
@@ -78,7 +79,7 @@ export class OrdersComponent implements OnInit, OnDestroy{
     ]
     orders.forEach(order =>
       this.ordersByStatuses.find(ordersByStatus =>
-        ordersByStatus.status === order.status)?.orders!.push(order));
+        ordersByStatus.status === order.status)?.orders.push(order));
     this.ordersByStatuses = this.ordersByStatuses.map(ordersByStatus => {
       ordersByStatus.orders = ordersByStatus.orders.map((order, index) => {
         order.num = index + 1;

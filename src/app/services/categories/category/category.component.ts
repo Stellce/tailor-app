@@ -78,7 +78,7 @@ export class CategoryComponent implements OnInit, OnDestroy{
     this.dialog.open(VideoDialogComponent, {data: {videoUrl: videoUrl}});
   }
   onShowPhotos(modelId: string) {
-    if(this.selectedModel.id !== modelId) return;
+    if(this.selectedModel?.id !== modelId) return;
     this.arePhotosShowen = !this.arePhotosShowen;
     if(this.arePhotosShowen) this.modelsService.requestModelPhotos(modelId);
   }
