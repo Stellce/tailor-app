@@ -221,7 +221,7 @@ export class OrdersService {
   base64ToFile(base64: string) {
     const imageName = 'name.png';
     const imageBlob = dataURItoBlob(base64);
-    const file = new File([imageBlob], imageName, { type: 'image/png' });
+    return new File([imageBlob], imageName, { type: 'image/png' });
     function dataURItoBlob(dataURI: any) {
       const byteString = window.atob(dataURI);
       const arrayBuffer = new ArrayBuffer(byteString.length);
@@ -229,10 +229,8 @@ export class OrdersService {
       for (let i = 0; i < byteString.length; i++) {
         int8Array[i] = byteString.charCodeAt(i);
       }
-      const blob = new Blob([int8Array], { type: 'image/png' });
-      return blob;
+      return new Blob([int8Array], { type: 'image/png' });
     }
-    return file
   }
 
 }
